@@ -902,7 +902,7 @@ export default function BookingSection() {
         }
       `}</style>
       <section
-        className="w-full py-10 md:py-16"
+        className="w-full py-4 md:py-4"
         style={{ background: COLORS.bg, fontFamily: "'Inter', 'Poppins', sans-serif" }}
       >
         <div className="mx-auto max-w-7xl px-4 md:px-8">

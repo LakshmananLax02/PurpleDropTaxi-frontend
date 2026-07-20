@@ -22,10 +22,7 @@
  *   framer-motion lucide-react
  *
  * IMAGES: every slide's background photo is a placeholder right now — see
- * HERO_SLIDES below. Add your own licensed photography/artwork there. (The
- * character illustration in your reference screenshot is GTA: San Andreas
- * fan art, which isn't something that can be reproduced here — swap in your
- * own hero imagery instead.)
+ * HERO_SLIDES below. Add your own licensed photography/artwork there.
  *
  * NOTE ON OVERLAP: your reference design has the booking card's top edge
  * overlapping the bottom of the hero image. To reproduce that in your page
@@ -36,6 +33,10 @@
  *   <div className="-mt-24 md:-mt-32 relative z-10">
  *     <BookingSection />
  *   </div>
+ *
+ * MOBILE: the slide subtext/description is hidden below the md breakpoint
+ * to shrink the hero's mobile height, so the booking form card that sits
+ * below it renders properly without extra scroll.
  * ============================================================================
  */
 
@@ -113,7 +114,7 @@ export default function HeroSection() {
   return (
     <div>
       <section
-        className="relative w-full min-h-[420px] md:min-h-[520px] flex items-center overflow-hidden pb-28 md:pb-36"
+        className="relative w-full min-h-[300px] sm:min-h-[420px] md:min-h-[520px] flex items-center overflow-hidden pb-20 md:pb-36"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -128,7 +129,11 @@ export default function HeroSection() {
             className="absolute inset-0"
           >
             {slide.image ? (
-              <img src={slide.image} alt="" className="w-full h-full object-cover" />
+              <img
+                src={slide.image}
+                alt=""
+                className="w-full h-full object-cover object-bottom scale-150 origin-bottom md:scale-100"
+              />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-[#DDE9D8] via-[#C9DFC4] to-[#B9D6B3]" />
             )}
@@ -162,20 +167,23 @@ export default function HeroSection() {
                   <span style={{ color: COLORS.gradientTo }}>{slide.headlineHighlight}</span>
                 </h1>
 
-                <p className="mt-4 text-sm md:text-base text-[#475569] max-w-md">{slide.subtext}</p>
+                <p className="hidden md:block mt-4 text-sm md:text-base text-[#475569] max-w-md">
+                  {slide.subtext}
+                </p>
               </motion.div>
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Prev / Next arrows */}
+        {/* Prev / Next arrows — centered against the visible photo area only,
+            excluding the bottom space reserved for the booking card overlap */}
         {count > 1 && (
-          <>
+          <div className="absolute inset-x-0 top-0 bottom-20 md:bottom-36 pointer-events-none z-10">
             <button
               type="button"
               onClick={() => goTo(index - 1)}
               aria-label="Previous slide"
-              className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
+              className="pointer-events-auto absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -183,28 +191,10 @@ export default function HeroSection() {
               type="button"
               onClick={() => goTo(index + 1)}
               aria-label="Next slide"
-              className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
+              className="pointer-events-auto absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
-          </>
-        )}
-
-        {/* Dots */}
-        {count > 1 && (
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-            {HERO_SLIDES.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                onClick={() => goTo(i)}
-                aria-label={`Go to slide ${i + 1}`}
-                className={[
-                  "h-1.5 rounded-full transition-all",
-                  i === index ? "w-6 bg-[#8B5CF6]" : "w-1.5 bg-[#8B5CF6]/30",
-                ].join(" ")}
-              />
-            ))}
           </div>
         )}
       </section>
