@@ -40,10 +40,7 @@
  *   2) persist the enquiry to the database.
  * Until then it falls back to a local mock response so the UI keeps working.
  *
- * VEHICLE IMAGES: every vehicle image is a placeholder right now. Drop real
- * photos into `VEHICLE_IMAGES` below (or return an `image` field from
- * GET /api/vehicles) and they'll show up automatically in both the fleet
- * showcase and the "select cab type" cards.
+ * VEHICLE IMAGES: real photo paths are already wired in VEHICLE_IMAGES below.
  *
  * Everything for this feature — state, validation, map logic, the animated
  * loading sequence, fare estimation and enquiry confirmation — lives in this
@@ -73,7 +70,6 @@ import {
   Clock,
   Gauge,
   ImageOff,
-  Loader2,
   Luggage,
   Mail,
   MapPin,
@@ -192,12 +188,9 @@ const TAMIL_NADU_AIRPORTS = [
 
 // ---------------------------------------------------------------------------
 // VEHICLE IMAGES
-// Add the real photo URL/path for each vehicle id here (e.g. "/vehicles/
-// sedan.png" or a CDN URL). Anything left empty falls back to a placeholder
-// so the layout never breaks while images are still being sourced.
 // ---------------------------------------------------------------------------
 const VEHICLE_IMAGES = {
- sedan: "/images/primesedanimg.png",
+  sedan: "/images/primesedanimg.png",
   etios: "/images/sedanimg.png",
   suv: "/images/suvimg.png",
   prime_suv: "/images/primesuvimg.png",
@@ -220,6 +213,15 @@ const MAP_CONTAINER_STYLE = {
 
 const DEFAULT_CENTER = { lat: 11.0168, lng: 76.9558 }; // Coimbatore
 const GOOGLE_MAPS_LIBRARIES = ["places"];
+
+// ---------------------------------------------------------------------------
+// MAP PLACEHOLDER IMAGE
+// Shown in place of the live map until a real Google Maps API key is added
+// (see hasMapsKey below). Drop in a static map screenshot, a branded
+// graphic, or any image you like — e.g. "/images/map-placeholder.png".
+// Leave empty to show a plain icon + label instead.
+// ---------------------------------------------------------------------------
+const MAP_PLACEHOLDER_IMAGE = "";
 
 /* ============================================================================
  * 3. API LAYER (backend-ready; falls back to local calc if endpoint is absent)
@@ -324,7 +326,7 @@ function CheckboxPill({ label, icon, checked, onChange }) {
   return (
     <label
       className={[
-        "flex items-center gap-2 rounded-xl border px-3 py-2.5 cursor-pointer select-none transition-colors",
+        "h-full flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 cursor-pointer select-none transition-colors",
         checked ? "border-[#8B5CF6] bg-[#F5F3FF]" : "border-[#E2E8F0] bg-white hover:bg-slate-50",
       ].join(" ")}
     >
@@ -334,8 +336,8 @@ function CheckboxPill({ label, icon, checked, onChange }) {
         onChange={(e) => onChange(e.target.checked)}
         className="sr-only"
       />
-      <span className={checked ? "text-[#8B5CF6]" : "text-[#64748B]"}>{icon}</span>
-      <span className="text-sm font-medium text-[#1E293B]">{label}</span>
+      <span className={["shrink-0", checked ? "text-[#8B5CF6]" : "text-[#64748B]"].join(" ")}>{icon}</span>
+      <span className="text-sm font-medium text-[#1E293B] leading-snug text-center">{label}</span>
     </label>
   );
 }
@@ -526,7 +528,7 @@ function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
         )}
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+      <div className="flex overflow-x-auto gap-2.5 pb-1 -mx-1 px-1 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 [scrollbar-width:thin]">
         {vehicles.map((v) => {
           const isSelected = v.id === value;
           return (
@@ -535,7 +537,7 @@ function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
               type="button"
               onClick={() => onChange(v.id)}
               className={[
-                "flex flex-col items-center gap-1.5 rounded-xl border-2 px-2.5 py-3 transition-all duration-150",
+                "shrink-0 w-[104px] sm:w-auto flex flex-col items-center gap-1.5 rounded-xl border-2 px-2.5 py-3 transition-all duration-150",
                 isSelected
                   ? "text-white border-transparent shadow-md"
                   : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#C4B5FD]",
@@ -729,7 +731,11 @@ function Confetti() {
  * ========================================================================= */
 
 export default function BookingSection() {
-  /* ---- Google Maps loader --------------------------------------------- */
+  /* ---- Google Maps loader ---------------------------------------------
+   * Always attempts to load the real map. Without a real, billed API key,
+   * Google's own SDK will show its "This page can't load Google Maps
+   * correctly" overlay on top of the (still visible) map tiles — that's
+   * expected until a valid key is set in .env.local. */
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
@@ -882,15 +888,28 @@ export default function BookingSection() {
    * RENDER
    * ==================================================================== */
   return (
-    <section
-      className="w-full py-10 md:py-16"
-      style={{ background: COLORS.bg, fontFamily: "'Inter', 'Poppins', sans-serif" }}
-    >
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
-          {/* ================= LEFT: MAP + FLEET SHOWCASE ================= */}
+    <>
+      {/* Google's Places Autocomplete injects a .pac-container div for its
+       * suggestion dropdown. When the Maps API can't load correctly (e.g.
+       * an unbilled/invalid key), that container still gets created but
+       * stays empty — and renders as a stray hairline instead of just
+       * disappearing. This hides it whenever it has no suggestions in it.
+       * Safe to remove once a valid key is in place and this stops
+       * happening, but harmless to leave in either way. */}
+      <style>{`
+        .pac-container:empty {
+          display: none !important;
+        }
+      `}</style>
+      <section
+        className="w-full py-10 md:py-16"
+        style={{ background: COLORS.bg, fontFamily: "'Inter', 'Poppins', sans-serif" }}
+      >
+        <div className="mx-auto max-w-7xl px-4 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+          {/* ================= MAP + FLEET SHOWCASE (right, narrower) ================= */}
           <div
-            className="lg:col-span-3 flex flex-col rounded-[20px] border overflow-hidden shadow-lg bg-white"
+            className="order-2 lg:col-span-2 flex flex-col rounded-[20px] border overflow-hidden shadow-lg bg-white"
             style={{ borderColor: COLORS.border }}
           >
             <div className="relative h-[300px] md:h-[360px] p-4 md:p-5 pb-0">
@@ -922,10 +941,15 @@ export default function BookingSection() {
                     />
                   )}
                 </GoogleMap>
+              ) : MAP_PLACEHOLDER_IMAGE ? (
+                <img
+                  src={MAP_PLACEHOLDER_IMAGE}
+                  alt="Map preview"
+                  className="w-full h-full object-cover rounded-2xl"
+                />
               ) : (
-                <div className="w-full h-full rounded-2xl flex items-center justify-center text-[#64748B] text-sm gap-2 bg-slate-50">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Loading map...
+                <div className="w-full h-full rounded-2xl flex items-center justify-center text-[#94A3B8] text-sm font-semibold bg-slate-100">
+                  MAp
                 </div>
               )}
 
@@ -948,9 +972,9 @@ export default function BookingSection() {
             <FleetCarousel vehicles={vehicles} />
           </div>
 
-          {/* ================= RIGHT: ENQUIRY CARD ================= */}
+          {/* ================= ENQUIRY CARD (left, wider) ================= */}
           <div
-            className="lg:col-span-2 relative rounded-[20px] bg-white shadow-xl overflow-hidden"
+            className="order-1 lg:col-span-3 relative rounded-[20px] bg-white shadow-xl overflow-hidden"
             style={{ boxShadow: "0 20px 45px -12px rgba(109,40,217,0.18)" }}
           >
             <TaxiLoadingOverlay active={stage === "loading"} />
@@ -965,7 +989,7 @@ export default function BookingSection() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -24 }}
                   transition={{ duration: 0.35 }}
-                  className="p-6 md:p-7 space-y-4 max-h-[720px] overflow-y-auto"
+                  className="p-6 md:p-7 space-y-4"
                 >
                   <div className="flex items-center gap-2.5 mb-1">
                     <span
@@ -987,7 +1011,8 @@ export default function BookingSection() {
                   {/* Trip type */}
                   <TripTypeTabs value={tripType} onChange={setTripType} />
 
-                  {/* Pickup */}
+                  {/* Pickup / Drop — single line */}
+                  <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="text-xs font-semibold text-[#64748B] mb-1 block">
                       Pickup Location
@@ -1006,6 +1031,7 @@ export default function BookingSection() {
                               <input
                                 {...field}
                                 placeholder="Enter pickup location"
+                                autoComplete="off"
                                 className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
                               />
                             </Autocomplete>
@@ -1013,6 +1039,7 @@ export default function BookingSection() {
                             <input
                               {...field}
                               placeholder="Enter pickup location"
+                              autoComplete="off"
                               className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
                             />
                           )}
@@ -1069,6 +1096,7 @@ export default function BookingSection() {
                                 <input
                                   {...field}
                                   placeholder="Enter drop location"
+                                  autoComplete="off"
                                   className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
                                 />
                               </Autocomplete>
@@ -1076,6 +1104,7 @@ export default function BookingSection() {
                               <input
                                 {...field}
                                 placeholder="Enter drop location"
+                                autoComplete="off"
                                 className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
                               />
                             )}
@@ -1084,6 +1113,7 @@ export default function BookingSection() {
                       }
                     />
                     <FieldError message={errors.drop?.message} />
+                  </div>
                   </div>
 
                   {/* Date / Time */}
@@ -1116,21 +1146,7 @@ export default function BookingSection() {
                     </div>
                   </div>
 
-                  {/* Vehicle selection — image cards replace the old dropdowns */}
-                  <Controller
-                    name="vehicle"
-                    control={control}
-                    render={({ field }) => (
-                      <VehicleSelectGrid
-                        vehicles={vehicles}
-                        value={field.value}
-                        onChange={field.onChange}
-                        hasError={!!errors.vehicle}
-                      />
-                    )}
-                  />
-
-                  {/* Name / Mobile */}
+  {/* Name / Mobile */}
                   <div className="grid grid-cols-2 gap-3">
                     <div>
                       <label className="text-xs font-semibold text-[#64748B] mb-1 block">
@@ -1162,58 +1178,82 @@ export default function BookingSection() {
                     </div>
                   </div>
 
+                  {/* Vehicle selection — image cards replace the old dropdowns */}
+                  <Controller
+                    name="vehicle"
+                    control={control}
+                    render={({ field }) => (
+                      <VehicleSelectGrid
+                        vehicles={vehicles}
+                        value={field.value}
+                        onChange={field.onChange}
+                        hasError={!!errors.vehicle}
+                      />
+                    )}
+                  />
+
+                
+
                   {/* Special requirements */}
                   <div>
                     <label className="text-xs font-semibold text-[#64748B] mb-2 block">
                       Special Requirements <span className="text-slate-400 font-normal">(optional)</span>
                     </label>
-                    <div className="grid grid-cols-2 gap-2.5">
+                    <div className="flex overflow-x-auto gap-2.5 pb-1 -mx-1 px-1 sm:grid sm:grid-cols-2 md:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 [scrollbar-width:thin]">
                       <Controller
                         name="womanAlone"
                         control={control}
                         render={({ field }) => (
-                          <CheckboxPill
-                            label="Woman Travelling Alone"
-                            icon={<ShieldCheck className="w-4 h-4" />}
-                            checked={field.value}
-                            onChange={field.onChange}
-                          />
+                          <div className="shrink-0 w-40 sm:w-auto sm:h-full">
+                            <CheckboxPill
+                              label="Woman Travelling Alone"
+                              icon={<ShieldCheck className="w-4 h-4" />}
+                              checked={field.value}
+                              onChange={field.onChange}
+                            />
+                          </div>
                         )}
                       />
                       <Controller
                         name="seniorCitizen"
                         control={control}
                         render={({ field }) => (
-                          <CheckboxPill
-                            label="Senior Citizen"
-                            icon={<UserCircle2 className="w-4 h-4" />}
-                            checked={field.value}
-                            onChange={field.onChange}
-                          />
+                          <div className="shrink-0 w-40 sm:w-auto sm:h-full">
+                            <CheckboxPill
+                              label="Senior Citizen"
+                              icon={<UserCircle2 className="w-4 h-4" />}
+                              checked={field.value}
+                              onChange={field.onChange}
+                            />
+                          </div>
                         )}
                       />
                       <Controller
                         name="travellingWithInfant"
                         control={control}
                         render={({ field }) => (
-                          <CheckboxPill
-                            label="Travelling with Infant"
-                            icon={<User className="w-4 h-4" />}
-                            checked={field.value}
-                            onChange={field.onChange}
-                          />
+                          <div className="shrink-0 w-40 sm:w-auto sm:h-full">
+                            <CheckboxPill
+                              label="Travelling with Infant"
+                              icon={<User className="w-4 h-4" />}
+                              checked={field.value}
+                              onChange={field.onChange}
+                            />
+                          </div>
                         )}
                       />
                       <Controller
                         name="extraLuggage"
                         control={control}
                         render={({ field }) => (
-                          <CheckboxPill
-                            label="Extra Luggage"
-                            icon={<Luggage className="w-4 h-4" />}
-                            checked={field.value}
-                            onChange={field.onChange}
-                          />
+                          <div className="shrink-0 w-40 sm:w-auto sm:h-full">
+                            <CheckboxPill
+                              label="Extra Luggage"
+                              icon={<Luggage className="w-4 h-4" />}
+                              checked={field.value}
+                              onChange={field.onChange}
+                            />
+                          </div>
                         )}
                       />
                     </div>
@@ -1307,7 +1347,7 @@ export default function BookingSection() {
                         background: `linear-gradient(135deg, ${COLORS.gradientFrom}, ${COLORS.gradientTo})`,
                       }}
                     >
-                      Send Enquiry →
+                      Confirm Booking →
                     </motion.button>
                   </div>
                 </motion.div>
@@ -1370,6 +1410,7 @@ export default function BookingSection() {
         </div>
       </div>
     </section>
+    </>
   );
 }
 

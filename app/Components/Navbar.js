@@ -60,7 +60,7 @@ export default function Navbar() {
 
       {/* ===== Top scrolling marquee bar ===== */}
       <div className="w-full overflow-hidden bg-[#e5d4f7] text-gray-900">
-        <div className="navbar-marquee flex w-max py-2.5">
+        <div className="navbar-marquee flex w-max py-2">
           <FeatureRow />
           <FeatureRow />
           <FeatureRow />
@@ -74,21 +74,21 @@ export default function Navbar() {
 
       {/* ===== Main navigation ===== */}
       <nav className="w-full border-b border-gray-200 bg-white shadow-sm">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-          {/* Logo (image) */}
-          <Link href="#home" className="flex shrink-0 items-center" aria-label="PurpleDropTaxi home">
-            <Image
-              src={LOGO_SRC || "/placeholder.svg"}
-              alt="PurpleDropTaxi logo"
-              width={200}
-              height={190}
-              priority
-              className="h-20 w-auto sm:h-14"
-            />
-          </Link>
+       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-0 sm:px-6 sm:py-0">
+  {/* Logo (image) */}
+  <Link href="#home" className="flex shrink-0 items-center py-1" aria-label="PurpleDropTaxi home">
+    <Image
+      src={LOGO_SRC || "/placeholder.svg"}
+      alt="PurpleDropTaxi logo"
+      width={320}
+      height={304}
+      priority
+      className="h-23 w-35 sm:h-23 md:h-23"
+    />
+  </Link>
 
           {/* Desktop links */}
-          <ul className="hidden items-center gap-6 lg:flex xl:gap-8">
+          <ul className="hidden items-center gap-10 lg:flex xl:gap-8">
             {navLinks.map((link) => (
               <li key={link.label}>
                 <Link

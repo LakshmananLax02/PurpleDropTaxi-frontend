@@ -1,10 +1,16 @@
 import Image from "next/image";
-import Carousel from './Components/Carousel'
+import HeroSection from './Components/HeroSection'
+import BookingSection from './Components/BookingSection'
+
 
 export default function Home() {
   return (
     <>
-    <Carousel/>
+      <HeroSection />
+
+      <div className="-mt-24 md:-mt-32 relative z-10">
+        <BookingSection />
+      </div>
    
     
     </>
