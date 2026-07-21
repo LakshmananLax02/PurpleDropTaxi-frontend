@@ -1,6 +1,7 @@
 import Image from "next/image";
 import HeroSection from './Components/HeroSection'
 import BookingSection from './Components/BookingSection'
+import Cars from './Components/Cars'
 
 
 export default function Home() {
@@ -11,6 +12,8 @@ export default function Home() {
       <div className="-mt-24 md:-mt-32 relative z-10">
         <BookingSection />
       </div>
+
+      <Cars/>
    
     
     </>
