@@ -2,6 +2,8 @@ import Image from "next/image";
 import HeroSection from './Components/HeroSection'
 import BookingSection from './Components/BookingSection'
 import Cars from './Components/Cars'
+import WhyChooseUs from './Components/WhyChooseUs'
+import FaqSection from './Components/FaqSection'
 
 
 export default function Home() {
@@ -14,6 +16,12 @@ export default function Home() {
       </div>
 
       <Cars/>
+      <WhyChooseUs/>
+
+
+
+      <FaqSection/>
+
    
     
     </>
