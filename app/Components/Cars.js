@@ -1,31 +1,7 @@
 "use client";
 
-/**
- * ============================================================================
- * FleetSection.jsx
- * ----------------------------------------------------------------------------
- * "Our Fleet" section for PurpleDropTaxi — a grid of cab cards, each wrapped
- * in an animated rotating-gradient border (adapted from the Uiverse.io
- * "glowing border card" concept by bhaveshxrawat, reworked for a light theme
- * to match the rest of the site instead of the original dark card).
- *
- * Stack: Next.js (App Router) + JavaScript + Tailwind CSS
- *
- * HOW THE BORDER EFFECT WORKS (Tailwind-only, no custom CSS file needed):
- *   1. Each card is a relative, overflow-hidden wrapper.
- *   2. A thin gradient bar sits centered behind the content and spins
- *      continuously using Tailwind's built-in `animate-spin` keyframe
- *      (sped up via an arbitrary animation-duration utility).
- *   3. The actual card content sits on top in a white plate that's inset by
- *      a couple of pixels, so only a slim rotating gradient ring peeks out
- *      around the edge — same trick as the original ::before/::after card,
- *      just sized for a real content card instead of a small logo tile.
- *
- * IMAGES: swap the `image` paths in FLEET_CARS for your real car photos.
- * ============================================================================
- */
-
 import React from "react";
+import { Sparkles } from "lucide-react";
 
 const FLEET_CARS = [
   {
@@ -34,6 +10,7 @@ const FLEET_CARS = [
     image: "/images/sedanimg.png",
     oneWay: "15",
     roundTrip: "14",
+    seats: "4 Seater",
   },
   {
     id: "etios",
@@ -41,6 +18,7 @@ const FLEET_CARS = [
     image: "/images/primesedanimg.png",
     oneWay: "16",
     roundTrip: "14",
+    seats: "4 Seater",
   },
   {
     id: "suv",
@@ -48,6 +26,7 @@ const FLEET_CARS = [
     image: "/images/suvimg.png",
     oneWay: "20",
     roundTrip: "19",
+    seats: "6 Seater",
   },
   {
     id: "innova",
@@ -55,6 +34,7 @@ const FLEET_CARS = [
     image: "/images/primesuvimg.png",
     oneWay: "24",
     roundTrip: "22",
+    seats: "7 Seater",
   },
 ];
 
@@ -62,76 +42,83 @@ function FleetCard({ car }) {
   return (
     <div
       className="
-        group relative overflow-hidden rounded-[15px] bg-gray-300
-        border border-gray-100
-        shadow-[0_20px_45px_-10px_rgba(15,23,42,0.25)]
+        group relative overflow-hidden rounded-[20px] bg-purple-100/60
+        border border-purple-100
+        shadow-[0_15px_35px_-10px_rgba(109,40,217,0.15)]
         transition-all duration-300 ease-out
-        hover:-translate-y-2 hover:shadow-[0_28px_60px_-8px_rgba(139,92,246,0.35)]
+        hover:-translate-y-2 hover:shadow-[0_25px_50px_-8px_rgba(124,58,237,0.3)]
       "
     >
-      {/* Rotating gradient bar — spins slow by default, speeds up on hover */}
+      {/* Rotating Purple Gradient Border */}
       <div
         className="
-          pointer-events-none absolute left-1/2 top-1/2 h-[160%] w-24
+          pointer-events-none absolute left-1/2 top-1/2 h-[180%] w-28
           -translate-x-1/2 -translate-y-1/2
           animate-spin [animation-duration:4s]
-          group-hover:[animation-duration:2.5s]
+          group-hover:[animation-duration:2.2s]
         "
         style={{
           background:
-            "linear-gradient(180deg, #38BDF8 0%, #22D3EE 35%, #34D399 70%, #38BDF8 100%)",
+            "linear-gradient(180deg, #7c3aed 0%, #a855f7 35%, #c084fc 70%, #6D28D9 100%)",
         }}
       />
 
-      {/* Inset white plate — leaves a thin gradient ring visible around it */}
-      <div className="absolute inset-[3px] rounded-[19px] bg-white" />
+      {/* Inset White Content Plate */}
+      <div className="absolute inset-[2px] rounded-[18px] bg-white" />
 
-      {/* Actual card content, above both layers */}
-      <div className="relative z-10 flex flex-col">
-        {/* Image */}
-        <div className="overflow-hidden rounded-t-[19px] bg-gray-50 px-6 pt-8 pb-6">
-          <img
-            src={car.image || "/placeholder.svg"}
-            alt={car.name}
-            className="mx-auto h-36 w-auto object-contain transition-transform duration-500 ease-out group-hover:scale-110"
-          />
-        </div>
+      {/* Card Content */}
+      <div className="relative z-10 flex flex-col justify-between h-full">
+        <div>
+          {/* Vehicle Image Header */}
+          <div className="relative overflow-hidden rounded-t-[18px] bg-purple-50/40 px-6 pt-10 pb-4 flex flex-col items-center">
+            
+            {/* Seater Badge: z-20 prevents image overlap */}
+            <span className="absolute top-3 right-3 z-20 text-[10px] font-extrabold uppercase tracking-wider text-[#7c3aed] bg-white/90 backdrop-blur-sm px-2.5 py-1 rounded-full border border-purple-200/80 shadow-sm">
+              👤 {car.seats}
+            </span>
 
-        {/* Details */}
-        <div className="px-6 pb-6 pt-2">
-          <h3 className="text-lg font-extrabold uppercase tracking-wide text-[#1E293B]">
-            {car.name}
-          </h3>
-
-          <div className="mt-3 grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                One way
-              </p>
-              <p className="mt-1 text-lg font-bold text-[#0EA5E9]">₹{car.oneWay}/km</p>
-            </div>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                Round trip
-              </p>
-              <p className="mt-1 text-lg font-bold text-[#0EA5E9]">₹{car.roundTrip}/km</p>
-            </div>
+            {/* Car Image: z-10 stays under badge */}
+            <img
+              src={car.image || "/placeholder.svg"}
+              alt={car.name}
+              className="relative z-10 mx-auto h-32 w-auto object-contain transition-transform duration-500 ease-out group-hover:scale-105"
+            />
           </div>
 
+          {/* Vehicle Details */}
+          <div className="px-6 pt-4 pb-2">
+            <h3 className="text-base font-black uppercase tracking-tight text-gray-900 group-hover:text-[#7c3aed] transition-colors">
+              {car.name}
+            </h3>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 p-3 bg-purple-50/50 rounded-xl border border-purple-100/60">
+              <div>
+                <p className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400">
+                  One way
+                </p>
+                <p className="mt-0.5 text-base font-black text-[#7c3aed]">
+                  ₹{car.oneWay}<span className="text-xs font-bold text-gray-500">/km</span>
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] font-extrabold uppercase tracking-wider text-gray-400">
+                  Round trip
+                </p>
+                <p className="mt-0.5 text-base font-black text-[#7c3aed]">
+                  ₹{car.roundTrip}<span className="text-xs font-bold text-gray-500">/km</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button using 3D Animated Jello Style */}
+        <div className="px-6 pb-6 pt-4">
           <button
             type="button"
-            className="
-              mt-5 flex w-full items-center justify-center gap-2 rounded-full
-              bg-gradient-to-r from-[#22D3EE] to-[#34D399]
-              px-5 py-3 text-sm font-bold text-white shadow-md
-              transition-all duration-300
-              hover:brightness-110 hover:scale-[1.02] active:scale-95
-            "
+            className="btn-3d-purple w-full py-3.5 text-xs font-black uppercase tracking-wider text-white"
           >
-            Book This Cab
-            <span className="transition-transform duration-300 group-hover:translate-x-1">
-              →
-            </span>
+            Book This Cab →
           </button>
         </div>
       </div>
@@ -141,42 +128,49 @@ function FleetCard({ car }) {
 
 export default function FleetSection() {
   return (
-    <section className="w-full bg-white py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-4 md:px-8">
+    <section className="w-full bg-[#f8fafc] py-20 px-4 md:px-8 relative overflow-hidden font-sans">
+      
+      {/* Ambient Backdrop Glow */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-purple-200/30 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="mx-auto max-w-7xl relative z-10">
+        
         {/* Header */}
-        <div className="flex flex-col items-center text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.15em] text-[#0EA5E9]">
-            Our Fleet
-          </span>
-          <h2 className="mt-3 text-3xl font-extrabold text-[#0F172A] md:text-4xl lg:text-[2.5rem]">
-            Choose Your Comfort — Cabs for Every Budget
+        <div className="flex flex-col items-center text-center space-y-3">
+          <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm">
+            <Sparkles className="w-4 h-4" /> Our Fleet
+          </div>
+          <h2 className="text-3xl font-black text-gray-900 md:text-4xl lg:text-5xl tracking-tight">
+            Choose Your Comfort — <span className="text-[#7c3aed]">Cabs for Every Budget</span>
           </h2>
-          <span className="mt-4 h-1 w-20 rounded-full bg-gradient-to-r from-[#22D3EE] to-[#34D399]" />
+          <p className="text-gray-500 text-xs sm:text-sm max-w-lg font-medium">
+            Pristine, climate-controlled outstation vehicles with transparent per-kilometer rates and certified professional chauffeurs.
+          </p>
         </div>
 
-        {/* Grid — wrapped in one large rotating-gradient border so the whole
-            fleet block reads as a single glowing panel, on top of each
-            card's own border */}
-        <div className="relative mt-14 overflow-hidden rounded-[32px] p-[3px]">
+        {/* Outer Rotating Glowing Panel */}
+        <div className="relative mt-12 overflow-hidden rounded-[32px] p-[2px]">
           <div
             className="
-              pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-40
+              pointer-events-none absolute left-1/2 top-1/2 h-[220%] w-48
               -translate-x-1/2 -translate-y-1/2
               animate-spin [animation-duration:8s]
             "
             style={{
               background:
-                "linear-gradient(180deg, #38BDF8 0%, #22D3EE 35%, #34D399 70%, #38BDF8 100%)",
+                "linear-gradient(180deg, #7c3aed 0%, #a855f7 35%, #c084fc 70%, #6D28D9 100%)",
             }}
           />
-          <div className="absolute inset-[3px] rounded-[30px] bg-white" />
+          <div className="absolute inset-[2px] rounded-[30px] bg-white/90 backdrop-blur-xl" />
 
-          <div className="relative z-10 grid grid-cols-1 gap-8 p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-10">
+          {/* Grid Layout Container */}
+          <div className="relative z-10 grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-8">
             {FLEET_CARS.map((car) => (
               <FleetCard key={car.id} car={car} />
             ))}
           </div>
         </div>
+
       </div>
     </section>
   );
