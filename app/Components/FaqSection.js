@@ -81,7 +81,7 @@ export default function FaqSection() {
   });
 
   return (
-    <section className="w-full bg-[#f8fafc] py-5 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#f8fafc] py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
       
       {/* Decorative Brand Gradient Orbs */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl pointer-events-none" />

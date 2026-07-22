@@ -22,8 +22,6 @@ const FEATURES = [
     title: "100% One-Way Pricing",
     description: "Pay strictly for the distance you travel. Zero return kilometer charges, zero hidden driver fees, and complete fare clarity upfront.",
     highlight: "No Return Charges",
-    accentColor: "from-purple-500 to-indigo-600",
-    floatDelay: 0,
   },
   {
     id: "safety-first",
@@ -31,8 +29,6 @@ const FEATURES = [
     title: "Women & Family Safe",
     description: "Equipped with live 24/7 GPS route tracking, emergency SOS assistance, and specially trained chauffeurs for maximum peace of mind.",
     highlight: "24/7 GPS Tracked",
-    accentColor: "from-indigo-500 to-purple-600",
-    floatDelay: 0.4,
   },
   {
     id: "verified-drivers",
@@ -40,8 +36,6 @@ const FEATURES = [
     title: "Verified Professional Drivers",
     description: "Background-checked, highly experienced outstation drivers who know state routes, highway regulations, and safety protocols thoroughly.",
     highlight: "100% Verified",
-    accentColor: "from-purple-600 to-violet-600",
-    floatDelay: 0.8,
   },
   {
     id: "timely-pickup",
@@ -49,8 +43,6 @@ const FEATURES = [
     title: "On-Time Guarantee",
     description: "Punctual doorstep pickups for early morning flights, outstation trips, or train connections without flight-delay penalty surcharges.",
     highlight: "Zero Delay Guarantee",
-    accentColor: "from-violet-500 to-purple-600",
-    floatDelay: 0.2,
   },
   {
     id: "fleet-comfort",
@@ -58,8 +50,6 @@ const FEATURES = [
     title: "Sanitized & Luxury Fleet",
     description: "Choose from pristine, climate-controlled Sedans, spacious SUVs, and Luxury Innova models inspected before every trip.",
     highlight: "Top Rated Fleet",
-    accentColor: "from-purple-500 to-fuchsia-600",
-    floatDelay: 0.6,
   },
   {
     id: "247-support",
@@ -67,8 +57,6 @@ const FEATURES = [
     title: "Dedicated Tele-Support",
     description: "Our dedicated dispatch management team is available around the clock to assist you with route adjustments or immediate bookings.",
     highlight: "24/7 Assistance",
-    accentColor: "from-fuchsia-600 to-purple-600",
-    floatDelay: 1.0,
   },
 ];
 
@@ -100,9 +88,118 @@ const cardScrollVariants = {
 
 export default function WhyChooseUs() {
   return (
-    <section className="w-full bg-[#f8fafc] py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#f8fafc] py-5 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
       
-      {/* STATIC/INFINITE ANIMATION: Ambient Background Orbs Floating continuously */}
+      {/* --- EMBEDDED STYLES FOR THE 3D STACKED HOVER CARD EFFECT --- */}
+      <style jsx global>{`
+        .card-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          border-radius: 24px;
+          line-height: 1.6;
+          transition: transform 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 20px;
+          padding: 32px;
+          width: 100%;
+          border-radius: 22px;
+          color: #ffffff;
+          overflow: visible; /* Allows stacked layers to peek out */
+          background: #6D28D9; /* Purple Brand Color */
+          transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content::before {
+          position: absolute;
+          content: "";
+          top: -4%;
+          left: 50%;
+          width: 90%;
+          height: 90%;
+          transform: translate(-50%, 0);
+          background: #DDD6FE; /* Purple Accent Layer 1 */
+          z-index: -1;
+          transform-origin: bottom;
+          border-radius: inherit;
+          transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content::after {
+          position: absolute;
+          content: "";
+          top: -8%;
+          left: 50%;
+          width: 80%;
+          height: 80%;
+          transform: translate(-50%, 0);
+          background: #EDE9FE; /* Purple Accent Layer 2 */
+          z-index: -2;
+          transform-origin: bottom;
+          border-radius: inherit;
+          transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content svg {
+          width: 32px;
+          height: 32px;
+        }
+
+        .content .para {
+          z-index: 1;
+          opacity: 1;
+          font-size: 13px;
+          color: #e9d5ff;
+          line-height: 1.6;
+          transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content .link {
+          z-index: 1;
+          color: #fde047; /* Yellow Accent Link */
+          text-decoration: none;
+          font-family: inherit;
+          font-size: 14px;
+          font-weight: 700;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .content .link:hover {
+          text-decoration: underline;
+        }
+
+        /* --- HOVER STATES --- */
+        .card-wrapper:hover {
+          transform: translateY(-16px) !important;
+        }
+
+        .card-wrapper:hover .content::before {
+          transform: translate(-50%, 0) rotate(-8deg);
+          top: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .card-wrapper:hover .content::after {
+          transform: translate(-50%, 0) rotate(8deg);
+          top: 0;
+          width: 100%;
+          height: 100%;
+        }
+      `}</style>
+
+      {/* Ambient Background Glow Orbs */}
       <motion.div 
         animate={{
           y: [0, -25, 0],
@@ -133,8 +230,8 @@ export default function WhyChooseUs() {
 
       <div className="max-w-7xl mx-auto relative z-10">
         
-        {/* --- SCROLL EFFECT: HEADER SECTION --- */}
-        <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
+        {/* --- HEADER SECTION --- */}
+        <div className="text-center space-y-4 mb-20 max-w-3xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -142,7 +239,6 @@ export default function WhyChooseUs() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm"
           >
-            {/* STATIC ANIMATION: Pulsing Icon */}
             <motion.div
               animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -174,13 +270,13 @@ export default function WhyChooseUs() {
           </motion.p>
         </div>
 
-        {/* --- SCROLL & STATIC ANIMATED CARDS GRID --- */}
+        {/* --- 3D STACKED CARDS GRID --- */}
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 pt-6"
         >
           {FEATURES.map((feature) => {
             const IconComponent = feature.icon;
@@ -188,81 +284,50 @@ export default function WhyChooseUs() {
               <motion.div
                 key={feature.id}
                 variants={cardScrollVariants}
-                className="group relative"
+                className="card-wrapper cursor-pointer"
               >
-                {/* STATIC ANIMATION: Gentle continuous vertical floating for each card */}
-                <motion.div
-                  animate={{
-                    y: [0, -6, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: feature.floatDelay,
-                  }}
-                  whileHover={{ y: -12, scale: 1.02 }}
-                  className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-purple-900/[0.03] hover:shadow-2xl hover:shadow-purple-600/15 transition-all duration-300 flex flex-col justify-between h-full overflow-hidden"
-                >
-                  {/* Top Progress Line Glow on Hover */}
-                  <span className={`absolute top-0 left-0 w-0 group-hover:w-full h-1 bg-gradient-to-r ${feature.accentColor} transition-all duration-500 ease-out`} />
-
-                  <div>
-                    {/* Icon & Badge Header */}
-                    <div className="flex items-center justify-between mb-6">
-                      <motion.div 
-                        whileHover={{ scale: 1.15, rotate: 6 }}
-                        className="w-14 h-14 rounded-2xl bg-purple-50 group-hover:bg-gradient-to-br group-hover:from-[#7c3aed] group-hover:to-[#6D28D9] flex items-center justify-center text-[#7c3aed] group-hover:text-white transition-colors duration-300 shadow-inner"
-                      >
-                        <IconComponent className="w-7 h-7 stroke-[2.2]" />
-                      </motion.div>
-
-                      {/* STATIC ANIMATION: Breathing Badge */}
-                      <motion.span 
-                        animate={{ opacity: [0.8, 1, 0.8] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="text-[10px] font-extrabold uppercase tracking-wider text-[#7c3aed] bg-purple-50 px-3 py-1 rounded-full border border-purple-100/60 group-hover:bg-purple-100 transition-colors"
-                      >
-                        {feature.highlight}
-                      </motion.span>
+                <div className="content">
+                  
+                  {/* Top Icon & Badge Header */}
+                  <div className="w-full flex items-center justify-between z-10">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white">
+                      <IconComponent />
                     </div>
 
-                    {/* Content */}
-                    <h3 className="text-lg font-black text-gray-900 group-hover:text-[#7c3aed] transition-colors mb-3 tracking-tight">
-                      {feature.title}
-                    </h3>
-
-                    <p className="text-gray-500 text-xs sm:text-sm font-medium leading-relaxed">
-                      {feature.description}
-                    </p>
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-200 bg-white/10 border border-white/20 px-3 py-1 rounded-full backdrop-blur-md">
+                      {feature.highlight}
+                    </span>
                   </div>
 
-                  {/* Interactive Footer */}
-                  <div className="pt-6 mt-6 border-t border-gray-50 flex items-center text-xs font-bold text-[#7c3aed] group-hover:text-[#5b21b6] transition-colors">
-                    <span>Learn more</span>
-                    <motion.div
-                      className="inline-block ml-1.5"
-                      initial={{ x: 0 }}
-                      whileHover={{ x: 6 }}
-                    >
-                      <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                    </motion.div>
-                  </div>
-                </motion.div>
+                  {/* Title */}
+                  <h3 className="text-xl font-black text-white tracking-tight z-10">
+                    {feature.title}
+                  </h3>
+
+                  {/* Description */}
+                  <p className="para">
+                    {feature.description}
+                  </p>
+
+                  {/* Link */}
+                  <a href="#book" className="link">
+                    Learn More <ArrowRight className="w-4 h-4" />
+                  </a>
+
+                </div>
               </motion.div>
             );
           })}
         </motion.div>
 
-        {/* --- SCROLL EFFECT & STATIC ANIMATION: BOTTOM STATS CARD --- */}
+        {/* --- BOTTOM STATS CARD --- */}
         <motion.div 
           initial={{ opacity: 0, y: 50, scale: 0.95 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-16 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-purple-900/30"
+          className="mt-24 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-purple-900/30"
         >
-          {/* STATIC ANIMATION: Continuous Pulsing Ambient Aura */}
           <motion.div 
             animate={{ 
               opacity: [0.2, 0.5, 0.2],
