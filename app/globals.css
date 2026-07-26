@@ -25,6 +25,26 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Google Places Autocomplete (used on the booking form) injects a
+ * .pac-container div for its suggestion dropdown as a DIRECT CHILD OF
+ * <body> — outside the React tree entirely. When the Maps API can't load
+ * correctly (e.g. an unbilled/invalid key), that container still gets
+ * created but stays empty, and renders as a stray full-width hairline.
+ * This MUST live in a global stylesheet, not a component-scoped <style>
+ * tag: a scoped rule disappears the moment the form's component unmounts
+ * (e.g. navigating from the booking form to /estimate), which un-hides an
+ * already-created empty container and the hairline reappears for the rest
+ * of the flow. Safe to remove once a valid, billed key is in place. */
+.pac-container:empty {
+  display: none !important;
+}
+
+/* Pickup Date and Pickup Time are no longer native <input type="date"/"time">
+ * — both the native calendar and native time picker are OS/browser-styled
+ * and can't be made to match the app (nor forced to 12h+AM/PM for time), so
+ * they're custom DatePickerCalendar / TimePicker12h components instead; see
+ * BookingSection.js. */
+
 
 /* Custom 3D Purple Button Styling */
 .btn-3d-purple {

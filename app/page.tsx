@@ -1,29 +1,18 @@
-import Image from "next/image";
-import HeroSection from './Components/HeroSection'
-import BookingSection from './Components/BookingSection'
-import Cars from './Components/Cars'
-import WhyChooseUs from './Components/WhyChooseUs'
-import FaqSection from './Components/FaqSection'
-
+import BookingSection from "./Components/BookingSection";
+import Cars from "./Components/Cars";
+import WhyChooseUs from "./Components/WhyChooseUs";
+import FaqSection from "./Components/FaqSection";
 
 export default function Home() {
   return (
     <>
-      <HeroSection />
+      {/* Page 1: carousel-background hero with the enquiry form.
+          Submitting it navigates to /estimate (page 2). */}
+      <BookingSection />
 
-      <div className="-mt-24 md:-mt-32 relative z-10">
-        <BookingSection />
-      </div>
-
-      <Cars/>
-      <WhyChooseUs/>
-
-
-
-      <FaqSection/>
-
-   
-    
+      <Cars />
+      <WhyChooseUs />
+      <FaqSection />
     </>
   );
 }

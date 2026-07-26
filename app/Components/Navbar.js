@@ -8,7 +8,12 @@ import { Phone, MessageCircle, Menu, X, ShieldCheck, Users, Leaf, BadgeDollarSig
 // ---- Config: replace with your real values ----
 const PHONE_NUMBER = "+911234567890"
 const WHATSAPP_NUMBER = "911234567890"
-const LOGO_SRC = "/images/logoimg.png"
+// logoimg.png is a 2000x2000 canvas but the actual mark only fills the middle
+// ~78% width x ~38% height of it — displaying it in a square box (or worse,
+// a mismatched non-square box) leaves most of the box empty and the visible
+// logo tiny. logo-navbar.png is a pre-cropped version (trimmed to the mark,
+// +4-6% padding) at its real ~1.98:1 aspect ratio — use that here instead.
+const LOGO_SRC = "/images/logo-navbar.png"
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -74,16 +79,19 @@ export default function Navbar() {
 
       {/* ===== Main navigation ===== */}
       <nav className="w-full border-b border-gray-200 bg-white shadow-sm">
-       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-0 sm:px-6 sm:py-0">
-  {/* Logo (image) */}
-  <Link href="#home" className="flex shrink-0 items-center py-1" aria-label="PurpleDropTaxi home">
+       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
+  {/* Logo — logo-navbar.png is pre-cropped to its real ~1.98:1 aspect ratio,
+      so only height is constrained here and width is "auto": the browser
+      derives it from the image's real ratio, which keeps the mark large
+      and correctly proportioned without any stretching. */}
+  <Link href="#home" className="flex shrink-0 items-center" aria-label="PurpleDropTaxi home">
     <Image
       src={LOGO_SRC || "/placeholder.svg"}
       alt="PurpleDropTaxi logo"
-      width={320}
-      height={304}
+      width={1681}
+      height={851}
       priority
-      className="h-23 w-35 sm:h-23 md:h-23"
+      className="h-11 w-auto sm:h-12"
     />
   </Link>
 
