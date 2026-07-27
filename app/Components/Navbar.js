@@ -119,7 +119,7 @@ export default function Navbar() {
           <div className="hidden items-center gap-3 md:flex">
             <Link
               href={`tel:${PHONE_NUMBER}`}
-              className="inline-flex items-center gap-2 rounded-full bg-[#7b2ff7] px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+              className="btn btn-primary px-4 py-2.5 text-sm font-semibold shadow-md"
             >
               <Phone className="h-4 w-4" />
               Call now
@@ -128,7 +128,7 @@ export default function Navbar() {
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-[#25d366] px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:scale-105 hover:brightness-110 active:scale-95"
+              className="btn btn-whatsapp px-4 py-2.5 text-sm font-semibold shadow-md"
             >
               <MessageCircle className="h-4 w-4" />
               Whatsapp

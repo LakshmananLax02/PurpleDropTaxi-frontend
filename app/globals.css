@@ -46,71 +46,189 @@ body {
  * BookingSection.js. */
 
 
-/* Custom 3D Purple Button Styling */
-.btn-3d-purple {
-  position: relative;
-  border-radius: 45px;
-  border: none;
-  background-color: rgb(124, 58, 237); /* Purple Brand Accent */
-  color: white;
-  box-shadow: 
-    0px 10px 10px rgba(192, 132, 252, 0.6) inset,
-    0px 5px 10px rgba(5, 5, 5, 0.2),
-    0px -10px 10px rgba(109, 40, 217, 0.9) inset;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+/* ==========================================================================
+ * BUTTON SYSTEM
+ * --------------------------------------------------------------------------
+ * One hover language for every button in the app: a circle expands from the
+ * centre to flood the button, paired with a slight lift and a brand glow.
+ * Variants only change WHICH colours flood — the motion stays identical, so
+ * primary / outline / ghost / whatsapp all feel like the same family.
+ *
+ * Lives in `@layer components` ON PURPOSE. Tailwind v4 emits its utilities
+ * into `@layer utilities`, which is declared after `components` — so any
+ * Tailwind class on the element (h-[54px], text-xs, py-3.5, w-full, rounded-*)
+ * still overrides these defaults. Written as plain unlayered CSS instead, this
+ * block would beat every Tailwind utility regardless of specificity and
+ * silently break the existing button sizing across the app.
+ * ========================================================================== */
+
+@layer components {
+  .btn {
+    position: relative;
+    /* Contains the negative-z pseudo-elements below: without isolation they
+     * can paint behind an ancestor's background instead of the button's. */
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 10px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    border: 2px solid transparent;
+    border-radius: 34px;
+    background-color: transparent;
+    cursor: pointer;
+    overflow: hidden; /* clips the flood circle to the pill shape */
+    transition:
+      color 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+      transform 0.3s cubic-bezier(0.23, 1, 0.32, 1),
+      box-shadow 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* The flood circle. Sized at 120% of the BUTTON'S OWN WIDTH rather than a
+   * fixed 50px so it scales with the element — a fixed-size circle covers a
+   * small inline button but leaves the ends of a full-width CTA unfilled. */
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 120%;
+    aspect-ratio: 1;
+    border-radius: 9999px;
+    scale: 0;
+    z-index: -1;
+    transition: scale 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .btn:hover::before {
+    scale: 1.5;
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid #7c3aed;
+    outline-offset: 3px;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  /* A disabled button must stay inert — no flood, no lift, no glow. */
+  .btn:disabled:hover::before,
+  .btn[aria-disabled="true"]:hover::before {
+    scale: 0;
+  }
+
+  .btn:disabled:hover,
+  .btn[aria-disabled="true"]:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* ---- Primary: solid purple, main CTAs ---------------------------------
+   * The base fill is a ::after at z-index -2 rather than a background-color
+   * on the element itself, so the ::before flood (z-index -1) can sit on top
+   * of the fill while both stay behind the label. */
+  .btn-primary {
+    color: #ffffff;
+  }
+
+  .btn-primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    background-image: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+  }
+
+  .btn-primary::before {
+    background-color: #a855f7;
+  }
+
+  .btn-primary:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 22px rgba(124, 58, 237, 0.45);
+  }
+
+  /* ---- Outline: transparent until hovered, secondary CTAs ---------------- */
+  .btn-outline {
+    color: #7c3aed;
+    border-color: #7c3aed;
+  }
+
+  .btn-outline::before {
+    background-color: #7c3aed;
+  }
+
+  .btn-outline:hover {
+    color: #ffffff;
+    transform: scale(1.04);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  }
+
+  /* ---- Ghost: quiet neutral action (Back, Cancel) ------------------------ */
+  .btn-ghost {
+    color: #1e293b;
+    border-width: 1px;
+    border-color: #e2e8f0;
+  }
+
+  .btn-ghost::before {
+    background-color: #f5f3ff;
+  }
+
+  .btn-ghost:hover {
+    color: #6d28d9;
+    border-color: #c4b5fd;
+    transform: scale(1.02);
+  }
+
+  /* ---- WhatsApp: same motion, WhatsApp's own brand green ----------------- */
+  .btn-whatsapp {
+    color: #ffffff;
+  }
+
+  .btn-whatsapp::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    background-color: #25d366;
+  }
+
+  .btn-whatsapp::before {
+    background-color: #1faf53;
+  }
+
+  .btn-whatsapp:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 20px rgba(37, 211, 102, 0.45);
+  }
 }
 
-.btn-3d-purple::before {
-  width: 70%;
-  height: 2px;
-  position: absolute;
-  background-color: rgba(250, 250, 250, 0.7);
-  content: "";
-  filter: blur(1px);
-  top: 7px;
-  border-radius: 50%;
-}
+/* Honour a reduced-motion preference: keep the colour change, drop the
+ * travel (the flood sweep and the scale lift). */
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .btn::before {
+    transition-duration: 0.01ms;
+  }
 
-.btn-3d-purple::after {
-  width: 70%;
-  height: 2px;
-  position: absolute;
-  background-color: rgba(250, 250, 250, 0.2);
-  content: "";
-  filter: blur(1px);
-  bottom: 7px;
-  border-radius: 50%;
-}
-
-.btn-3d-purple:hover {
-  animation: jello-horizontal 0.9s both;
-}
-
-/* Jello Animation Keyframes */
-@keyframes jello-horizontal {
-  0% {
-    transform: scale3d(1, 1, 1);
-  }
-  30% {
-    transform: scale3d(1.25, 0.75, 1);
-  }
-  40% {
-    transform: scale3d(0.75, 1.25, 1);
-  }
-  50% {
-    transform: scale3d(1.15, 0.85, 1);
-  }
-  65% {
-    transform: scale3d(0.95, 1.05, 1);
-  }
-  75% {
-    transform: scale3d(1.05, 0.95, 1);
-  }
-  100% {
-    transform: scale3d(1, 1, 1);
+  .btn:hover,
+  .btn:active {
+    transform: none;
   }
 }

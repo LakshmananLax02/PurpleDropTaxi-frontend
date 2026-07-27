@@ -337,7 +337,7 @@ function TimePicker12h({ value, onChange }) {
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="btn-3d-purple w-full h-9 mt-3 text-xs font-black uppercase tracking-wider text-white"
+            className="btn btn-primary w-full h-9 mt-3 text-xs font-black uppercase tracking-wider"
           >
             Done
           </button>
@@ -1015,7 +1015,7 @@ export default function BookingSection() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="btn-3d-purple w-full h-[54px] text-sm font-black uppercase tracking-wider text-white disabled:opacity-60"
+                className="btn btn-primary w-full h-[54px] text-sm font-black uppercase tracking-wider"
               >
                 Get Fare Estimation
               </button>

@@ -112,11 +112,11 @@ function FleetCard({ car }) {
           </div>
         </div>
 
-        {/* Action Button using 3D Animated Jello Style */}
+        {/* Action button — shared app-wide button system (see globals.css) */}
         <div className="px-6 pb-6 pt-4">
           <button
             type="button"
-            className="btn-3d-purple w-full py-3.5 text-xs font-black uppercase tracking-wider text-white"
+            className="btn btn-primary w-full py-3.5 text-xs font-black uppercase tracking-wider"
           >
             Book This Cab →
           </button>

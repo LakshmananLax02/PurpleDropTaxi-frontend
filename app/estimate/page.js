@@ -279,14 +279,14 @@ export default function EstimatePage() {
                   <div className="flex gap-3">
                     <button
                       onClick={() => router.push("/")}
-                      className="flex-1 h-[54px] rounded-[14px] border border-[#E2E8F0] font-bold text-sm text-[#1E293B] hover:bg-slate-50 transition-colors"
+                      className="btn btn-ghost flex-1 h-[54px] font-bold text-sm"
                     >
                       ← Back
                     </button>
                     <button
                       onClick={handleConfirm}
                       disabled={!fare}
-                      className="btn-3d-purple flex-1 h-[54px] text-sm font-black uppercase tracking-wider text-white disabled:opacity-60"
+                      className="btn btn-primary flex-1 h-[54px] text-sm font-black uppercase tracking-wider"
                     >
                       Confirm Booking →
                     </button>
@@ -335,7 +335,7 @@ export default function EstimatePage() {
 
                   <button
                     onClick={() => router.push("/")}
-                    className="btn-3d-purple w-full h-[54px] text-sm font-black uppercase tracking-wider text-white"
+                    className="btn btn-primary w-full h-[54px] text-sm font-black uppercase tracking-wider"
                   >
                     Book Another Ride
                   </button>
