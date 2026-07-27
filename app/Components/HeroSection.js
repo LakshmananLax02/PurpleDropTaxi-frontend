@@ -183,7 +183,7 @@ export default function HeroSection() {
               type="button"
               onClick={() => goTo(index - 1)}
               aria-label="Previous slide"
-              className="pointer-events-auto absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
+              className="btn btn-light btn-icon pointer-events-auto absolute left-4 md:left-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 shadow-md border border-black/5"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -191,7 +191,7 @@ export default function HeroSection() {
               type="button"
               onClick={() => goTo(index + 1)}
               aria-label="Next slide"
-              className="pointer-events-auto absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 rounded-full bg-white/90 backdrop-blur shadow-md border border-black/5 flex items-center justify-center text-[#1E293B] hover:text-[#8B5CF6] transition-colors"
+              className="btn btn-light btn-icon pointer-events-auto absolute right-4 md:right-8 top-1/2 -translate-y-1/2 w-9 h-9 md:w-10 md:h-10 shadow-md border border-black/5"
             >
               <ChevronRight className="w-5 h-5" />
             </button>

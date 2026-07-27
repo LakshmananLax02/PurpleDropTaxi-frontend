@@ -326,7 +326,7 @@ export default function WhyChooseUs() {
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-24 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-950 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-purple-900/30"
+          className="mt-24 bg-gradient-to-r from-slate-950 via-purple-950 to-slate-950 rounded-xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden border border-purple-900/30"
         >
           <motion.div 
             animate={{ 

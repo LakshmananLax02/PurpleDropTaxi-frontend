@@ -128,7 +128,7 @@ function FleetCard({ car }) {
 
 export default function FleetSection() {
   return (
-    <section className="w-full bg-[#f8fafc] py-20 px-4 md:px-8 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#f8fafc] py-5 px-4 md:px-8 relative overflow-hidden font-sans">
       
       {/* Ambient Backdrop Glow */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-purple-200/30 rounded-full blur-3xl pointer-events-none" />

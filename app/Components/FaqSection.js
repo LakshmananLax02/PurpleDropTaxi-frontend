@@ -212,7 +212,7 @@ export default function FaqSection() {
           <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
             <a
               href="tel:+919361354492"
-              className="flex items-center gap-2 bg-white text-[#7c3aed] hover:bg-purple-50 px-5 py-3 rounded-xl text-xs font-extrabold transition-all shadow-md active:scale-95"
+              className="btn btn-light px-5 py-3 rounded-xl text-xs font-extrabold shadow-md"
             >
               <Phone className="w-4 h-4" /> Call Dispatch
             </a>
@@ -220,7 +220,7 @@ export default function FaqSection() {
               href="https://wa.me/919361354492"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-xl text-xs font-extrabold transition-all shadow-md active:scale-95"
+              className="btn btn-whatsapp px-5 py-3 rounded-xl text-xs font-extrabold shadow-md"
             >
               <MessageSquare className="w-4 h-4" /> WhatsApp Us
             </a>
