@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./Components/Navbar";
+import Footer from './Components/Footer'
 import { BookingProvider } from "./context/BookingContext";
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ export default function RootLayout({
         <BookingProvider>
           <Navbar />
           {children}
+          <Footer/>
         </BookingProvider>
       </body>
     </html>

@@ -236,8 +236,8 @@ export default function PopularRoutes() {
                       </div>
                     </div>
 
-                    {/* Footer Pricing */}
-                    <div className="pt-2 mt-2 border-t border-gray-100 flex items-baseline justify-between">
+                    {/* Footer Pricing & Added Button */}
+                    <div className="pt-2 mt-2 border-t border-gray-100 flex items-center justify-between gap-2">
                       <div>
                         <span className="text-[9px] font-extrabold uppercase text-gray-400 block -mb-1">
                           Starting from
@@ -247,9 +247,12 @@ export default function PopularRoutes() {
                         </span>
                       </div>
 
-                      <span className="text-[9px] font-extrabold text-[#7c3aed] uppercase tracking-wide">
-                        Onwards
-                      </span>
+                      <button
+                        type="button"
+                        className="btn btn-primary px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider shrink-0"
+                      >
+                        Book Route →
+                      </button>
                     </div>
                   </div>
 
