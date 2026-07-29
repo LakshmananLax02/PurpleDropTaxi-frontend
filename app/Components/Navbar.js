@@ -19,9 +19,9 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about-us" },
   { label: "Onewaytaxi", href: "#oneway" },
-  { label: "Airport taxi", href: "#airport" },
+  { label: "Tariff", href: "/tariff" },
   { label: "Service routes", href: "#routes" },
-  { label: "Contact us", href: "#contact" },
+  { label: "Contact us", href: "/contact-us" },
 ]
 
 const features = [

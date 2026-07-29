@@ -147,12 +147,77 @@ export default function AboutUs() {
   return (
     <div className="w-full bg-[#f8fafc] text-gray-900 relative overflow-hidden font-sans select-none">
       
+      {/* 🎨 CUSTOM UIVERSE EXPANDING HOVER STYLES */}
+      <style jsx global>{`
+        /* Uiverse Expanding Circle Hover Card */
+        .uiverse-hover-card {
+          position: relative;
+          background: #ffffff;
+          border-radius: 16px;
+          border: 1px solid #f1f5f9;
+          z-index: 0;
+          overflow: hidden;
+          transition: all 0.4s ease;
+        }
+
+        .uiverse-hover-card::before {
+          content: '';
+          position: absolute;
+          z-index: -1;
+          top: -16px;
+          right: -16px;
+          background: linear-gradient(135deg, #7c3aed, #4c1d95);
+          height: 32px;
+          width: 32px;
+          border-radius: 32px;
+          transform: scale(1);
+          transform-origin: 50% 50%;
+          transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .uiverse-go-corner {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: absolute;
+          width: 2.2em;
+          height: 2.2em;
+          overflow: hidden;
+          top: 0;
+          right: 0;
+          background: linear-gradient(135deg, #a855f7, #7c3aed);
+          border-radius: 0 16px 0 24px;
+          transition: all 0.3s ease;
+        }
+
+        /* Hover States */
+        .uiverse-hover-card:hover::before {
+          transform: scale(32);
+        }
+
+        .uiverse-hover-card:hover .uiverse-card-title {
+          color: #ffffff !important;
+          transition: color 0.35s ease;
+        }
+
+        .uiverse-hover-card:hover .uiverse-card-desc {
+          color: rgba(255, 255, 255, 0.85) !important;
+          transition: color 0.35s ease;
+        }
+
+        .uiverse-hover-card:hover .uiverse-card-icon {
+          background-color: rgba(255, 255, 255, 0.2) !important;
+          color: #ffffff !important;
+          transition: all 0.35s ease;
+        }
+      `}</style>
+
       {/* 🌟 AMBIENT GLOW EFFECTS */}
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-purple-200/40 rounded-full blur-3xl pointer-events-none -translate-y-1/2 z-0" />
       <div className="absolute bottom-1/3 right-0 w-[500px] h-[500px] bg-purple-300/30 rounded-full blur-3xl pointer-events-none z-0" />
 
       {/* ========================================================================
-       * 1. HERO HEADER SECTION WITH DIRECT /images/sedanimg.png IMAGE
+       * 1. HERO HEADER SECTION
        * ========================================================================= */}
       <section className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
         
@@ -196,7 +261,7 @@ export default function AboutUs() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10 space-y-24">
 
         {/* ========================================================================
-         * 2. STATS TICKER GRID (SCROLL ANIMATED)
+         * 2. STATS TICKER GRID
          * ========================================================================= */}
         <motion.section 
           initial="hidden"
@@ -225,7 +290,7 @@ export default function AboutUs() {
         </motion.section>
 
         {/* ========================================================================
-         * 3. PURPLE DROP TAXI KEY FEATURES
+         * 3. PURPLE DROP TAXI KEY FEATURES (UIVERSE EXPANDING HOVER CARDS)
          * ========================================================================= */}
         <motion.section 
           initial="hidden"
@@ -253,14 +318,20 @@ export default function AboutUs() {
                 <motion.div 
                   key={i} 
                   variants={fadeInUp}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="bg-white border border-gray-100 p-6 rounded-2xl space-y-3 shadow-lg shadow-slate-200/40 hover:border-purple-300 transition-colors group"
+                  className="uiverse-hover-card p-6 shadow-lg shadow-slate-200/50 flex flex-col justify-between"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Icon className="w-5 h-5" />
+                  {/* Uiverse Corner Arrow Badge */}
+                  <div className="uiverse-go-corner">
+                    <ArrowRight className="w-3.5 h-3.5 text-white -mt-0.5 -mr-0.5" />
                   </div>
-                  <h3 className="text-base font-bold text-gray-900">{item.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed font-medium">{item.desc}</p>
+
+                  <div className="space-y-3">
+                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="uiverse-card-title text-base font-bold text-gray-900 transition-colors">{item.title}</h3>
+                    <p className="uiverse-card-desc text-xs text-gray-500 leading-relaxed font-medium transition-colors">{item.desc}</p>
+                  </div>
                 </motion.div>
               );
             })}
@@ -344,23 +415,33 @@ export default function AboutUs() {
           </motion.div>
 
           <motion.div variants={fadeInUp} className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-xl shadow-slate-200/40">
-            <table className="w-full text-left text-xs sm:text-sm text-gray-700">
+            <table className="w-full min-w-[640px] text-left text-xs sm:text-sm text-gray-700 table-fixed">
               <thead className="bg-purple-50 text-[#7c3aed] font-black uppercase tracking-wider text-[11px] border-b border-purple-100">
                 <tr>
-                  <th className="p-4 sm:p-5">Feature</th>
-                  <th className="p-4 sm:p-5 text-rose-600">Traditional Cabs</th>
-                  <th className="p-4 sm:p-5 text-emerald-600">PurpleDropTaxi</th>
+                  <th className="p-4 sm:p-5 w-[34%]">Feature</th>
+                  <th className="p-4 sm:p-5 w-[33%] text-rose-600">Traditional Cabs</th>
+                  <th className="p-4 sm:p-5 w-[33%] text-emerald-600">PurpleDropTaxi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 font-medium">
                 {COMPARISONS.map((row, i) => (
                   <tr key={i} className="hover:bg-purple-50/40 transition-colors">
-                    <td className="p-4 sm:p-5 font-bold text-gray-900">{row.feature}</td>
-                    <td className="p-4 sm:p-5 text-gray-500 flex items-center gap-2">
-                      <XCircle className="w-4 h-4 text-rose-500 shrink-0" /> {row.traditional}
+                    <td className="p-4 sm:p-5 font-bold text-gray-900 align-top">
+                      {row.feature}
                     </td>
-                    <td className="p-4 sm:p-5 text-gray-900 font-bold flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> {row.purple}
+
+                    <td className="p-4 sm:p-5 text-gray-500 align-top">
+                      <div className="flex items-start gap-2">
+                        <XCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" /> 
+                        <span>{row.traditional}</span>
+                      </div>
+                    </td>
+
+                    <td className="p-4 sm:p-5 text-gray-900 font-bold align-top bg-purple-50/20">
+                      <div className="flex items-start gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" /> 
+                        <span className="text-gray-900">{row.purple}</span>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -370,7 +451,7 @@ export default function AboutUs() {
         </motion.section>
 
         {/* ========================================================================
-         * 6. SAFETY & TRUST CARDS
+         * 6. SAFETY & TRUST CARDS (UIVERSE EXPANDING HOVER CARDS)
          * ========================================================================= */}
         <motion.section 
           initial="hidden"
@@ -395,14 +476,19 @@ export default function AboutUs() {
                 <motion.div 
                   key={i} 
                   variants={fadeInUp}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="bg-white border border-gray-100 p-6 rounded-2xl space-y-3 shadow-lg shadow-slate-200/40 hover:border-purple-300 transition-colors group"
+                  className="uiverse-hover-card p-6 shadow-lg shadow-slate-200/40 flex flex-col justify-between"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Icon className="w-5 h-5" />
+                  <div className="uiverse-go-corner">
+                    <ArrowRight className="w-3.5 h-3.5 text-white -mt-0.5 -mr-0.5" />
                   </div>
-                  <h3 className="text-sm font-bold text-gray-900">{item.title}</h3>
-                  <p className="text-xs text-gray-500 leading-relaxed font-medium">{item.desc}</p>
+
+                  <div className="space-y-3">
+                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center transition-colors">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="uiverse-card-title text-sm font-bold text-gray-900 transition-colors">{item.title}</h3>
+                    <p className="uiverse-card-desc text-xs text-gray-500 leading-relaxed font-medium transition-colors">{item.desc}</p>
+                  </div>
                 </motion.div>
               );
             })}
@@ -410,7 +496,7 @@ export default function AboutUs() {
         </motion.section>
 
         {/* ========================================================================
-         * 7. CALL TO ACTION BANNER (POP ANIMATION)
+         * 7. CALL TO ACTION BANNER
          * ========================================================================= */}
         <motion.section 
           initial={{ opacity: 0, scale: 0.95 }}
