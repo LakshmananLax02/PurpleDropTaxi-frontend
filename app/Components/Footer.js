@@ -45,10 +45,11 @@ const QUICK_LINKS = [
   { name: "About Us", href: "#about" },
   { name: "Tariff & Fare Card", href: "#tariff" },
   { name: "Our Fleet", href: "#fleet" },
-  { name: "Attach Your Taxi", href: "#attach" },
-  { name: "Driver Partner Login", href: "#driver" },
+  { name: "Service Routes", href: "#attach" },
   { name: "Privacy Policy", href: "#privacy" },
   { name: "Terms & Conditions", href: "#terms" },
+    { name: "Contact Us", href: "#terms" },
+
 ];
 
 export default function Footer() {
@@ -132,29 +133,7 @@ export default function Footer() {
               </span>
             </div>
 
-            {/* App Store Mock Badges */}
-            <div className="pt-2">
-              <span className="text-[11px] font-extrabold text-gray-500 uppercase tracking-widest block mb-3">
-                Book Faster via Mobile App
-              </span>
-              <div className="flex items-center gap-3">
-                <button className="flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 border border-purple-900/50 px-4 py-2 rounded-xl transition-all">
-                  <Play className="w-4 h-4 text-purple-400 fill-purple-400" />
-                  <div className="text-left">
-                    <span className="text-[9px] font-extrabold uppercase text-gray-400 block -mb-0.5">GET IT ON</span>
-                    <span className="text-xs font-bold text-white">Google Play</span>
-                  </div>
-                </button>
-
-                <button className="flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 border border-purple-900/50 px-4 py-2 rounded-xl transition-all">
-                  <Apple className="w-4 h-4 text-purple-400 fill-purple-400" />
-                  <div className="text-left">
-                    <span className="text-[9px] font-extrabold uppercase text-gray-400 block -mb-0.5">DOWNLOAD ON THE</span>
-                    <span className="text-xs font-bold text-white">App Store</span>
-                  </div>
-                </button>
-              </div>
-            </div>
+            
           </div>
 
           {/* COLUMN 2: POPULAR CITIES */}
@@ -252,10 +231,9 @@ export default function Footer() {
 
          <p className="flex items-center gap-1 text-gray-500">
   Designed and Developed By{" "}
-  <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" />
   <Link
     href="/"
-    className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"
+    className="text-purple-400 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"
   >
     Wexoraa Infotech
   </Link>

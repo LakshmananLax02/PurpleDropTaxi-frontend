@@ -16,8 +16,8 @@ const WHATSAPP_NUMBER = "911234567890"
 const LOGO_SRC = "/images/logo-navbar.png"
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about-us" },
   { label: "Onewaytaxi", href: "#oneway" },
   { label: "Airport taxi", href: "#airport" },
   { label: "Service routes", href: "#routes" },
