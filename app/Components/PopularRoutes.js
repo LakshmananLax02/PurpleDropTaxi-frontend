@@ -79,9 +79,9 @@ export default function PopularRoutes() {
   };
 
   return (
-    <section className="w-full bg-[#f8fafc] py-20 px-4 md:px-8 relative overflow-hidden font-sans select-none">
+    <section className="w-full bg-[#f8fafc] py-5 px-4 md:px-8 relative overflow-hidden font-sans select-none">
       
-      {/* Embedded CSS - Fixed Stacking and Hover Animation */}
+      {/* Embedded CSS - Fixed Stacking, Hover Animation, and Mobile Centering */}
       <style jsx global>{`
         /* Hide scrollbars */
         .no-scrollbar::-webkit-scrollbar {
@@ -90,6 +90,22 @@ export default function PopularRoutes() {
         .no-scrollbar {
           -ms-overflow-style: none;
           scrollbar-width: none;
+        }
+
+        /* CAROUSEL TRACK - snap behavior */
+        .route-track {
+          scroll-snap-type: x mandatory;
+        }
+
+        /* On mobile (one card visible at a time), add side padding so the
+           active card can rest dead-center in the viewport, and snap each
+           card to that center point. On larger screens (multiple cards
+           visible) we drop the centering padding since it isn't needed. */
+        @media (max-width: 767px) {
+          .route-track {
+            padding-left: calc(50% - 110px); /* 110px = half of 220px card width */
+            padding-right: calc(50% - 110px);
+          }
         }
 
         /* CARD CONTAINER */
@@ -106,6 +122,7 @@ export default function PopularRoutes() {
           color: #0f172a;
           flex-shrink: 0;
           transition: all 0.4s ease;
+          scroll-snap-align: center;
         }
 
         /* ROTATING GRADIENT BACKGROUND LAYER */
@@ -196,7 +213,7 @@ export default function PopularRoutes() {
           {/* CAROUSEL TRACK */}
           <div
             ref={scrollRef}
-            className="flex items-center gap-8 overflow-x-auto no-scrollbar py-6 px-4 scroll-smooth"
+            className="route-track flex items-center gap-8 overflow-x-auto no-scrollbar py-6 px-4 scroll-smooth"
           >
             {POPULAR_ROUTES.map((route) => (
               <div key={route.id} className="glow-route-card group/card">

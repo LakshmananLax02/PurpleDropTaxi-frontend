@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { User, Users, HeartHandshake, Plane, Briefcase, ArrowRight, Sparkles } from "lucide-react";
+import React, { useRef } from "react";
+import { User, Users, HeartHandshake, Plane, Briefcase, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 
 /* ============================================================================
  * 1. TRAVELLERS DATASET
@@ -50,11 +50,34 @@ const TRAVELLERS = [
 ];
 
 export default function DesignedForTravellers() {
+  const scrollRef = useRef(null);
+
+  /* Scroll Carousel Controls (mobile only) */
+  const handleScroll = (direction) => {
+    if (scrollRef.current) {
+      const { scrollLeft, clientWidth } = scrollRef.current;
+      const scrollAmount = clientWidth * 0.9;
+      scrollRef.current.scrollTo({
+        left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <section className="w-full bg-[#f8fafc] py-16 px-4 md:px-8 relative overflow-hidden font-sans">
       
-      {/* Embedded CSS - Reduced Card Height to 300px */}
+      {/* Embedded CSS - Reduced Card Height + Mobile Carousel / Desktop Grid */}
       <style jsx global>{`
+        /* Hide scrollbars */
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+
         /* --- 3D FLIP CARD LAYOUT --- */
         .flip-card {
           width: 100%;
@@ -70,7 +93,8 @@ export default function DesignedForTravellers() {
           transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .flip-card:hover .flip-card-inner {
+        .flip-card:hover .flip-card-inner,
+        .flip-card:active .flip-card-inner {
           transform: rotateY(180deg);
         }
 
@@ -106,6 +130,43 @@ export default function DesignedForTravellers() {
           box-shadow: 0 15px 30px -10px rgba(109, 40, 217, 0.3);
         }
 
+        /* --- RESPONSIVE TRACK: horizontal centered carousel on mobile,
+               static grid from the sm breakpoint upward --- */
+        .travellers-track {
+          display: flex;
+          gap: 20px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          padding-left: calc(50% - 130px); /* 130px = half of the 260px mobile card width */
+          padding-right: calc(50% - 130px);
+        }
+
+        .travellers-track .flip-card {
+          width: 260px;
+          flex-shrink: 0;
+          scroll-snap-align: center;
+        }
+
+        @media (min-width: 640px) {
+          .travellers-track {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            overflow-x: visible;
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .travellers-track .flip-card {
+            width: 100%;
+            flex-shrink: initial;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .travellers-track {
+            grid-template-columns: repeat(5, 1fr);
+          }
+        }
+
         /* The card's Book Now button uses the shared .btn system
            (see globals.css) — .btn-amber is the on-purple variant. */
       `}</style>
@@ -129,81 +190,104 @@ export default function DesignedForTravellers() {
           </p>
         </div>
 
-        {/* --- 3D FLIP CARDS GRID --- */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-          {TRAVELLERS.map((item) => {
-            const IconComponent = item.icon;
-            return (
-              <div key={item.id} className="flip-card group cursor-pointer">
-                <div className="flip-card-inner">
-                  
-                  {/* FRONT FACE */}
-                  <div className="flip-card-front rounded-xl">
-                    {/* Top Image Container - Reduced to h-32 (128px) */}
-                    <div className="relative h-32 w-full overflow-hidden rounded-t-xl shrink-0">
-                      <img
-                        src={item.frontImage}
-                        alt={item.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        {/* --- CARDS: mobile carousel w/ arrows, sm+ static grid --- */}
+        <div className="relative group/carousel">
+
+          {/* PREV / NEXT — mobile only, grid shows all cards on sm+ so arrows aren't needed there */}
+          <button
+            type="button"
+            onClick={() => handleScroll("left")}
+            aria-label="Previous traveller type"
+            className="btn btn-primary btn-icon sm:hidden absolute -left-1 top-[130px] -translate-y-1/2 z-30 w-11 h-11 shadow-lg shadow-purple-600/30 border-2 border-white"
+          >
+            <ChevronLeft className="w-6 h-6 stroke-[2.5]" />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleScroll("right")}
+            aria-label="Next traveller type"
+            className="btn btn-primary btn-icon sm:hidden absolute -right-1 top-[130px] -translate-y-1/2 z-30 w-11 h-11 shadow-lg shadow-purple-600/30 border-2 border-white"
+          >
+            <ChevronRight className="w-6 h-6 stroke-[2.5]" />
+          </button>
+
+          <div ref={scrollRef} className="travellers-track no-scrollbar py-2">
+            {TRAVELLERS.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <div key={item.id} className="flip-card group cursor-pointer">
+                  <div className="flip-card-inner">
+
+                    {/* FRONT FACE */}
+                    <div className="flip-card-front rounded-xl">
+                      {/* Top Image Container - Reduced to h-32 (128px) */}
+                      <div className="relative h-32 w-full overflow-hidden rounded-t-xl shrink-0">
+                        <img
+                          src={item.frontImage}
+                          alt={item.title}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      </div>
+
+                      {/* Bottom Details Container - Compact layout */}
+                      <div className="p-4 flex-1 flex flex-col justify-between bg-white rounded-b-xl">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <div className="w-6 h-6 rounded-md bg-purple-100 text-[#7c3aed] flex items-center justify-center shrink-0">
+                              <IconComponent className="w-3.5 h-3.5" />
+                            </div>
+                            <h3 className="text-xs font-black text-gray-900 tracking-tight">
+                              {item.title}
+                            </h3>
+                          </div>
+                          <p className="text-gray-500 text-[11px] font-medium leading-normal line-clamp-2">
+                            {item.shortDesc}
+                          </p>
+                        </div>
+
+                        <div className="pt-2.5 border-t border-gray-100 flex items-center text-[10px] font-extrabold text-[#7c3aed]">
+                          <span>Hover to explore</span>
+                          <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-1" />
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Bottom Details Container - Compact layout */}
-                    <div className="p-4 flex-1 flex flex-col justify-between bg-white rounded-b-xl">
-                      <div>
-                        <div className="flex items-center gap-2 mb-1.5">
-                          <div className="w-6 h-6 rounded-md bg-purple-100 text-[#7c3aed] flex items-center justify-center shrink-0">
-                            <IconComponent className="w-3.5 h-3.5" />
+                    {/* BACK FACE */}
+                    <div className="flip-card-back rounded-xl">
+                      <div className="space-y-3">
+                        {/* Icon & Title Header */}
+                        <div className="flex items-center gap-2.5 border-b border-white/20 pb-2.5">
+                          <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md text-amber-300 flex items-center justify-center shrink-0">
+                            <IconComponent className="w-4 h-4" />
                           </div>
-                          <h3 className="text-xs font-black text-gray-900 tracking-tight">
+                          <h3 className="text-sm font-black text-white tracking-tight">
                             {item.title}
                           </h3>
                         </div>
-                        <p className="text-gray-500 text-[11px] font-medium leading-normal line-clamp-2">
-                          {item.shortDesc}
+
+                        {/* Detailed Description */}
+                        <p className="text-purple-100 text-[11px] font-medium leading-relaxed">
+                          {item.backDesc}
                         </p>
                       </div>
 
-                      <div className="pt-2.5 border-t border-gray-100 flex items-center text-[10px] font-extrabold text-[#7c3aed]">
-                        <span>Hover to explore</span>
-                        <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-1" />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* BACK FACE */}
-                  <div className="flip-card-back rounded-xl">
-                    <div className="space-y-3">
-                      {/* Icon & Title Header */}
-                      <div className="flex items-center gap-2.5 border-b border-white/20 pb-2.5">
-                        <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-md text-amber-300 flex items-center justify-center shrink-0">
-                          <IconComponent className="w-4 h-4" />
-                        </div>
-                        <h3 className="text-sm font-black text-white tracking-tight">
-                          {item.title}
-                        </h3>
-                      </div>
-
-                      {/* Detailed Description */}
-                      <p className="text-purple-100 text-[11px] font-medium leading-relaxed">
-                        {item.backDesc}
-                      </p>
+                      {/* Shared button system — amber variant reads on purple */}
+                      <button
+                        type="button"
+                        className="btn btn-amber w-full h-[42px] text-xs font-black"
+                      >
+                        Book Now <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
                     </div>
 
-                    {/* Shared button system — amber variant reads on purple */}
-                    <button
-                      type="button"
-                      className="btn btn-amber w-full h-[42px] text-xs font-black"
-                    >
-                      Book Now <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
                   </div>
-
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
         </div>
 
       </div>

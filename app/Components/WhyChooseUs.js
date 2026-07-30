@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { 
   ShieldCheck, 
   Receipt, 
@@ -87,9 +87,29 @@ const cardScrollVariants = {
 };
 
 export default function WhyChooseUs() {
+  const { scrollYProgress } = useScroll();
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
+
   return (
-    <section className="w-full bg-[#f8fafc] py-5 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
+    <section className="w-full relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden font-sans">
       
+      {/* ========================================================================
+       * BACKGROUND IMAGE & GRADIENT OVERLAY
+       * ========================================================================= */}
+      <motion.div 
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        style={{ scale: bgScale }}
+      >
+        <img
+          src="/images/sedanimg.png"
+          alt="PurpleDropTaxi Why Choose Us Background"
+          className="w-full h-full object-cover object-center opacity-85"
+        />
+      </motion.div>
+
+      {/* Dark & Subtle Purple Gradient Overlay to guarantee high contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/30 via-[#f8fafc]/10 to-[#f8fafc]/20 z-0" />
+
       {/* --- EMBEDDED STYLES FOR THE 3D STACKED HOVER CARD EFFECT --- */}
       <style jsx global>{`
         .card-wrapper {
@@ -211,7 +231,7 @@ export default function WhyChooseUs() {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="absolute top-1/4 -left-20 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl pointer-events-none" 
+        className="absolute top-1/4 -left-20 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl pointer-events-none z-0" 
       />
       <motion.div 
         animate={{
@@ -225,7 +245,7 @@ export default function WhyChooseUs() {
           ease: "easeInOut",
           delay: 1,
         }}
-        className="absolute bottom-10 -right-20 w-[450px] h-[450px] bg-purple-400/20 rounded-full blur-3xl pointer-events-none" 
+        className="absolute bottom-10 -right-20 w-[450px] h-[450px] bg-purple-400/20 rounded-full blur-3xl pointer-events-none z-0" 
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -237,7 +257,7 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm"
+            className="inline-flex items-center gap-2 bg-white/90 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm backdrop-blur-md"
           >
             <motion.div
               animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
@@ -264,7 +284,7 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-gray-500 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed"
+            className="text-gray-600 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed"
           >
             We combine transparent pricing, certified highway safety, and premium vehicle comfort so you can travel across Tamil Nadu & South India worry-free.
           </motion.p>

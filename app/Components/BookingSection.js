@@ -699,7 +699,7 @@ export default function BookingSection() {
   /* ---- Carousel autoplay ---- */
   const [slideIndex, setSlideIndex] = useState(0);
   useEffect(() => {
-    const t = setInterval(() => setSlideIndex((i) => (i + 1) % SLIDES.length), 5000);
+    const t = setInterval(() => setSlideIndex((i) => (i + 1) % SLIDES.length), 3000);
     return () => clearInterval(t);
   }, []);
   const slide = SLIDES[slideIndex];
@@ -806,7 +806,7 @@ export default function BookingSection() {
       </div>
 
       {/* ---- Foreground: carousel content (left) + form (right) ---- */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-8 py-6 md:py-16">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-8 py-5 md:py-6">
         {/* Mobile: carousel content first, then the form peeking up beneath it
             (tight gap so at least the top half of the form is on-screen).
             Desktop: content left, form right. */}

@@ -20,7 +20,7 @@ const navLinks = [
   { label: "About", href: "/about-us" },
   { label: "Onewaytaxi", href: "#oneway" },
   { label: "Tariff", href: "/tariff" },
-  { label: "Service routes", href: "#routes" },
+  { label: "Service routes", href: "/service-routes" },
   { label: "Contact us", href: "/contact-us" },
 ]
 
