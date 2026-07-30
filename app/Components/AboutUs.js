@@ -219,7 +219,7 @@ export default function AboutUs() {
       {/* ========================================================================
        * 1. HERO HEADER SECTION
        * ========================================================================= */}
-      <section className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
+      <section className="relative w-full py-4 md:py-4 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
         
         {/* Parallax Background Image Layer */}
         <motion.div 
@@ -258,7 +258,7 @@ export default function AboutUs() {
         </motion.div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 relative z-10 space-y-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-3 relative z-10 space-y-24">
 
         {/* ========================================================================
          * 2. STATS TICKER GRID

@@ -15,9 +15,9 @@ import {
   ArrowRight,
   Headphones,
   Car,
-  Calendar,
   AlertCircle,
-  Navigation
+  Navigation,
+  User
 } from "lucide-react";
 
 /* ============================================================================
@@ -81,19 +81,21 @@ export default function ContactUs() {
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    email: "",
     phone: "",
-    pickup: "",
-    drop: "",
-    date: "",
     message: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Add your API call logic here (e.g., Post to Formspree, Nodemailer, etc.)
+    console.log("Form Submitted:", formData);
+    
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
-      setFormData({ name: "", phone: "", pickup: "", drop: "", date: "", message: "" });
+      // Reset form fields to empty
+      setFormData({ name: "", email: "", phone: "", message: "" });
     }, 5000);
   };
 
@@ -156,7 +158,7 @@ export default function ContactUs() {
       {/* ========================================================================
        * 1. HERO HEADER SECTION (PARALLAX BACKGROUND)
        * ========================================================================= */}
-      <section className="relative w-full py-24 md:py-32 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
+      <section className="relative w-full py-5 md:py-5 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
         
         <motion.div 
           className="absolute inset-0 w-full h-full pointer-events-none z-0"
@@ -201,7 +203,7 @@ export default function ContactUs() {
         <motion.section 
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
@@ -241,25 +243,25 @@ export default function ContactUs() {
         <motion.section 
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, margin: "-100px" }}
           variants={staggerContainer}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start"
         >
           
-          {/* LEFT: INQUIRY & BOOKING FORM (7 COLUMNS) */}
+          {/* LEFT: CONTACT FORM (7 COLUMNS) */}
           <motion.div variants={fadeInUp} className="lg:col-span-7 bg-white border border-purple-100 p-6 sm:p-10 rounded-3xl shadow-xl shadow-purple-500/5 space-y-8 relative overflow-hidden">
             
             <Car className="absolute -bottom-10 -right-10 w-64 h-64 text-slate-50 opacity-50 pointer-events-none rotate-12" />
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-3">
-                Priority Form
+                Inquiry Form
               </div>
               <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-                Request A <span className="text-[#7c3aed]">Quick Callback</span>
+                Send Us A <span className="text-[#7c3aed]">Message</span>
               </h2>
               <p className="text-xs sm:text-sm text-gray-500 font-medium mt-1">
-                Fill in your trip details below. Our dispatch team responds within 3 to 5 minutes to confirm fares.
+                Have a question or feedback? Fill out the form below and our team will get back to you shortly.
               </p>
             </div>
 
@@ -273,88 +275,72 @@ export default function ContactUs() {
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-black">Request Sent Successfully!</h3>
-                  <p className="text-sm text-emerald-700 mt-2 font-medium">Our dispatch desk will reach out to the provided number shortly.</p>
+                  <h3 className="text-xl font-black">Message Sent Successfully!</h3>
+                  <p className="text-sm text-emerald-700 mt-2 font-medium">Thank you for contacting PurpleDropTaxi. We will review your message and respond via email or phone shortly.</p>
                 </div>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Your Name</label>
+                {/* Field 1: Name */}
+                <div className="space-y-1.5">
+                  <label htmlFor="name" className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
+                      id="name"
                       type="text"
                       required
-                      placeholder="e.g. Ramesh Kumar"
+                      placeholder="Enter your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
+                </div>
 
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Phone Number</label>
+                {/* Field 2: Email */}
+                <div className="space-y-1.5">
+                  <label htmlFor="email" className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Email</label>
+                  <div className="relative">
+                    <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
+                      id="email"
+                      type="email"
+                      required
+                      placeholder="Enter your email address"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                    />
+                  </div>
+                </div>
+
+                {/* Field 3: Mobile Number */}
+                <div className="space-y-1.5">
+                  <label htmlFor="phone" className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Mobile Number</label>
+                  <div className="relative">
+                    <Phone className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <input
+                      id="phone"
                       type="tel"
                       required
-                      placeholder="+91 98765 43210"
+                      pattern="[0-9]{10}"
+                      placeholder="Enter 10-digit mobile number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Pickup City</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Chennai"
-                        value={formData.pickup}
-                        onChange={(e) => setFormData({ ...formData, pickup: e.target.value })}
-                        className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Drop City</label>
-                    <div className="relative">
-                      <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7c3aed]" />
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Bangalore"
-                        value={formData.drop}
-                        onChange={(e) => setFormData({ ...formData, drop: e.target.value })}
-                        className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
-                      />
-                    </div>
-                  </div>
-                </div>
-
+                {/* Field 4: Message */}
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Travel Date</label>
-                  <div className="relative">
-                    <Calendar className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-                    <input
-                      type="date"
-                      value={formData.date}
-                      onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium cursor-pointer"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Trip Details & Fleet Request</label>
+                  <label htmlFor="message" className="block text-xs font-bold text-gray-700 uppercase tracking-wider">Your Message</label>
                   <textarea
-                    rows={3}
-                    placeholder="Tell us about preferred pickup time, car model (Sedan/SUV), or any special requests..."
+                    id="message"
+                    rows={5}
+                    required
+                    placeholder="Type your message, inquiry, or feedback here..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium resize-none"
@@ -365,7 +351,7 @@ export default function ContactUs() {
                   type="submit"
                   className="w-full py-4 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 active:scale-95"
                 >
-                  <Send className="w-4 h-4" /> Send Request
+                  <Send className="w-4 h-4" /> Send Message
                 </button>
               </form>
             )}
@@ -378,7 +364,7 @@ export default function ContactUs() {
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
               
               <div className="flex flex-wrap items-center justify-between gap-3 relative z-10">
-                <span className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm">
+                <span className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 px-3 py-1 rounded-full text-xs font-bold shadow-sm">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -407,7 +393,7 @@ export default function ContactUs() {
                   href="https://wa.me/919876543210"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95 block text-center"
+                  className="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95 block text-center"
                 >
                   <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp Direct
                 </a>
@@ -504,7 +490,7 @@ export default function ContactUs() {
 
           {/* GOOGLE MAP IFRAME */}
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.4782105795352!2d76.93948757498214!3d11.07769275356463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f63fc31c5847%3A0xc848127fd2aefae!2sSri%20Murugan%20Cinemas%20A%2FC%204K%20Dolby%20Atmos!5e0!3m2!1sen!2sin!4v1785298306579!5m2!1sen!2sin" 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.4782105795352!2d76.93948757498214!3d11.07769275356463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f63fc31c5847%3A0xc848127fd2aefae!2sSri%20Murugan%20Cinemas+A%2FC+4K+Dolby+Atmos!5e0!3m2!1sen!2sin!4v1785298306579!5m2!1sen!2sin" 
             className="w-full h-full border-0"
             allowFullScreen="" 
             loading="lazy" 
