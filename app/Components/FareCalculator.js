@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 
 /* ============================================================================
- * FLEET RATES DATASET (PER KM RATES FOR ONE-WAY & ROUND TRIP)
+ * FLEET RATES DATASET (WITH CAR IMAGES FOR TABLE & CARDS)
  * ========================================================================= */
 const FLEETS = [
   {
@@ -30,6 +30,7 @@ const FLEETS = [
     roundTripRate: 11, // ₹11 / km for Round Trip
     driverBata: 400,   // Fixed driver bata per day
     badge: "Budget Friendly",
+    image: "/images/primesedanimg.png", // Update this path to your car image file
   },
   {
     id: "prime-sedan",
@@ -41,6 +42,7 @@ const FLEETS = [
     roundTripRate: 13, // ₹13 / km
     driverBata: 500,
     badge: "Extra Comfort",
+    image: "/images/sedanimg.png", // Update this path
   },
   {
     id: "suv",
@@ -52,6 +54,7 @@ const FLEETS = [
     roundTripRate: 15, // ₹15 / km
     driverBata: 600,
     badge: "Family Favorite",
+    image: "/images/suvimg.png", // Update this path
   },
   {
     id: "prime-suv",
@@ -63,6 +66,7 @@ const FLEETS = [
     roundTripRate: 18, // ₹18 / km
     driverBata: 700,
     badge: "Luxury Cruiser",
+    image: "/images/primesuvimg.png", // Update this path
   }
 ];
 
@@ -121,7 +125,7 @@ export default function FareCalculator() {
         {/* --- 2. MAIN CALCULATOR CARD --- */}
         <div className="bg-white border-2 border-purple-100/80 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-500/10 space-y-8">
           
-          {/* 💡 TOP INTIMATION BANNER */}
+          {/* TOP INTIMATION BANNER */}
           <div className="bg-purple-50 border border-purple-200 p-4 rounded-2xl flex items-center gap-3 text-purple-950 shadow-sm">
             <div className="w-8 h-8 rounded-xl bg-[#7c3aed] text-white flex items-center justify-center shrink-0 shadow-md">
               <Info className="w-4 h-4" />
@@ -168,20 +172,18 @@ export default function FareCalculator() {
           {/* INPUT FIELDS & QUICK METRICS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             
-            {/* KILOMETER INPUT WITH CLEAR INTIMATION & GLOW */}
+            {/* KILOMETER INPUT */}
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <label htmlFor="km-input" className="block text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-[#7c3aed]" /> Enter Distance
                 </label>
 
-                {/* Animated Pulsing Hint Badge */}
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#7c3aed] bg-purple-100 px-2.5 py-0.5 rounded-full border border-purple-200 animate-pulse">
                   <Navigation className="w-3 h-3" /> Type KMs Below
                 </span>
               </div>
 
-              {/* Input Wrapper with Ring Glow */}
               <div className="relative group">
                 <input
                   id="km-input"
@@ -201,7 +203,6 @@ export default function FareCalculator() {
                 </span>
               </div>
 
-              {/* Quick Distance Preset Buttons */}
               <div className="flex items-center gap-2 pt-1">
                 <span className="text-[10px] font-bold text-gray-400 uppercase">Preset KMs:</span>
                 {QUICK_DISTANCES.map((dist) => (
@@ -284,7 +285,6 @@ export default function FareCalculator() {
                         : "bg-white border-gray-100 hover:border-purple-300 hover:shadow-lg hover:shadow-slate-200/50"
                     }`}
                   >
-                    {/* Badge */}
                     <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md self-start mb-2 ${
                       isSelected ? "bg-[#7c3aed] text-white shadow-sm" : "bg-slate-100 text-gray-600 border border-gray-200"
                     }`}>
@@ -330,7 +330,7 @@ export default function FareCalculator() {
 
         </div>
 
-        {/* --- 4. DETAILED ESTIMATION TABLE (TRIGGERS ON CLICK) --- */}
+        {/* --- 4. DETAILED ESTIMATION TABLE (WITH CAR IMAGES INJECTED) --- */}
         <AnimatePresence>
           {showTable && (
             <motion.div
@@ -360,11 +360,11 @@ export default function FareCalculator() {
                 <table className="w-full min-w-[650px] text-left text-xs sm:text-sm text-gray-700 table-fixed">
                   <thead className="bg-purple-50 text-[#7c3aed] font-black uppercase tracking-wider text-[11px] border-b-2 border-purple-100">
                     <tr>
-                      <th className="p-4 sm:p-5 w-[25%]">Fleet Category</th>
+                      <th className="p-4 sm:p-5 w-[30%]">Fleet Category</th>
                       <th className="p-4 sm:p-5 w-[15%]">Rate / KM</th>
                       <th className="p-4 sm:p-5 w-[20%]">Base Fare ({billableKm} KM)</th>
                       <th className="p-4 sm:p-5 w-[15%]">Driver Bata</th>
-                      <th className="p-4 sm:p-5 w-[25%] text-right">Total Est. Fare</th>
+                      <th className="p-4 sm:p-5 w-[20%] text-right">Total Est. Fare</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100 font-medium">
@@ -379,10 +379,18 @@ export default function FareCalculator() {
                             isCurrent ? "bg-purple-50/60 font-bold" : "hover:bg-slate-50"
                           }`}
                         >
-                          <td className="p-4 sm:p-5 font-black text-gray-900 flex items-center gap-2">
-                            <Car className="w-4 h-4 text-[#7c3aed]" />
-                            <span>{fleet.name}</span>
+                          {/* CAR IMAGE + FLEET NAME IN TABLE CELL */}
+                          <td className="p-4 sm:p-5 font-black text-gray-900">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={fleet.image}
+                                alt={fleet.name}
+                                className="w-12 h-8 object-contain shrink-0 drop-shadow-sm"
+                              />
+                              <span>{fleet.name}</span>
+                            </div>
                           </td>
+
                           <td className="p-4 sm:p-5 text-gray-700 font-bold">
                             ₹{ratePerKm} / km
                           </td>
