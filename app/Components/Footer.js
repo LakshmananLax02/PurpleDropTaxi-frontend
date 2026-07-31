@@ -42,13 +42,13 @@ const POPULAR_ROUTES = [
 ];
 
 const QUICK_LINKS = [
-  { name: "About Us", href: "#about" },
-  { name: "Tariff & Fare Card", href: "#tariff" },
+  { name: "About Us", href: "/about-us" },
+  { name: "Tariff & Fare Card", href: "/tariff" },
   { name: "Our Fleet", href: "#fleet" },
-  { name: "Service Routes", href: "#attach" },
+  { name: "Service Routes", href: "/service-routes" },
   { name: "Privacy Policy", href: "#privacy" },
   { name: "Terms & Conditions", href: "#terms" },
-    { name: "Contact Us", href: "#terms" },
+  { name: "Contact Us", href: "/contact-us" },
 
 ];
 

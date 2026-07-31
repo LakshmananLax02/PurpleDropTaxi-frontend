@@ -91,7 +91,7 @@ export default function WhyChooseUs() {
   const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
 
   return (
-    <section className="w-full relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden font-sans">
+    <section className="w-full relative py-10 px-4 sm:px-6 lg:px-8 overflow-hidden font-sans">
       
       {/* ========================================================================
        * BACKGROUND IMAGE & GRADIENT OVERLAY
