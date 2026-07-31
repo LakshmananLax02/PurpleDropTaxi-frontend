@@ -22,7 +22,7 @@ import {
 const FLEETS = [
   {
     id: "sedan",
-    name: "Compact Sedan",
+    name: "Sedan",
     models: "Etios, Dzire, Aura",
     seats: "4 Passengers",
     luggage: "2 Bags",
@@ -46,7 +46,7 @@ const FLEETS = [
   },
   {
     id: "suv",
-    name: "Executive SUV",
+    name: "SUV",
     models: "Ertiga, Triber, Carens",
     seats: "6 Passengers",
     luggage: "4 Bags",

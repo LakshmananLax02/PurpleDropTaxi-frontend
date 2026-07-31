@@ -60,7 +60,7 @@ import {
 const SLIDES = [
   {
     id: "confidence",
-    image: "/images/sedanimg.png",
+    image: "/images/carouselimg1.png",
     badge: "No.1 trusted drop taxi service in South India",
     prefix: "Travel Across Tamil Nadu",
     highlight: "With Confidence",
@@ -69,7 +69,7 @@ const SLIDES = [
   },
   {
     id: "oneway",
-    image: "/images/primesedanimg.png",
+    image: "/images/carouselimg2.png",
     badge: "Outstation cabs, done right",
     prefix: "One-Way Drops,",
     highlight: "Zero Return Fare",
@@ -77,20 +77,20 @@ const SLIDES = [
   },
   {
     id: "airport",
-    image: "/images/suvimg.png",
+    image: "/images/carouselimg3.png",
     badge: "On-time, every time",
     prefix: "Airport Pickups,",
     highlight: "Perfectly Timed",
     subtext: "Verified drivers and live tracking mean your cab is there when you land.",
   },
-  {
-    id: "fleet",
-    image: "/images/primesuvimg.png",
-    badge: "Premium fleet",
-    prefix: "Ride in Comfort,",
-    highlight: "Prime SUVs & Sedans",
-    subtext: "A clean, well-maintained fleet for families, groups and business travel.",
-  },
+  // {
+  //   id: "fleet",
+  //   image: "/images/primesuvimg.png",
+  //   badge: "Premium fleet",
+  //   prefix: "Ride in Comfort,",
+  //   highlight: "Prime SUVs & Sedans",
+  //   subtext: "A clean, well-maintained fleet for families, groups and business travel.",
+  // },
 ];
 
 /* ============================================================================
@@ -800,7 +800,7 @@ export default function BookingSection() {
             className="absolute inset-0"
           >
             <img src={slide.image} alt="" className="w-full h-full object-cover object-center opacity-30 md:opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/70 to-white/40" />
+            <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/10 to-white/10" />
           </motion.div>
         </AnimatePresence>
       </div>

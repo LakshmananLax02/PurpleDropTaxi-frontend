@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
 
 const FLEET_CARS = [
   {
@@ -114,12 +115,14 @@ function FleetCard({ car }) {
 
         {/* Action button — shared app-wide button system (see globals.css) */}
         <div className="px-6 pb-6 pt-4">
+          <Link href="/booking">
           <button
             type="button"
             className="btn btn-primary w-full py-3.5 text-xs font-black uppercase tracking-wider"
           >
             Book This Cab →
           </button>
+          </Link>
         </div>
       </div>
     </div>
