@@ -218,7 +218,11 @@ export default function AboutUs() {
        * ========================================================================= */}
       <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
         <div className="absolute inset-0 z-0">
-          <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+          <img
+            src="/images/carouselimg1.png"
+            alt=""
+            className="h-full w-full object-cover object-[center_35%]"
+          />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
         </div>
 
@@ -509,7 +513,7 @@ export default function AboutUs() {
             </button>
 
             <a
-              href="tel:+919876543210"
+              href="tel:+918110880500"
               className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 active:scale-95 backdrop-blur-md"
             >
               <Phone className="w-4 h-4 text-amber-300" /> Call Dispatch Desk

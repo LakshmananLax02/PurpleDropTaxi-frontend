@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { User, Users, HeartHandshake, Plane, Briefcase, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 /* ============================================================================
  * 1. TRAVELLERS DATASET
@@ -51,6 +52,43 @@ const TRAVELLERS = [
 
 export default function DesignedForTravellers() {
   const scrollRef = useRef(null);
+  const animationFrameRef = useRef(null);
+  const isPausedRef = useRef(false);
+
+  // Continuously move through the duplicated cards. When one complete set has
+  // passed, jump back by that exact distance; the repeated cards make the loop
+  // seamless instead of showing a visible reset.
+  useEffect(() => {
+    const track = scrollRef.current;
+    if (!track || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return undefined;
+
+    const getLoopDistance = () => {
+      const card = track.querySelector(".flip-card");
+      if (!card) return 0;
+      const gap = Number.parseFloat(window.getComputedStyle(track).gap) || 0;
+      return (card.offsetWidth + gap) * TRAVELLERS.length;
+    };
+
+    let loopDistance = getLoopDistance();
+    const updateLoopDistance = () => { loopDistance = getLoopDistance(); };
+    window.addEventListener("resize", updateLoopDistance);
+
+    const move = () => {
+      if (!isPausedRef.current) {
+        if (loopDistance) {
+          track.scrollLeft += 0.45;
+          if (track.scrollLeft >= loopDistance) track.scrollLeft -= loopDistance;
+        }
+      }
+      animationFrameRef.current = window.requestAnimationFrame(move);
+    };
+
+    animationFrameRef.current = window.requestAnimationFrame(move);
+    return () => {
+      window.cancelAnimationFrame(animationFrameRef.current);
+      window.removeEventListener("resize", updateLoopDistance);
+    };
+  }, []);
 
   /* Scroll Carousel Controls (mobile only) */
   const handleScroll = (direction) => {
@@ -130,40 +168,27 @@ export default function DesignedForTravellers() {
           box-shadow: 0 15px 30px -10px rgba(109, 40, 217, 0.3);
         }
 
-        /* --- RESPONSIVE TRACK: horizontal centered carousel on mobile,
-               static grid from the sm breakpoint upward --- */
+        /* --- Seamless auto-scrolling traveller carousel --- */
         .travellers-track {
           display: flex;
           gap: 20px;
           overflow-x: auto;
-          scroll-snap-type: x mandatory;
-          padding-left: calc(50% - 130px); /* 130px = half of the 260px mobile card width */
-          padding-right: calc(50% - 130px);
+          scroll-behavior: auto;
+          overscroll-behavior-x: contain;
+          padding: 0 4px;
         }
 
         .travellers-track .flip-card {
           width: 260px;
           flex-shrink: 0;
-          scroll-snap-align: center;
         }
 
         @media (min-width: 640px) {
           .travellers-track {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            overflow-x: visible;
-            padding-left: 0;
-            padding-right: 0;
+            padding: 0 6px;
           }
           .travellers-track .flip-card {
-            width: 100%;
-            flex-shrink: initial;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .travellers-track {
-            grid-template-columns: repeat(5, 1fr);
+            width: 260px;
           }
         }
 
@@ -212,11 +237,20 @@ export default function DesignedForTravellers() {
             <ChevronRight className="w-6 h-6 stroke-[2.5]" />
           </button>
 
-          <div ref={scrollRef} className="travellers-track no-scrollbar py-2">
-            {TRAVELLERS.map((item) => {
+          <div
+            ref={scrollRef}
+            className="travellers-track no-scrollbar py-2"
+            onMouseEnter={() => { isPausedRef.current = true; }}
+            onMouseLeave={() => { isPausedRef.current = false; }}
+            onFocusCapture={() => { isPausedRef.current = true; }}
+            onBlurCapture={() => { isPausedRef.current = false; }}
+            onPointerDown={() => { isPausedRef.current = true; }}
+            onPointerUp={() => { isPausedRef.current = false; }}
+          >
+            {[...TRAVELLERS, ...TRAVELLERS].map((item, index) => {
               const IconComponent = item.icon;
               return (
-                <div key={item.id} className="flip-card group cursor-pointer">
+                <div key={`${item.id}-${index}`} className="flip-card group cursor-pointer">
                   <div className="flip-card-inner">
 
                     {/* FRONT FACE */}
@@ -274,12 +308,14 @@ export default function DesignedForTravellers() {
                       </div>
 
                       {/* Shared button system — amber variant reads on purple */}
+                     <Link href='/booking'>
                       <button
                         type="button"
                         className="btn btn-amber w-full h-[42px] text-xs font-black"
                       >
                         Book Now <ArrowRight className="w-3.5 h-3.5" />
                       </button>
+                      </Link>
                     </div>
 
                   </div>

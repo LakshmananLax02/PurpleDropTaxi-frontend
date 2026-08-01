@@ -108,6 +108,20 @@ body {
   color: #1bc5d8;
 }
 
+/* Mobile homepage carousel: keep the headline to its intended two lines. */
+.carousel-title-pattern {
+  font-size: clamp(1.25rem, 6vw, 1.75rem);
+  line-height: 1.02;
+  white-space: nowrap;
+}
+
+@media (min-width: 640px) {
+  .carousel-title-pattern {
+    font-size: clamp(2.25rem, 4vw, 4rem);
+    white-space: normal;
+  }
+}
+
 /* The same composition for major headings inside light content sections. */
 .section-title-pattern {
   color: #2f075c;

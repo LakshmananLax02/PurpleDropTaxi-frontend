@@ -25,7 +25,7 @@ export default function TariffHeroHeader() {
   return (
     <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
       <div className="absolute inset-0 z-0">
-        <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+        <img src="/images/carouselimg2.png" alt="" className="h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
       </div>
 

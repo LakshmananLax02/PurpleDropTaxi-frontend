@@ -211,13 +211,13 @@ export default function FaqSection() {
 
           <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
             <a
-              href="tel:+919361354492"
+              href="tel:+918110880500"
               className="btn btn-light px-5 py-3 rounded-xl text-xs font-extrabold shadow-md"
             >
               <Phone className="w-4 h-4" /> Call Dispatch
             </a>
             <a
-              href="https://wa.me/919361354492"
+              href="https://wa.me/918110880500"
               target="_blank"
               rel="noreferrer"
               className="btn btn-whatsapp px-5 py-3 rounded-xl text-xs font-extrabold shadow-md"

@@ -46,17 +46,17 @@ const staggerContainer = {
 const CONTACT_CARDS = [
   {
     title: "24/7 Dispatch Desk",
-    detail: "+91 98765 43210",
+    detail: "+91 81108 80500",
     subtext: "Instant phone booking & emergency highway assistance.",
     icon: Phone,
-    action: "tel:+919876543210",
+    action: "tel:+918110880500",
   },
   {
     title: "WhatsApp Booking",
-    detail: "+91 98765 43210",
+    detail: "+91 81108 80500",
     subtext: "Get instant fare quotes and vehicle options on WhatsApp.",
     icon: MessageSquare,
-    action: "https://wa.me/919876543210",
+    action: "https://wa.me/918110880500",
   },
   {
     title: "Email Support",
@@ -67,7 +67,7 @@ const CONTACT_CARDS = [
   },
   {
     title: "Central Hub",
-    detail: "Coimbatore & Chennai",
+    detail: "Dindigul",
     subtext: "Serving 100+ cities across TN, Karnataka & Kerala.",
     icon: MapPin,
     action: "#map-section",
@@ -157,7 +157,7 @@ export default function ContactUs() {
        * ========================================================================= */}
       <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
         <div className="absolute inset-0 z-0">
-          <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+          <img src="/images/carouselimg3.png" alt="" className="h-full w-full object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
         </div>
 
@@ -172,7 +172,7 @@ export default function ContactUs() {
           </motion.div>
           
           <motion.h1 variants={fadeInUp} className="page-title-pattern">
-            We're On The Highway 24/7 <br />
+            We&apos;re On The Highway 24/7 <br />
             <span className="text-[#1bc5d8]">Get In Touch Instantly.</span>
           </motion.h1>
           
@@ -280,7 +280,7 @@ export default function ContactUs() {
                       placeholder="Enter your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-[#b8eaf0] hover:border-[#1bc5d8] focus:border-[#7c2bea] focus:hover:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-[#7c2bea]/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -297,7 +297,7 @@ export default function ContactUs() {
                       placeholder="Enter your email address"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-[#b8eaf0] hover:border-[#1bc5d8] focus:border-[#7c2bea] focus:hover:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-[#7c2bea]/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -315,7 +315,7 @@ export default function ContactUs() {
                       placeholder="Enter 10-digit mobile number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-[#b8eaf0] hover:border-[#1bc5d8] focus:border-[#7c2bea] focus:hover:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-[#7c2bea]/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -330,13 +330,13 @@ export default function ContactUs() {
                     placeholder="Type your message, inquiry, or feedback here..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium resize-none"
+                    className="w-full bg-slate-50 border border-[#b8eaf0] hover:border-[#1bc5d8] focus:border-[#7c2bea] focus:hover:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-[#7c2bea]/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#7c2bea] hover:bg-[#5815b7] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 active:scale-95"
+                  className="btn btn-primary min-h-[52px] w-full text-xs font-black uppercase tracking-widest"
                 >
                   <Send className="w-4 h-4" /> Send Message
                 </button>
@@ -370,14 +370,14 @@ export default function ContactUs() {
 
               <div className="pt-2 space-y-3 relative z-10">
                 <a
-                  href="tel:+919876543210"
+                  href="tel:+918110880500"
                   className="w-full py-4 bg-amber-400 hover:bg-amber-300 text-gray-950 font-black text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg active:scale-95 block text-center"
                 >
                   <Phone className="w-4 h-4 fill-gray-950" /> Call Dispatch Now
                 </a>
 
                 <a
-                  href="https://wa.me/919876543210"
+                  href="https://wa.me/918110880500"
                   target="_blank"
                   rel="noreferrer"
                   className="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95 block text-center"
@@ -437,7 +437,7 @@ export default function ContactUs() {
               Our Depot Location
             </div>
             <h2 className="section-title-pattern">
-              Visit Our <span className="text-[#7c2bea]">Coimbatore Dispatch Hub</span>
+              Visit Our <span className="text-[#7c2bea]">Dindigul Dispatch Hub</span>
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 font-medium mt-1">
               Conveniently located for highway pickups and 24/7 driver partner onboarding.
@@ -445,7 +445,7 @@ export default function ContactUs() {
           </div>
 
           <a
-            href="https://maps.google.com/?q=Sri+Murugan+Cinemas+Coimbatore"
+            href="https://maps.app.goo.gl/CJXcEoN2Efaore7A9"
             target="_blank"
             rel="noreferrer"
             className="px-6 py-3 bg-slate-900 hover:bg-slate-800 text-white font-black text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 shadow-md active:scale-95 shrink-0"
@@ -475,11 +475,12 @@ export default function ContactUs() {
             </div>
           </div>
 
-          {/* GOOGLE MAP IFRAME */}
+          {/* UPDATED GOOGLE MAP IFRAME */}
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3915.4782105795352!2d76.93948757498214!3d11.07769275356463!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba8f63fc31c5847%3A0xc848127fd2aefae!2sSri%20Murugan%20Cinemas+A%2FC+4K+Dolby+Atmos!5e0!3m2!1sen!2sin!4v1785298306579!5m2!1sen!2sin" 
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d298861.4291513764!2d77.55736514611415!3d10.201573973343152!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTDCsDA5JzU1LjAiTiA3N8KwNTAnNTMuNCJF!5e0!3m2!1sen!2sin!4v1785593358690!5m2!1sen!2sin" 
             className="w-full h-full border-0"
-            allowFullScreen="" 
+            style={{ border: 0 }} 
+            allowFullScreen
             loading="lazy" 
             referrerPolicy="strict-origin-when-cross-origin"
             title="PurpleDropTaxi Location Map"

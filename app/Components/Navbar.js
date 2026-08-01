@@ -6,8 +6,8 @@ import Link from "next/link"
 import { Phone, MessageCircle, Menu, X, ShieldCheck, Users, Leaf, BadgeDollarSign } from "lucide-react"
 
 // ---- Config: replace with your real values ----
-const PHONE_NUMBER = "+911234567890"
-const WHATSAPP_NUMBER = "911234567890"
+const PHONE_NUMBER = "+918110880500"
+const WHATSAPP_NUMBER = "918110880500"
 // logoimg.png is a 2000x2000 canvas but the actual mark only fills the middle
 // ~78% width x ~38% height of it — displaying it in a square box (or worse,
 // a mismatched non-square box) leaves most of the box empty and the visible
@@ -18,9 +18,9 @@ const LOGO_SRC = "/images/logo-navbar.png"
 const navLinks = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about-us" },
-  { label: "Onewaytaxi", href: "#oneway" },
+  { label: "Services", href: "/services" },
   { label: "Tariff", href: "/tariff" },
-  { label: "Service routes", href: "/service-routes" },
+  { label: "Routes", href: "/service-routes" },
   { label: "Contact us", href: "/contact-us" },
 ]
 

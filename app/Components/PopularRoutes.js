@@ -79,7 +79,7 @@ export default function PopularRoutes() {
   };
 
   return (
-    <section className="w-full bg-[#f8f6fc] py-5 px-4 md:px-8 relative overflow-hidden font-sans select-none">
+    <section className="w-full bg-[#f8f6fc] py-10 px-4 md:px-8 relative overflow-hidden font-sans select-none">
       
       {/* Embedded CSS - Fixed Stacking, Hover Animation, and Mobile Centering */}
       <style jsx global>{`

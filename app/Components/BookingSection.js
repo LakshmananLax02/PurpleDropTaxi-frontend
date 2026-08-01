@@ -19,12 +19,12 @@
  * back gracefully.
  * ========================================================================== */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { Autocomplete, GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { DirectionsRenderer, GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import {
   Calendar,
   Car,
@@ -53,6 +53,9 @@ import {
   bookingFormSchema,
   defaultFormValues,
   apiGetVehicles,
+  apiSubmitEnquiry,
+  calculateFareEstimate,
+  getVehicleRate,
 } from "../lib/booking";
 
 /* ============================================================================
@@ -106,13 +109,119 @@ function InputShell({ icon, children, hasError }) {
   return (
     <div
       className={[
-        "flex items-center gap-2.5 h-[50px] rounded-xl bg-white border px-3.5 transition-all duration-200",
-        "focus-within:ring-2 focus-within:ring-[#1bc5d8]/40 focus-within:border-[#1bc5d8]",
-        hasError ? "border-red-400" : "border-[#E2E8F0]",
+        "flex h-[50px] items-center gap-2 px-2.5 sm:gap-2.5 sm:px-3.5 rounded-xl bg-white border transition-all duration-200",
+        "focus-within:ring-2 focus-within:ring-[#7c2bea]/25 focus-within:border-[#7c2bea] focus-within:hover:border-[#7c2bea]",
+        hasError ? "border-red-400" : "border-[#b8eaf0] hover:border-[#1bc5d8]",
       ].join(" ")}
     >
       <span className="text-[#1bc5d8] shrink-0">{icon}</span>
       {children}
+    </div>
+  );
+}
+
+// Uses the current Places Autocomplete Data API while keeping the project's
+// existing branded input design. The older google.maps.places.Autocomplete
+// widget is unavailable for new Google Cloud customers.
+function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, placeholder, dropdownAlign = "left" }) {
+  const [suggestions, setSuggestions] = useState([]);
+  const [placesLibrary, setPlacesLibrary] = useState(null);
+  const requestIdRef = React.useRef(0);
+
+  useEffect(() => {
+    let active = true;
+    if (!window.google?.maps?.importLibrary) return undefined;
+
+    window.google.maps.importLibrary("places")
+      .then(({ AutocompleteSuggestion }) => {
+        if (active) setPlacesLibrary({ AutocompleteSuggestion });
+      })
+      .catch(() => {
+        if (active) setPlacesLibrary(null);
+      });
+
+    return () => { active = false; };
+  }, []);
+
+  useEffect(() => {
+    const query = value?.trim();
+    if (!placesLibrary || !query) {
+      return undefined;
+    }
+
+    const requestId = ++requestIdRef.current;
+    const timer = window.setTimeout(async () => {
+      try {
+        const { suggestions: nextSuggestions = [] } = await placesLibrary.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+          input: query,
+          includedRegionCodes: ["in"],
+        });
+        if (requestId === requestIdRef.current) {
+          setSuggestions(nextSuggestions.filter((item) => item.placePrediction));
+        }
+      } catch {
+        if (requestId === requestIdRef.current) setSuggestions([]);
+      }
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [value, placesLibrary]);
+
+  const selectSuggestion = async (suggestion) => {
+    const prediction = suggestion.placePrediction;
+    if (!prediction) return;
+
+    try {
+      const place = prediction.toPlace();
+      await place.fetchFields({ fields: ["displayName", "formattedAddress", "location"] });
+      const address = place.formattedAddress || place.displayName || prediction.text?.text || value;
+      const location = place.location;
+      onValueChange(address);
+      if (location) onPlaceSelect({ lat: location.lat(), lng: location.lng() });
+    } catch {
+      onValueChange(prediction.text?.text || value);
+    } finally {
+      setSuggestions([]);
+    }
+  };
+
+  return (
+    <div className="relative w-full">
+      <input
+        value={value}
+        onChange={(event) => onValueChange(event.target.value)}
+        onBlur={() => {
+          window.setTimeout(() => setSuggestions([]), 150);
+          onBlur?.();
+        }}
+        placeholder={placeholder}
+        autoComplete="off"
+        className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
+      />
+      {value?.trim() && suggestions.length > 0 && (
+        <div
+          className={[
+            "absolute top-[calc(100%+12px)] z-50 w-[min(17rem,calc(100vw-3rem))] max-w-[calc(100vw-3rem)] overflow-hidden rounded-xl border border-[#b8eaf0] bg-white shadow-xl sm:left-0 sm:right-0 sm:w-auto",
+            dropdownAlign === "right" ? "right-0" : "left-0",
+          ].join(" ")}
+        >
+          {suggestions.map((suggestion, index) => {
+            const prediction = suggestion.placePrediction;
+            return (
+              <button
+                key={`${prediction.placeId ?? prediction.text?.text ?? "place"}-${index}`}
+                type="button"
+                onMouseDown={(event) => event.preventDefault()}
+                onClick={() => selectSuggestion(suggestion)}
+                className="flex w-full items-start gap-2.5 border-b border-slate-100 px-3 py-2.5 text-left text-sm text-[#1E293B] last:border-b-0 hover:bg-[#f1fbfc]"
+              >
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#1bc5d8]" />
+                <span className="line-clamp-2">{prediction.text?.text}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -493,7 +602,7 @@ function CheckboxPill({ label, icon, checked, onChange }) {
     <label
       className={[
         "h-full flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 cursor-pointer select-none transition-colors",
-        checked ? "border-[#1bc5d8] bg-[#f1fbfc]" : "border-[#E2E8F0] bg-white hover:bg-slate-50",
+        checked ? "border-[#1bc5d8] bg-[#f1fbfc]" : "border-[#b8eaf0] bg-white hover:border-[#7c2bea] hover:bg-slate-50",
       ].join(" ")}
     >
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
@@ -551,14 +660,13 @@ function TripTypeTabs({ value, onChange }) {
  * across the whole form. */
 function AirportSelect({ airports, value, onChange }) {
   const [open, setOpen] = useState(false);
-  const selected = airports.find((a) => a.name === value);
 
   return (
     <>
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-between gap-2 bg-transparent outline-none text-sm text-left"
+        className="flex min-w-0 flex-1 items-center justify-between gap-2 bg-transparent text-left text-sm outline-none"
       >
         <span className={["flex-1 min-w-0 truncate", value ? "text-[#1E293B]" : "text-slate-400"].join(" ")}>
           {value || "Select an airport"}
@@ -568,7 +676,12 @@ function AirportSelect({ airports, value, onChange }) {
 
       {open && (
         <PickerModal onClose={() => setOpen(false)}>
-          <p className="text-xs font-black uppercase tracking-wide text-[#64748B] mb-3">Select Airport</p>
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <p className="text-xs font-black uppercase tracking-wide text-[#64748B]">Select Tamil Nadu airport</p>
+            <span className="rounded-full bg-[#F1FBFC] px-2 py-1 text-[10px] font-bold text-[#1bc5d8]">
+              {airports.length} airports
+            </span>
+          </div>
           <div className="space-y-1.5 max-h-72 overflow-y-auto -mx-1 px-1">
             {airports.map((a) => {
               const isSelected = a.name === value;
@@ -582,7 +695,7 @@ function AirportSelect({ airports, value, onChange }) {
                   }}
                   className={[
                     "w-full flex items-center gap-2.5 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-150",
-                    isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#b8eaf0]",
+                    isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#b8eaf0] hover:border-[#7c2bea]",
                   ].join(" ")}
                   style={isSelected ? { background: `linear-gradient(135deg, ${COLORS.gradientFrom}, ${COLORS.gradientTo})` } : undefined}
                 >
@@ -598,12 +711,16 @@ function AirportSelect({ airports, value, onChange }) {
   );
 }
 
-function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
-  const selected = vehicles.find((v) => v.id === value);
+function VehicleSelectGrid({ vehicles, value, onChange, hasError, tripType }) {
+  const vehiclesWithRates = vehicles.map((vehicle) => ({
+    ...vehicle,
+    ratePerKm: getVehicleRate(vehicle.id, tripType),
+  }));
+  const selected = vehiclesWithRates.find((v) => v.id === value);
   return (
     <div>
       <div className="flex items-center justify-between mb-2">
-        <label className="text-xs font-semibold text-[#64748B] uppercase tracking-wide">Select Cab Type</label>
+        <label className="text-xs font-semibold text-black uppercase tracking-wide">Select Cab Type</label>
         {selected && (
           <span
             className="text-[11px] font-bold px-2.5 py-1 rounded-full text-white"
@@ -614,7 +731,7 @@ function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
         )}
       </div>
       <div className="flex overflow-x-auto gap-2.5 pb-1 -mx-1 px-1 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 [scrollbar-width:thin]">
-        {vehicles.map((v) => {
+        {vehiclesWithRates.map((v) => {
           const isSelected = v.id === value;
           return (
             <button
@@ -623,7 +740,7 @@ function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
               onClick={() => onChange(v.id)}
               className={[
                 "shrink-0 w-[104px] sm:w-auto flex flex-col items-center gap-1.5 rounded-xl border-2 px-2.5 py-3 transition-all duration-150",
-                isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#b8eaf0]",
+                isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#b8eaf0] hover:border-[#7c2bea]",
               ].join(" ")}
               style={isSelected ? { background: `linear-gradient(135deg, ${COLORS.gradientFrom}, ${COLORS.gradientTo})` } : undefined}
             >
@@ -665,7 +782,7 @@ function CarouselContent({ slide }) {
           <ShieldCheck className="w-3.5 h-3.5" />
           {slide.badge}
         </span>
-        <h1 className="page-title-pattern">
+        <h1 className="page-title-pattern carousel-title-pattern">
           {slide.prefix}
           <br />
           <span style={{ color: COLORS.gradientTo }}>{slide.highlight}</span>
@@ -676,22 +793,147 @@ function CarouselContent({ slide }) {
   );
 }
 
-function BookingMapPreview({ isLoaded, pickupCoords, dropCoords }) {
+function formatRouteDuration(minutes) {
+  const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
+  const hours = Math.floor(totalMinutes / 60);
+  const remainingMinutes = totalMinutes % 60;
+  return hours ? `${hours} hrs ${remainingMinutes} mins` : `${remainingMinutes} mins`;
+}
+
+function RouteFareTable({ routeMeta }) {
+  if (!routeMeta) {
+    return (
+      <div className="mt-4 rounded-2xl border border-dashed border-[#b8eaf0] bg-[#f1fbfc] px-4 py-5 text-center text-xs font-medium text-[#64748B]">
+        Route-based one-way and round-trip fares will appear as soon as the map route loads.
+      </div>
+    );
+  }
+
+  const oneWayDistance = routeMeta.distanceKm;
+  const oneWayDuration = routeMeta.durationMins;
+  const roundTripDistance = oneWayDistance * 2;
+  const roundTripDuration = oneWayDuration * 2;
+
+  return (
+    <section className="mt-4 rounded-2xl border border-[#b8eaf0] bg-white p-3 shadow-sm">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <div>
+          <h3 className="text-sm font-black text-[#1E293B]">Route Fare Comparison</h3>
+          <p className="mt-0.5 text-[11px] text-[#64748B]">Includes ₹400 driver bata. Tolls and parking are extra.</p>
+        </div>
+        <span className="rounded-full bg-[#F1FBFC] px-2 py-1 text-[10px] font-bold text-[#1bc5d8]">Live estimate</span>
+      </div>
+
+      <div className="mb-3 grid grid-cols-2 gap-2">
+        <div className="rounded-xl border border-[#b8eaf0] bg-[#f1fbfc] p-2.5">
+          <p className="text-[10px] font-black uppercase tracking-wide text-[#64748B]">One way</p>
+          <p className="mt-1 text-xs font-bold text-[#1E293B]">{oneWayDistance} km</p>
+          <p className="text-[11px] text-[#64748B]">{formatRouteDuration(oneWayDuration)}</p>
+        </div>
+        <div className="rounded-xl border border-[#d8c4fb] bg-[#faf7ff] p-2.5">
+          <p className="text-[10px] font-black uppercase tracking-wide text-[#5815b7]">Round trip</p>
+          <p className="mt-1 text-xs font-bold text-[#1E293B]">{roundTripDistance} km</p>
+          <p className="text-[11px] text-[#64748B]">{formatRouteDuration(roundTripDuration)}</p>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto rounded-xl border border-[#E2E8F0]">
+        <table className="w-full min-w-[500px] text-left text-[11px]">
+          <thead className="bg-[#F8F6FC] text-[#5815b7]">
+            <tr>
+              <th className="px-3 py-2.5 font-black uppercase tracking-wide">Cab</th>
+              <th className="px-3 py-2.5 font-black uppercase tracking-wide">One Way</th>
+              <th className="px-3 py-2.5 font-black uppercase tracking-wide">Round Trip</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-[#E2E8F0] text-[#1E293B]">
+            {FALLBACK_VEHICLES.map((vehicle) => {
+              const oneWay = calculateFareEstimate({ vehicleId: vehicle.id, tripType: "oneway", distanceKm: oneWayDistance, durationMins: oneWayDuration });
+              const roundTrip = calculateFareEstimate({ vehicleId: vehicle.id, tripType: "roundtrip", distanceKm: oneWayDistance, durationMins: oneWayDuration });
+              return (
+                <tr key={vehicle.id}>
+                  <td className="px-3 py-2.5 font-bold">
+                    <span className="flex items-center gap-2">
+                      <img src={VEHICLE_IMAGES[vehicle.id]} alt="" className="h-7 w-11 object-contain" />
+                      {vehicle.label}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <p className="font-black text-[#1E293B]">₹{oneWay.fare.toLocaleString("en-IN")}</p>
+                    <p className="text-[10px] text-[#64748B]">₹{oneWay.ratePerKm}/km</p>
+                  </td>
+                  <td className="px-3 py-2.5">
+                    <p className="font-black text-[#5815b7]">₹{roundTrip.fare.toLocaleString("en-IN")}</p>
+                    <p className="text-[10px] text-[#64748B]">₹{roundTrip.ratePerKm}/km</p>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function BookingMapPreview({ isLoaded, pickupCoords, dropCoords, routeTitle }) {
   const mapRef = React.useRef(null);
+  const [routeData, setRouteData] = useState(null);
+  const [routeError, setRouteError] = useState(null);
   const center = pickupCoords ?? DEFAULT_CENTER;
+  const routeKey = pickupCoords && dropCoords
+    ? `${pickupCoords.lat},${pickupCoords.lng}|${dropCoords.lat},${dropCoords.lng}`
+    : "";
+  const directions = routeData?.key === routeKey ? routeData.directions : null;
+  const routeMeta = routeData?.key === routeKey ? routeData.meta : null;
+  const visibleRouteError = routeError?.key === routeKey ? routeError.message : null;
 
   useEffect(() => {
     if (mapRef.current) mapRef.current.panTo(center);
   }, [center]);
 
+  useEffect(() => {
+    if (!isLoaded || !pickupCoords || !dropCoords || !window.google?.maps) return undefined;
+
+    let active = true;
+    const service = new window.google.maps.DirectionsService();
+    service.route(
+      { origin: pickupCoords, destination: dropCoords, travelMode: window.google.maps.TravelMode.DRIVING },
+      (result, status) => {
+        if (!active) return;
+        if (status === "OK" && result) {
+          const leg = result.routes[0]?.legs[0];
+          if (!leg?.distance || !leg?.duration) return;
+          setRouteData({
+            key: routeKey,
+            directions: result,
+            meta: {
+              distanceKm: Math.round((leg.distance.value / 1000) * 10) / 10,
+              durationMins: Math.round(leg.duration.value / 60),
+            },
+          });
+          setRouteError(null);
+          if (mapRef.current && result.routes[0]?.bounds) mapRef.current.fitBounds(result.routes[0].bounds);
+        } else {
+          setRouteData(null);
+          setRouteError({ key: routeKey, message: "Google Maps could not find a driving route for these locations." });
+        }
+      }
+    );
+
+    return () => { active = false; };
+  }, [isLoaded, pickupCoords, dropCoords, routeKey]);
+
   return (
-    <aside className="order-2 lg:col-span-2 min-h-[360px] lg:min-h-[620px] rounded-[20px] border border-[#E2E8F0] bg-white p-4 md:p-5 shadow-xl">
+    <aside className="order-2 lg:col-span-2 rounded-[20px] border border-[#b8eaf0] bg-white p-4 md:p-5 shadow-xl">
       <div className="mb-4">
-        <h2 className="text-lg font-bold text-[#1E293B]">Route Preview</h2>
-        <p className="mt-0.5 text-xs text-[#64748B]">Select your locations to preview them on the map.</p>
+        <h2 className="text-lg font-bold text-[#1E293B]">{routeTitle || "Route Preview"}</h2>
+        <p className="mt-0.5 text-xs text-[#64748B]">
+          {routeMeta ? `${routeMeta.distanceKm} km • ${formatRouteDuration(routeMeta.durationMins)} driving route` : "Calculating the fastest driving route..."}
+        </p>
       </div>
 
-      <div className="h-[calc(100%-60px)] min-h-[285px] overflow-hidden rounded-2xl bg-slate-100">
+      <div className="h-[310px] overflow-hidden rounded-2xl bg-slate-100">
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -700,6 +942,7 @@ function BookingMapPreview({ isLoaded, pickupCoords, dropCoords }) {
             onLoad={(map) => (mapRef.current = map)}
             options={{ streetViewControl: false, mapTypeControl: false, fullscreenControl: false }}
           >
+            {directions && <DirectionsRenderer directions={directions} options={{ suppressMarkers: true, polylineOptions: { strokeColor: "#5815b7", strokeWeight: 5 } }} />}
             {pickupCoords && <Marker position={pickupCoords} label="P" />}
             {dropCoords && <Marker position={dropCoords} label="D" />}
           </GoogleMap>
@@ -707,10 +950,12 @@ function BookingMapPreview({ isLoaded, pickupCoords, dropCoords }) {
           <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-sm font-semibold text-[#94A3B8]">
             <MapPin className="h-7 w-7 text-[#1bc5d8]" />
             Map preview
-            <span className="text-[11px] font-normal">Add a Google Maps API key to see live locations.</span>
+            <span className="text-[11px] font-normal">Add a Google Maps API key to see live directions.</span>
           </div>
         )}
       </div>
+      {visibleRouteError && <p className="mt-3 text-center text-xs font-medium text-red-500">{visibleRouteError}</p>}
+      <RouteFareTable routeMeta={routeMeta} />
     </aside>
   );
 }
@@ -718,7 +963,7 @@ function BookingMapPreview({ isLoaded, pickupCoords, dropCoords }) {
 /* ============================================================================
  * MAIN — PAGE 1
  * ========================================================================== */
-export default function BookingSection({ variant = "carousel" }) {
+export default function BookingSection({ variant = "carousel", presetRoute = null }) {
   const isBookingPage = variant === "booking";
   const router = useRouter();
   const { setBooking } = useBooking();
@@ -733,9 +978,7 @@ export default function BookingSection({ variant = "carousel" }) {
   const [tripType, setTripType] = useState("oneway");
   const [pickupCoords, setPickupCoords] = useState(null);
   const [dropCoords, setDropCoords] = useState(null);
-
-  const pickupAutocompleteRef = React.useRef(null);
-  const dropAutocompleteRef = React.useRef(null);
+  const [enquiryError, setEnquiryError] = useState(null);
 
   /* ---- Carousel autoplay ---- */
   const [slideIndex, setSlideIndex] = useState(0);
@@ -753,7 +996,11 @@ export default function BookingSection({ variant = "carousel" }) {
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(bookingFormSchema),
-    defaultValues: defaultFormValues,
+    defaultValues: {
+      ...defaultFormValues,
+      pickup: presetRoute?.pickup ?? "",
+      drop: presetRoute?.drop ?? "",
+    },
     mode: "onBlur",
   });
 
@@ -762,21 +1009,11 @@ export default function BookingSection({ variant = "carousel" }) {
   }, []);
 
   // Reset drop when trip type changes (free-text ↔ airport picker mismatch).
-  useEffect(() => {
+  const handleTripTypeChange = (nextTripType) => {
+    setTripType(nextTripType);
     setValue("drop", "");
     setDropCoords(null);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tripType]);
-
-  const onPickupPlaceChanged = useCallback(() => {
-    const loc = pickupAutocompleteRef.current?.getPlace()?.geometry?.location;
-    if (loc) setPickupCoords({ lat: loc.lat(), lng: loc.lng() });
-  }, []);
-
-  const onDropPlaceChanged = useCallback(() => {
-    const loc = dropAutocompleteRef.current?.getPlace()?.geometry?.location;
-    if (loc) setDropCoords({ lat: loc.lat(), lng: loc.lng() });
-  }, []);
+  };
 
   // Resolves free-typed text to coordinates via Google's Geocoder when the
   // customer typed a location but never clicked an Autocomplete suggestion
@@ -804,7 +1041,22 @@ export default function BookingSection({ variant = "carousel" }) {
   // (no key yet, or Google denies the request), pickup/dropCoords are just
   // null and page 2 falls back to its existing graceful placeholder state.
   // The booking itself (form → estimate → confirm) always goes through.
+  const presetRouteKey = presetRoute?.pickup && presetRoute?.drop
+    ? `${presetRoute.pickup}|${presetRoute.drop}`
+    : "";
+  const resolvedPresetRouteRef = React.useRef("");
+
+  useEffect(() => {
+    if (!isBookingPage || !isLoaded || !presetRouteKey || resolvedPresetRouteRef.current === presetRouteKey) return;
+    resolvedPresetRouteRef.current = presetRouteKey;
+    Promise.all([geocodeAddress(presetRoute.pickup), geocodeAddress(presetRoute.drop)]).then(([pickup, drop]) => {
+      setPickupCoords(pickup);
+      setDropCoords(drop);
+    });
+  }, [isBookingPage, isLoaded, presetRoute, presetRouteKey]);
+
   const onSubmit = async (values) => {
+    setEnquiryError(null);
     let finalPickupCoords = pickupCoords;
     let finalDropCoords = dropCoords;
 
@@ -817,20 +1069,25 @@ export default function BookingSection({ variant = "carousel" }) {
       }
     }
 
-    setBooking({
-      form: values,
-      tripType,
-      pickupCoords: finalPickupCoords,
-      dropCoords: finalDropCoords,
-      createdAt: Date.now(),
-    });
-    router.push("/estimate");
+    try {
+      const enquiry = await apiSubmitEnquiry({ form: values, tripType }, "enquiry");
+      setBooking({
+        form: values,
+        tripType,
+        pickupCoords: finalPickupCoords,
+        dropCoords: finalDropCoords,
+        enquiryId: enquiry.enquiryId,
+      });
+      router.push("/estimate");
+    } catch (error) {
+      setEnquiryError(error.message || "We could not send your enquiry. Please try again.");
+    }
   };
 
   return (
-    <section className={`relative w-full overflow-hidden ${!isBookingPage ? "brand-hero" : ""}`} style={isBookingPage ? { background: COLORS.bg } : undefined}>
+    <section className={`relative w-full overflow-hidden ${isBookingPage ? "" : "bg-white lg:bg-transparent"}`} style={isBookingPage ? { background: COLORS.bg } : undefined}>
       {!isBookingPage && (
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-x-0 top-0 z-0 h-[320px] sm:h-[340px] lg:inset-0 lg:h-auto">
           <AnimatePresence mode="wait">
             <motion.div
               key={slide.id}
@@ -840,8 +1097,8 @@ export default function BookingSection({ variant = "carousel" }) {
               transition={{ duration: 0.6 }}
               className="absolute inset-0"
             >
-              <img src={slide.image} alt="" className="h-full w-full object-cover object-center" />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
+              <img src={slide.image} alt="" className="h-full w-full object-contain object-top lg:object-cover lg:object-center" />
+              <div className="absolute inset-0  from-[#1f043e]/40 via-[#1f043e]/40 to-black/40 lg:bg-gradient-to-r lg:from-[#1f043e]/70 lg:via-[#1f043e]/55 lg:to-black/50" />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -849,13 +1106,13 @@ export default function BookingSection({ variant = "carousel" }) {
 
       {/* ---- Carousel background image layer ---- */}
       {/* ---- Foreground: carousel content (left) + form (right) ---- */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-0 lg:px-8 lg:py-10">
         {/* Mobile: carousel content first, then the form peeking up beneath it
             (tight gap so at least the top half of the form is on-screen).
             Desktop: content left, form right. */}
-        <div className={isBookingPage ? "grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-stretch" : "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 lg:items-start"}>
+        <div className={isBookingPage ? "grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-stretch" : "grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-10 lg:items-start"}>
           {/* LEFT — carousel content + slide dots */}
-          {!isBookingPage && <div className="order-1 lg:pt-12">
+          {!isBookingPage && <div className="order-1 flex flex-col justify-center py-8 lg:py-0 lg:pt-12">
             <CarouselContent slide={slide} />
             <div className="flex items-center gap-1.5 mt-5 md:mt-8">
               {SLIDES.map((s, i) => (
@@ -875,17 +1132,18 @@ export default function BookingSection({ variant = "carousel" }) {
               consistency: a big spinning gradient bar clipped by the
               rounded card, with a 2px-inset white plate masking everything
               except a thin rotating sliver around the edge. */}
-          <div
-            className={`${isBookingPage ? "order-1 lg:col-span-3" : "order-2"} relative rounded-[20px] shadow-xl overflow-hidden`}
-            style={{ boxShadow: "0 20px 45px -12px rgba(88,21,183,0.22)" }}
-          >
+          <div className={isBookingPage ? "order-1 lg:col-span-3" : "order-2 -mx-4 bg-white px-4 py-4 lg:mx-0 lg:bg-transparent lg:px-0 lg:py-0"}>
+            <div
+              className="relative overflow-hidden rounded-[20px] shadow-xl"
+              style={{ boxShadow: "0 20px 45px -12px rgba(88,21,183,0.22)" }}
+            >
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-32 -translate-x-1/2 -translate-y-1/2 animate-spin [animation-duration:6s]"
               style={{ background: "linear-gradient(180deg, #7c2bea 0%, #a55cff 35%, #1bc5d8 70%, #5815b7 100%)" }}
             />
             <div className="absolute inset-[2px] rounded-[18px] bg-white" />
 
-            <form onSubmit={handleSubmit(onSubmit)} className="relative z-10 p-6 md:p-7 space-y-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="relative z-10 space-y-4 p-5 sm:p-8">
               <div className="flex items-center gap-2.5 mb-1">
                 <span
                   className="flex items-center justify-center w-9 h-9 rounded-xl text-white"
@@ -899,30 +1157,28 @@ export default function BookingSection({ variant = "carousel" }) {
                 </div>
               </div>
 
-              <TripTypeTabs value={tripType} onChange={setTripType} />
+              <TripTypeTabs value={tripType} onChange={handleTripTypeChange} />
 
               {/* Pickup / Drop */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-x-2 gap-y-3 sm:gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">Pickup Location</label>
+                  <label className="text-xs font-semibold text-black mb-1 block">Pickup Location</label>
                   <Controller
                     name="pickup"
                     control={control}
                     render={({ field }) => (
                       <InputShell icon={<MapPin className="w-4 h-4" />} hasError={!!errors.pickup}>
                         {isLoaded ? (
-                          <Autocomplete onLoad={(a) => (pickupAutocompleteRef.current = a)} onPlaceChanged={onPickupPlaceChanged} className="w-full">
-                            <input
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                setPickupCoords(null); // typed text invalidates any earlier selection
-                              }}
-                              placeholder="Enter pickup location"
-                              autoComplete="off"
-                              className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
-                            />
-                          </Autocomplete>
+                          <PlacesAutocompleteInput
+                            value={field.value}
+                            onValueChange={(nextValue) => {
+                              field.onChange(nextValue);
+                              setPickupCoords(null);
+                            }}
+                            onPlaceSelect={setPickupCoords}
+                            onBlur={field.onBlur}
+                            placeholder="Enter pickup location"
+                          />
                         ) : (
                           <input {...field} placeholder="Enter pickup location" autoComplete="off" className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400" />
                         )}
@@ -933,7 +1189,7 @@ export default function BookingSection({ variant = "carousel" }) {
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">
+                  <label className="text-xs font-semibold text-black mb-1 block">
                     {tripType === "airport" ? "Airport" : "Drop Location"}
                   </label>
                   <Controller
@@ -954,18 +1210,17 @@ export default function BookingSection({ variant = "carousel" }) {
                       ) : (
                         <InputShell icon={<MapPin className="w-4 h-4" />} hasError={!!errors.drop}>
                           {isLoaded ? (
-                            <Autocomplete onLoad={(a) => (dropAutocompleteRef.current = a)} onPlaceChanged={onDropPlaceChanged} className="w-full">
-                              <input
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e);
-                                  setDropCoords(null); // typed text invalidates any earlier selection
-                                }}
-                                placeholder="Enter drop location"
-                                autoComplete="off"
-                                className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
-                              />
-                            </Autocomplete>
+                            <PlacesAutocompleteInput
+                              value={field.value}
+                              onValueChange={(nextValue) => {
+                                field.onChange(nextValue);
+                                setDropCoords(null);
+                              }}
+                            onPlaceSelect={setDropCoords}
+                            onBlur={field.onBlur}
+                            placeholder="Enter drop location"
+                            dropdownAlign="right"
+                          />
                           ) : (
                             <input {...field} placeholder="Enter drop location" autoComplete="off" className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400" />
                           )}
@@ -978,9 +1233,9 @@ export default function BookingSection({ variant = "carousel" }) {
               </div>
 
               {/* Date / Time */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-x-2 gap-y-3 sm:gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">Pickup Date</label>
+                  <label className="text-xs font-semibold text-black mb-1 block">Pickup Date</label>
                   <InputShell icon={<Calendar className="w-4 h-4" />} hasError={!!errors.pickupDate}>
                     <Controller
                       name="pickupDate"
@@ -993,7 +1248,7 @@ export default function BookingSection({ variant = "carousel" }) {
                   <FieldError message={errors.pickupDate?.message} />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">Pickup Time</label>
+                  <label className="text-xs font-semibold text-black mb-1 block">Pickup Time</label>
                   <InputShell icon={<Clock className="w-4 h-4" />} hasError={!!errors.pickupTime}>
                     <Controller
                       name="pickupTime"
@@ -1008,16 +1263,16 @@ export default function BookingSection({ variant = "carousel" }) {
               </div>
 
               {/* Name / Mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-x-2 gap-y-3 sm:gap-3">
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">Customer Name</label>
+                  <label className="text-xs font-semibold text-black mb-1 block">Customer Name</label>
                   <InputShell icon={<User className="w-4 h-4" />} hasError={!!errors.customerName}>
                     <input {...register("customerName")} placeholder="Full name" className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400" />
                   </InputShell>
                   <FieldError message={errors.customerName?.message} />
                 </div>
                 <div>
-                  <label className="text-xs font-semibold text-[#64748B] mb-1 block">Mobile Number</label>
+                  <label className="text-xs font-semibold text-black mb-1 block">Mobile Number</label>
                   <InputShell icon={<Phone className="w-4 h-4" />} hasError={!!errors.mobile}>
                     <input {...register("mobile")} placeholder="10-digit number" inputMode="numeric" maxLength={10} className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400" />
                   </InputShell>
@@ -1030,13 +1285,13 @@ export default function BookingSection({ variant = "carousel" }) {
                 name="vehicle"
                 control={control}
                 render={({ field }) => (
-                  <VehicleSelectGrid vehicles={vehicles} value={field.value} onChange={field.onChange} hasError={!!errors.vehicle} />
+                <VehicleSelectGrid vehicles={vehicles} value={field.value} onChange={field.onChange} hasError={!!errors.vehicle} tripType={tripType} />
                 )}
               />
 
               {/* Special requirements */}
               <div>
-                <label className="text-xs font-semibold text-[#64748B] mb-2 block">
+                <label className="text-xs font-semibold text-black mb-2 block">
                   Special Requirements <span className="text-slate-400 font-normal">(optional)</span>
                 </label>
                 <div className="flex overflow-x-auto gap-2.5 pb-1 -mx-1 px-1 sm:grid sm:grid-cols-2 md:grid-cols-4 sm:overflow-visible sm:pb-0 sm:mx-0 sm:px-0 [scrollbar-width:thin]">
@@ -1060,9 +1315,11 @@ export default function BookingSection({ variant = "carousel" }) {
                 disabled={isSubmitting}
                 className="btn btn-primary w-full h-[54px] text-sm font-black uppercase tracking-wider"
               >
-                Get Fare Estimation
+                {isSubmitting ? "Sending Enquiry..." : "Get Fare Estimation"}
               </button>
+              {enquiryError && <p role="alert" className="text-center text-xs font-medium text-red-500">{enquiryError}</p>}
             </form>
+            </div>
           </div>
 
           {isBookingPage && (
@@ -1070,6 +1327,7 @@ export default function BookingSection({ variant = "carousel" }) {
               isLoaded={isLoaded}
               pickupCoords={pickupCoords}
               dropCoords={dropCoords}
+              routeTitle={presetRoute?.label}
             />
           )}
         </div>

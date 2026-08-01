@@ -73,19 +73,28 @@ function SuccessRow({ label, value }) {
   );
 }
 
+function formatDuration(minutes) {
+  const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
+  const hours = Math.floor(totalMinutes / 60);
+  const remainingMinutes = totalMinutes % 60;
+  return hours ? `${hours} hrs ${remainingMinutes} mins` : `${remainingMinutes} mins`;
+}
+
 export default function EstimatePage() {
   const router = useRouter();
   const { booking, hydrated } = useBooking();
 
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries: GOOGLE_MAPS_LIBRARIES,
   });
 
   const mapRef = useRef(null);
+  const routeTimeoutRef = useRef(null);
   const [directions, setDirections] = useState(null);
   const [routeMeta, setRouteMeta] = useState(null);
+  const [routeError, setRouteError] = useState(null);
   const [fare, setFare] = useState(null);
   const [stage, setStage] = useState("estimate"); // estimate | confirming | confirmed
   const [enquiry, setEnquiry] = useState(null);
@@ -96,6 +105,8 @@ export default function EstimatePage() {
   const pickupCoords = booking?.pickupCoords ?? null;
   const dropCoords = booking?.dropCoords ?? null;
   const selectedVehicleLabel = vehicleLabel(FALLBACK_VEHICLES, form?.vehicle);
+  const displayedDistanceKm = fare?.distanceKm ?? routeMeta?.distanceKm;
+  const displayedDurationMins = fare?.durationMins ?? routeMeta?.durationMins;
 
   /* ---- Redirect back to the form if there's no enquiry (e.g. deep link) ---- */
   useEffect(() => {
@@ -105,11 +116,17 @@ export default function EstimatePage() {
   /* ---- Compute the driving route once the map + both coords are ready ---- */
   const computeRoute = useCallback(() => {
     if (!isLoaded || !pickupCoords || !dropCoords || !window.google) return;
+    if (routeTimeoutRef.current) window.clearTimeout(routeTimeoutRef.current);
     const service = new window.google.maps.DirectionsService();
+    routeTimeoutRef.current = window.setTimeout(() => {
+      setRouteError("Route calculation timed out. Check the Google Maps API key, billing, and allowed website referrers.");
+    }, 12000);
     service.route(
       { origin: pickupCoords, destination: dropCoords, travelMode: window.google.maps.TravelMode.DRIVING },
       (result, status) => {
+        if (routeTimeoutRef.current) window.clearTimeout(routeTimeoutRef.current);
         if (status === "OK" && result) {
+          setRouteError(null);
           setDirections(result);
           const leg = result.routes[0]?.legs[0];
           if (leg?.distance && leg?.duration) {
@@ -119,6 +136,14 @@ export default function EstimatePage() {
             });
           }
           if (mapRef.current && result.routes[0]?.bounds) mapRef.current.fitBounds(result.routes[0].bounds);
+        } else {
+          setDirections(null);
+          setRouteMeta(null);
+          setRouteError(
+            status === "ZERO_RESULTS"
+              ? "Google Maps could not find a driving route for these locations."
+              : `Google Maps route request failed (${status}). Enable and allow the Directions API for this key.`
+          );
         }
       }
     );
@@ -128,10 +153,14 @@ export default function EstimatePage() {
     computeRoute();
   }, [computeRoute]);
 
+  useEffect(() => () => {
+    if (routeTimeoutRef.current) window.clearTimeout(routeTimeoutRef.current);
+  }, []);
+
   /* ---- (Re)compute the fare: immediately on load, then again when a real
    *      route distance arrives from the Directions API. ---- */
   useEffect(() => {
-    if (!form) return;
+    if (!form || !routeMeta) return;
     let cancelled = false;
     apiEstimateFare({
       pickup: form.pickup,
@@ -155,7 +184,7 @@ export default function EstimatePage() {
     setStage("confirming");
     try {
       const [record] = await Promise.all([
-        apiSubmitEnquiry({ form, fare }),
+        apiSubmitEnquiry({ form, fare, tripType, enquiryId: booking?.enquiryId }, "booking-confirmed"),
         new Promise((r) => setTimeout(r, 3600)), // let the animation play through
       ]);
       setEnquiry(record);
@@ -246,7 +275,11 @@ export default function EstimatePage() {
                         <p className="text-xs font-medium text-[#64748B] mt-1">Estimated Fare</p>
                       </>
                     ) : (
-                      <p className="text-sm text-[#64748B]">Calculating fare…</p>
+                      <p className="text-sm text-[#64748B]">
+                        {loadError
+                          ? "Google Maps could not load. Check the API key and enabled APIs."
+                          : routeError ?? "Calculating fare…"}
+                      </p>
                     )}
                   </div>
 
@@ -257,21 +290,23 @@ export default function EstimatePage() {
                           it fare.distanceKm/durationMins are just the 0 fallback, so show a
                           plain "—" instead of a misleading "0 km"/"0 mins". */}
                       <DetailRow icon={<RouteIcon className="w-4 h-4" />} label="Distance" value={routeMeta ? `${fare.distanceKm} km` : "—"} />
+                      <DetailRow icon={<Gauge className="w-4 h-4" />} label="Billable Distance" value={`${fare.billableKm} km`} />
                       <DetailRow icon={<User className="w-4 h-4" />} label="Driver Bata" value={`₹${fare.driverBata}`} />
                       <DetailRow icon={<Gauge className="w-4 h-4" />} label="Rate per KM" value={`₹${fare.ratePerKm}`} />
-                      <DetailRow icon={<Navigation className="w-4 h-4" />} label="Toll Charges" value={fare.tollCharges ? `₹${fare.tollCharges}` : "Included"} />
-                      <DetailRow icon={<Clock className="w-4 h-4" />} label="Duration" value={routeMeta ? `${fare.durationMins} mins` : "—"} />
-                      <DetailRow icon={<ShieldCheck className="w-4 h-4" />} label="Hill Charges" value={fare.hillCharges ? `₹${fare.hillCharges}` : "None"} />
+                      <DetailRow icon={<Navigation className="w-4 h-4" />} label="Base Fare" value={`₹${fare.baseFare.toLocaleString("en-IN")}`} />
+                      <DetailRow icon={<Clock className="w-4 h-4" />} label="Duration" value={routeMeta ? formatDuration(fare.durationMins) : "—"} />
+                      <DetailRow icon={<ShieldCheck className="w-4 h-4" />} label="Tolls & Parking" value="Extra at actuals" />
                       <DetailRow icon={<Car className="w-4 h-4" />} label="Vehicle" value={selectedVehicleLabel} />
                       <DetailRow icon={<Calendar className="w-4 h-4" />} label="Pickup Date" value={form?.pickupDate} />
                       <DetailRow icon={<Clock className="w-4 h-4" />} label="Pickup Time" value={form?.pickupTime} />
-                      <DetailRow icon={<Gauge className="w-4 h-4" />} label="GST" value={`₹${fare.gst}`} />
                     </div>
                   )}
 
                   {!routeMeta && (
                     <p className="text-[11px] text-[#94A3B8] mb-3 text-center">
-                      Distance-based pricing activates once the Google Maps route loads.
+                      {loadError
+                        ? "Google Maps could not load. Check the API key and enabled APIs."
+                        : routeError ?? "Distance-based pricing activates once the Google Maps route loads."}
                     </p>
                   )}
                   {submitError && <p className="text-xs font-medium text-red-500 mb-3 text-center">{submitError}</p>}
@@ -285,7 +320,7 @@ export default function EstimatePage() {
                     </button>
                     <button
                       onClick={handleConfirm}
-                      disabled={!fare}
+                      disabled={!fare || !routeMeta}
                       className="btn btn-primary flex-1 h-[54px] text-sm font-black uppercase tracking-wider"
                     >
                       Confirm Booking →
@@ -315,11 +350,18 @@ export default function EstimatePage() {
                     >
                       <CheckCircle2 className="w-9 h-9" style={{ color: COLORS.success }} />
                     </motion.div>
-                    <h2 className="text-xl font-extrabold text-[#1E293B]">Enquiry Sent!</h2>
-                    <p className="text-sm text-[#64748B] mt-1 max-w-xs">
-                      Reference <span className="font-semibold text-[#1E293B]">{enquiry.enquiryId}</span>. Our team will
-                      call you shortly on {enquiry.mobile} to confirm your ride.
-                    </p>
+                    <h2 className="text-xl font-extrabold text-[#1E293B]">Booking Request Received</h2>
+                    <div className="mt-3 w-full max-w-md rounded-2xl border border-[#B8EAF0] bg-[#F1FBFC] p-4 text-left shadow-sm">
+                      <p className="text-[10px] font-black uppercase tracking-[0.16em] text-[#64748B]">
+                        Booking reference
+                      </p>
+                      <p className="mt-1 text-lg font-black tracking-wide text-[#5815B7]">{enquiry.enquiryId}</p>
+                      <p className="mt-3 text-sm leading-relaxed text-[#475569]">
+                        Our booking team will call{' '}
+                        <span className="font-bold text-[#1E293B]">{enquiry.mobile}</span> shortly to confirm your ride
+                        details.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="rounded-2xl border border-[#E2E8F0] divide-y divide-[#E2E8F0] mb-6">
@@ -379,10 +421,10 @@ export default function EstimatePage() {
               {routeMeta && (
                 <div className="absolute bottom-8 left-8 flex gap-2">
                   <div className="flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-[#1E293B] shadow-md">
-                    <RouteIcon className="w-3.5 h-3.5 text-[#1bc5d8]" /> {routeMeta.distanceKm} km
+                    <RouteIcon className="w-3.5 h-3.5 text-[#1bc5d8]" /> {displayedDistanceKm} km
                   </div>
                   <div className="flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-[#1E293B] shadow-md">
-                    <Clock className="w-3.5 h-3.5 text-[#1bc5d8]" /> {routeMeta.durationMins} min
+                    <Clock className="w-3.5 h-3.5 text-[#1bc5d8]" /> {formatDuration(displayedDurationMins)}
                   </div>
                 </div>
               )}
@@ -407,12 +449,12 @@ export default function EstimatePage() {
                   <div className="flex items-center gap-1.5 text-sm">
                     <RouteIcon className="w-3.5 h-3.5 text-[#1bc5d8]" />
                     <span className="text-[#64748B]">Distance</span>
-                    <span className="font-semibold text-[#1E293B]">{routeMeta.distanceKm} km</span>
+                    <span className="font-semibold text-[#1E293B]">{displayedDistanceKm} km</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-sm">
                     <Clock className="w-3.5 h-3.5 text-[#1bc5d8]" />
                     <span className="text-[#64748B]">Duration</span>
-                    <span className="font-semibold text-[#1E293B]">{routeMeta.durationMins} min</span>
+                    <span className="font-semibold text-[#1E293B]">{formatDuration(displayedDurationMins)}</span>
                   </div>
                 </div>
               )}

@@ -17,6 +17,7 @@ import {
   Play
 } from "lucide-react";
 import Link from "next/link";
+import FloatingContactButtons from "./FloatingContactButtons";
 
 /* ============================================================================
  * FOOTER DATASETS
@@ -33,12 +34,12 @@ const TOP_CITIES = [
 ];
 
 const POPULAR_ROUTES = [
-  "Chennai to Bangalore Taxi",
-  "Coimbatore to Chennai Taxi",
-  "Madurai to Chennai Taxi",
-  "Chennai to Pondicherry Taxi",
-  "Coimbatore to Ooty Cab",
-  "Bangalore to Coimbatore Taxi",
+  { label: "Chennai to Bangalore Taxi", pickup: "Chennai, Tamil Nadu, India", drop: "Bengaluru, Karnataka, India" },
+  { label: "Coimbatore to Chennai Taxi", pickup: "Coimbatore, Tamil Nadu, India", drop: "Chennai, Tamil Nadu, India" },
+  { label: "Madurai to Chennai Taxi", pickup: "Madurai, Tamil Nadu, India", drop: "Chennai, Tamil Nadu, India" },
+  { label: "Chennai to Pondicherry Taxi", pickup: "Chennai, Tamil Nadu, India", drop: "Puducherry, India" },
+  { label: "Coimbatore to Ooty Cab", pickup: "Coimbatore, Tamil Nadu, India", drop: "Ooty, Tamil Nadu, India" },
+  { label: "Bangalore to Coimbatore Taxi", pickup: "Bengaluru, Karnataka, India", drop: "Coimbatore, Tamil Nadu, India" },
 ];
 
 const QUICK_LINKS = [
@@ -54,7 +55,7 @@ const QUICK_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#1f043e] text-white relative overflow-hidden font-sans border-t border-[#5815b7]">
+    <footer data-site-footer className="w-full bg-[#1f043e] text-white relative overflow-hidden font-sans border-t border-[#5815b7]">
       
       {/* 🌟 AMBIENT GLOW EFFECTS */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-[#7c2bea]/20 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
@@ -81,7 +82,7 @@ export default function Footer() {
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto z-10">
             {/* Phone Call CTA */}
             <a
-              href="tel:+919876543210"
+              href="tel:+918110880500"
               className="w-full sm:w-auto bg-[#1bc5d8] hover:bg-[#b8eaf0] text-[#1f043e] font-black px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-cyan-500/20 active:scale-95"
             >
               <Phone className="w-4 h-4 fill-[#1f043e]" /> Call Dispatch Desk
@@ -89,7 +90,7 @@ export default function Footer() {
 
             {/* WhatsApp CTA */}
             <a
-              href="https://wa.me/919876543210"
+              href="https://wa.me/918110880500"
               target="_blank"
               rel="noreferrer"
               className="w-full sm:w-auto bg-white/10 hover:bg-[#1bc5d8]/20 border border-[#1bc5d8]/50 text-[#b8eaf0] font-extrabold px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95"
@@ -119,7 +120,7 @@ export default function Footer() {
             </div>
 
             <p className="text-purple-100 text-xs leading-relaxed font-medium max-w-sm">
-              South India's most trusted one-way outstation taxi network. We eliminate return kilometer charges, offering transparent distance-only fares with verified chauffeurs.
+              South India&apos;s most trusted one-way outstation taxi network. We eliminate return kilometer charges, offering transparent distance-only fares with verified chauffeurs.
             </p>
 
             {/* Live Operations Badge */}
@@ -160,9 +161,12 @@ export default function Footer() {
             <ul className="space-y-2 text-xs font-medium text-purple-100">
               {POPULAR_ROUTES.map((route, idx) => (
                 <li key={idx}>
-                  <a href={`#${route}`} className="hover:text-[#1bc5d8] transition-colors flex items-center gap-1.5">
-                    <ArrowRight className="w-3 h-3 text-[#1bc5d8]/70" /> {route}
-                  </a>
+                  <Link
+                    href={`/booking?pickup=${encodeURIComponent(route.pickup)}&drop=${encodeURIComponent(route.drop)}&route=${encodeURIComponent(route.label)}`}
+                    className="hover:text-[#1bc5d8] transition-colors flex items-center gap-1.5"
+                  >
+                    <ArrowRight className="w-3 h-3 text-[#1bc5d8]/70" /> {route.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -185,6 +189,7 @@ export default function Footer() {
           </div>
 
         </div>
+        <FloatingContactButtons />
       </div>
 
       {/* ========================================================================

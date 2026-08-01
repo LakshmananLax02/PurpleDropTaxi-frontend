@@ -62,16 +62,90 @@ export const defaultFormValues = {
   extraLuggage: false,
 };
 
-/* ---- Vehicle catalogue ---------------------------------------------------- */
+// The single source of truth for every displayed and calculated per-kilometre
+// rate. The keys match the trip types used by the booking form.
+export const VEHICLE_RATES = {
+  oneway: { sedan: 15, prime_sedan: 15, suv: 19, prime_suv: 23 },
+  roundtrip: { sedan: 14, prime_sedan: 14, suv: 18, prime_suv: 22 },
+  airport: { sedan: 15, prime_sedan: 15, suv: 19, prime_suv: 23 },
+};
+
+// A fixed driver bata applies to every cab category and every trip type.
+export const DRIVER_BATA = 400;
+
+export function normalizeVehicleId(vehicleId) {
+  return {
+    etios: "prime_sedan",
+    "prime-sedan": "prime_sedan",
+    innova: "prime_suv",
+    "prime-suv": "prime_suv",
+  }[vehicleId] ?? vehicleId;
+}
+
+export function getVehicleRate(vehicleId, tripType = "oneway") {
+  const normalizedVehicleId = normalizeVehicleId(vehicleId);
+  const rates = VEHICLE_RATES[tripType] ?? VEHICLE_RATES.oneway;
+  return rates[normalizedVehicleId] ?? rates.sedan;
+}
+
 export const FALLBACK_VEHICLES = [
-  { id: "sedan", label: "Sedan", ratePerKm: 15, seats: 4, description: "Comfortable, budget-friendly rides for up to 4 — great for city trips." },
-  { id: "etios", label: "Etios", ratePerKm: 16, seats: 4, description: "Reliable and fuel-efficient, ideal for everyday travel." },
-  { id: "suv", label: "SUV", ratePerKm: 20, seats: 6, description: "Extra room for families and small groups on longer trips." },
-  { id: "prime_suv", label: "Prime SUV", ratePerKm: 22, seats: 6, description: "A step up in comfort — premium SUV with extra legroom." },
+  { id: "sedan", label: "Sedan", seats: 4, driverBata: DRIVER_BATA, description: "Comfortable everyday travel." },
+  { id: "prime_sedan", label: "Prime Sedan", seats: 4, driverBata: DRIVER_BATA, description: "Extra comfort for relaxed highway travel." },
+  { id: "suv", label: "SUV", seats: 6, driverBata: DRIVER_BATA, description: "Extra room for families and small groups." },
+  { id: "prime_suv", label: "Prime SUV", seats: 6, driverBata: DRIVER_BATA, description: "Premium SUV with extra legroom." },
 ];
+
+// Shared calculation rules used by both the public tariff calculator and the
+// live Google Maps quote. A round-trip route charges for the outward and return
+// journey, while airport pickup follows the one-way rules.
+export const FARE_RULES = {
+  minimumBillableKm: { oneway: 130, roundtrip: 250, airport: 130 },
+  roundTripDistanceMultiplier: 2,
+};
+
+export function getTripDistanceKm(distanceKm, tripType = "oneway") {
+  const routeDistanceKm = Math.max(0, Number(distanceKm) || 0);
+  return tripType === "roundtrip"
+    ? routeDistanceKm * FARE_RULES.roundTripDistanceMultiplier
+    : routeDistanceKm;
+}
+
+export function getTripDurationMins(durationMins, tripType = "oneway") {
+  const oneWayDurationMins = Math.max(0, Number(durationMins) || 0);
+  return tripType === "roundtrip"
+    ? oneWayDurationMins * FARE_RULES.roundTripDistanceMultiplier
+    : oneWayDurationMins;
+}
+
+export function calculateFareEstimate({ vehicleId, tripType = "oneway", distanceKm = 0, durationMins = 0 }) {
+  const normalizedVehicleId = normalizeVehicleId(vehicleId);
+  const vehicle = FALLBACK_VEHICLES.find((item) => item.id === normalizedVehicleId)
+    ?? FALLBACK_VEHICLES[0];
+  const travelDistanceKm = getTripDistanceKm(distanceKm, tripType);
+  const minimumBillableKm = FARE_RULES.minimumBillableKm[tripType] ?? FARE_RULES.minimumBillableKm.oneway;
+  const billableKm = Math.max(travelDistanceKm, minimumBillableKm);
+  const ratePerKm = getVehicleRate(vehicleId, tripType);
+  const baseFare = Math.round(billableKm * ratePerKm);
+  const driverBata = vehicle.driverBata;
+
+  return {
+    fare: Math.round(baseFare + driverBata),
+    distanceKm: Math.round(travelDistanceKm * 10) / 10,
+    durationMins: Math.round(getTripDurationMins(durationMins, tripType)),
+    billableKm,
+    minimumBillableKm,
+    ratePerKm,
+    baseFare,
+    driverBata,
+    tollCharges: 0,
+    hillCharges: 0,
+    gst: 0,
+  };
+}
 
 export const VEHICLE_IMAGES = {
   sedan: "/images/sedanimg.png",
+  prime_sedan: "/images/primesedanimg.png",
   etios: "/images/primesedanimg.png",
   suv: "/images/suvimg.png",
   prime_suv: "/images/primesuvimg.png",
@@ -84,7 +158,10 @@ export const TAMIL_NADU_AIRPORTS = [
   { id: "ixm", name: "Madurai Airport (IXM)", lat: 9.8345, lng: 78.0934 },
   { id: "trz", name: "Tiruchirappalli International Airport (TRZ)", lat: 10.7654, lng: 78.7097 },
   { id: "sxv", name: "Salem Airport (SXV)", lat: 11.7833, lng: 78.0708 },
-  { id: "tcr", name: "Tuticorin Airport (TCR)", lat: 8.7242, lng: 78.0257 },
+  { id: "tcr", name: "Thoothukudi Airport (TCR)", lat: 8.7242, lng: 78.0257 },
+  { id: "nvy", name: "Neyveli Airport (NVY)", lat: 11.61296, lng: 79.52738 },
+  { id: "vovr", name: "Vellore Airport (VOVR)", lat: 12.9088, lng: 79.0668 },
+  { id: "vo95", name: "Hosur Aerodrome (VO95)", lat: 12.6634, lng: 77.7709 },
 ];
 
 /* ---- Google Maps config --------------------------------------------------- */
@@ -136,51 +213,22 @@ export async function apiEstimateFare(payload) {
     return await res.json();
   } catch {
     // Local fallback, used until the backend is wired up.
-    const vehicle = FALLBACK_VEHICLES.find((v) => v.id === payload.vehicleId) ?? FALLBACK_VEHICLES[0];
-    const distance = payload.tripType === "roundtrip" ? payload.distanceKm * 2 : payload.distanceKm;
-    const base = distance * vehicle.ratePerKm;
-    const driverBata = 400;
-    const tollCharges = distance > 80 ? 120 : 0;
-    const hillCharges = 0;
-    const gst = Math.round((base + driverBata + tollCharges) * 0.05);
-    const fare = Math.round(base + driverBata + tollCharges + hillCharges + gst);
-    return {
-      fare,
-      distanceKm: Math.round(distance),
-      durationMins: payload.durationMins,
-      ratePerKm: vehicle.ratePerKm,
-      driverBata,
-      tollCharges,
-      hillCharges,
-      gst,
-    };
+    return calculateFareEstimate(payload);
   }
 }
 
-// TODO(backend): forward this payload to the Telegram bot/channel used by the
-// tele-calling team AND persist it to the database.
-export async function apiSubmitEnquiry(payload) {
-  try {
-    const res = await fetch("/api/enquiry", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error("enquiry submission failed");
-    return await res.json();
-  } catch {
-    return {
-      enquiryId: `ENQ-${Math.floor(100000 + Math.random() * 900000)}`,
-      pickup: payload.form.pickup,
-      drop: payload.form.drop,
-      vehicle: payload.form.vehicle,
-      fare: payload.fare.fare,
-      customerName: payload.form.customerName,
-      mobile: payload.form.mobile,
-      pickupDate: payload.form.pickupDate,
-      pickupTime: payload.form.pickupTime,
-    };
-  }
+// Sends customer data to the server-side enquiry route. Telegram credentials
+// are intentionally never exposed to the browser.
+export async function apiSubmitEnquiry(payload, event = "booking-confirmed") {
+  const res = await fetch("/api/enquiry", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...payload, event }),
+  });
+
+  const response = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(response.error || "enquiry submission failed");
+  return response;
 }
 
 /* ---- Small shared helpers ------------------------------------------------- */

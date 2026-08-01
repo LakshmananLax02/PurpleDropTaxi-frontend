@@ -14,6 +14,7 @@ import {
   Navigation,
   Sparkles
 } from "lucide-react";
+import { calculateFareEstimate, DRIVER_BATA, getTripDistanceKm } from "../lib/booking";
 
 /* ============================================================================
  * FLEET RATES DATASET
@@ -21,60 +22,58 @@ import {
 const FLEETS = [
   {
     id: "sedan",
-    name: "Compact Sedan",
+    name: "Sedan",
     models: "Etios, Dzire, Aura",
     seats: "4 Passengers",
     luggage: "2 Bags",
-    oneWayRate: 13,    // ₹13 / km for One-Way
-    roundTripRate: 11, // ₹11 / km for Round Trip
-    driverBata: 400,   // Fixed driver bata per day
+    oneWayRate: 15,    // ₹15 / km for One-Way
+    roundTripRate: 14, // ₹14 / km for Round Trip
+    driverBata: DRIVER_BATA,
     badge: "Budget Friendly",
     image: "/images/sedanimg.png",
   },
   {
-    id: "prime-sedan",
+    id: "prime_sedan",
     name: "Prime Sedan",
     models: "Ciaz, Sunny, Honda City",
     seats: "4 Passengers",
     luggage: "3 Bags",
     oneWayRate: 15,    // ₹15 / km
-    roundTripRate: 13, // ₹13 / km
-    driverBata: 500,   // Fixed driver bata per day
+    roundTripRate: 14, // ₹14 / km
+    driverBata: DRIVER_BATA,
     badge: "Extra Comfort",
     image: "/images/sedanimg.png",
   },
   {
     id: "suv",
-    name: "Executive SUV",
+    name: "SUV",
     models: "Ertiga, Triber, Carens",
     seats: "6 Passengers",
     luggage: "4 Bags",
-    oneWayRate: 18,    // ₹18 / km
-    roundTripRate: 15, // ₹15 / km
-    driverBata: 600,   // Fixed driver bata per day
+    oneWayRate: 19,    // ₹19 / km
+    roundTripRate: 18, // ₹18 / km
+    driverBata: DRIVER_BATA,
     badge: "Family Favorite",
     image: "/images/sedanimg.png",
   },
   {
-    id: "prime-suv",
+    id: "prime_suv",
     name: "Prime SUV",
     models: "Innova Crysta, Hycross",
     seats: "7 Passengers",
     luggage: "5 Bags",
-    oneWayRate: 22,    // ₹22 / km
-    roundTripRate: 18, // ₹18 / km
-    driverBata: 700,   // Fixed driver bata per day
+    oneWayRate: 23,    // ₹23 / km
+    roundTripRate: 22, // ₹22 / km
+    driverBata: DRIVER_BATA,
     badge: "Luxury Cruiser",
     image: "/images/sedanimg.png",
   }
 ];
 
-const ONE_WAY_MIN_KM = 130;
-const ROUND_TRIP_MIN_KM = 250;
 const QUICK_DISTANCES = [100, 250, 400, 550];
 
 export default function FareCalculator() {
-  const [tripType, setTripType] = useState("oneWay"); // "oneWay" or "roundTrip"
+  const [tripType, setTripType] = useState("oneway");
   const [kilometers, setKilometers] = useState(250);   // Default 250 km
   const [selectedFleet, setSelectedFleet] = useState("sedan");
   const [showTable, setShowTable] = useState(false);
@@ -83,22 +82,16 @@ export default function FareCalculator() {
    * SILENT BACKGROUND CALCULATION LOGIC
    * (Minimum threshold applied behind the scenes)
    * ========================================================================= */
-  const actualTotalKm = tripType === "roundTrip" ? kilometers * 2 : kilometers;
-  const minKmThreshold = tripType === "roundTrip" ? ROUND_TRIP_MIN_KM : ONE_WAY_MIN_KM;
-
-  // Billable distance threshold applies silently
-  const billableKm = actualTotalKm < minKmThreshold ? minKmThreshold : actualTotalKm;
+  const actualTotalKm = getTripDistanceKm(kilometers, tripType);
 
   // Estimated Travel Time Calculation (~50 km/hr average highway speed)
-  const estimatedHours = Math.floor(kilometers / 50);
-  const estimatedMinutes = Math.round(((kilometers % 50) / 50) * 60);
+  const estimatedHours = Math.floor(actualTotalKm / 50);
+  const estimatedMinutes = Math.round(((actualTotalKm % 50) / 50) * 60);
 
   // Calculate total fare for any fleet item
   const calculateFare = (fleet) => {
-    const ratePerKm = tripType === "oneWay" ? fleet.oneWayRate : fleet.roundTripRate;
-    const baseFare = billableKm * ratePerKm;
-    const totalFare = baseFare + fleet.driverBata;
-    return { ratePerKm, baseFare, totalFare };
+    const estimate = calculateFareEstimate({ vehicleId: fleet.id, tripType, distanceKm: kilometers });
+    return { ratePerKm: estimate.ratePerKm, baseFare: estimate.baseFare, totalFare: estimate.fare };
   };
 
   const handleGetEstimation = () => {
@@ -133,17 +126,17 @@ export default function FareCalculator() {
         {/* --- 2. MAIN CALCULATOR CARD --- */}
         <div className="bg-white border-2 border-purple-100/80 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-500/10 space-y-8">
           
-          {/* TABS: ONE-WAY vs ROUND TRIP */}
+          {/* TABS: ONE-WAY, ROUND TRIP, AIRPORT PICKUP */}
           <div className="flex justify-center">
-            <div className="inline-flex p-1.5 bg-slate-100 rounded-2xl border border-gray-200/80 w-full max-w-md shadow-inner">
+            <div className="inline-flex p-1.5 bg-slate-100 rounded-2xl border border-gray-200/80 w-full max-w-xl shadow-inner">
               <button
                 type="button"
                 onClick={() => {
-                  setTripType("oneWay");
+                  setTripType("oneway");
                   setShowTable(false);
                 }}
-                className={`flex-1 py-3 px-6 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
-                  tripType === "oneWay"
+                className={`flex-1 py-3 px-2 sm:px-4 rounded-xl text-[10px] sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
+                  tripType === "oneway"
                     ? "bg-[#7c2bea] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
@@ -153,16 +146,30 @@ export default function FareCalculator() {
               <button
                 type="button"
                 onClick={() => {
-                  setTripType("roundTrip");
+                  setTripType("roundtrip");
                   setShowTable(false);
                 }}
-                className={`flex-1 py-3 px-6 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
-                  tripType === "roundTrip"
+                className={`flex-1 py-3 px-2 sm:px-4 rounded-xl text-[10px] sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
+                  tripType === "roundtrip"
                     ? "bg-[#7c2bea] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
                 Round Trip
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setTripType("airport");
+                  setShowTable(false);
+                }}
+                className={`flex-1 py-3 px-2 sm:px-4 rounded-xl text-[10px] sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
+                  tripType === "airport"
+                    ? "bg-[#7c2bea] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Airport Pickup
               </button>
             </div>
           </div>
@@ -194,7 +201,7 @@ export default function FareCalculator() {
                     setKilometers(Math.max(1, Number(e.target.value)));
                     setShowTable(false);
                   }}
-                  className="w-full bg-slate-50 border-2 border-purple-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/15 text-xl font-black text-gray-900 rounded-2xl p-4 pr-16 outline-none transition-all shadow-md shadow-purple-500/5 group-hover:border-purple-400"
+                  className="w-full bg-slate-50 border-2 border-[#b8eaf0] focus:border-[#7c2bea] focus:hover:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-[#7c2bea]/15 text-xl font-black text-gray-900 rounded-2xl p-4 pr-16 outline-none transition-all shadow-md shadow-purple-500/5 group-hover:border-[#1bc5d8]"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-[#7c2bea] bg-purple-100/80 border border-purple-200 px-2.5 py-1 rounded-lg">
                   KM
@@ -236,7 +243,7 @@ export default function FareCalculator() {
                   {actualTotalKm} <span className="text-xs font-bold text-gray-500">KM</span>
                 </p>
                 <p className="text-[10px] text-gray-500 font-bold">
-                  {tripType === "roundTrip" ? "Round Trip Total" : "One-Way Distance"}
+                  {tripType === "roundtrip" ? "Round Trip Total" : tripType === "airport" ? "Airport Transfer Distance" : "One-Way Distance"}
                 </p>
               </div>
             </div>
@@ -345,7 +352,7 @@ export default function FareCalculator() {
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Tariff Breakdown
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-gray-900">
-                    Estimated Comparison for {kilometers} KM ({tripType === "oneWay" ? "One-Way Drop" : "Round Trip"})
+                    Estimated Comparison for {kilometers} KM ({tripType === "oneway" ? "One-Way Drop" : tripType === "roundtrip" ? "Round Trip" : "Airport Pickup"})
                   </h3>
                 </div>
                 <div className="text-xs font-bold text-gray-500 bg-slate-50 px-4 py-2 rounded-xl border border-gray-200">
