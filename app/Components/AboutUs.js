@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   ShieldCheck, 
   Award, 
@@ -141,11 +141,8 @@ const SAFETY_FEATURES = [
 ];
 
 export default function AboutUs() {
-  const { scrollYProgress } = useScroll();
-  const heroImageScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.12]);
-
   return (
-    <div className="w-full bg-[#f8fafc] text-gray-900 relative overflow-hidden font-sans select-none">
+    <div className="w-full bg-[#f8f6fc] text-gray-900 relative overflow-hidden font-sans select-none">
       
       {/* 🎨 CUSTOM UIVERSE EXPANDING HOVER STYLES */}
       <style jsx global>{`
@@ -166,7 +163,7 @@ export default function AboutUs() {
           z-index: -1;
           top: -16px;
           right: -16px;
-          background: linear-gradient(135deg, #7c3aed, #4c1d95);
+          background: linear-gradient(135deg, #7c2bea, #3d0c79);
           height: 32px;
           width: 32px;
           border-radius: 32px;
@@ -185,7 +182,7 @@ export default function AboutUs() {
           overflow: hidden;
           top: 0;
           right: 0;
-          background: linear-gradient(135deg, #a855f7, #7c3aed);
+          background: linear-gradient(135deg, #7c2bea, #1bc5d8);
           border-radius: 0 16px 0 24px;
           transition: all 0.3s ease;
         }
@@ -219,22 +216,11 @@ export default function AboutUs() {
       {/* ========================================================================
        * 1. HERO HEADER SECTION
        * ========================================================================= */}
-      <section className="relative w-full py-4 md:py-4 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
-        
-        {/* Parallax Background Image Layer */}
-        <motion.div 
-          className="absolute inset-0 w-full h-full pointer-events-none z-0"
-          style={{ scale: heroImageScale }}
-        >
-          <img
-            src="/images/sedanimg.png"
-            alt="PurpleDropTaxi Highway Drive Background"
-            className="w-full h-full object-cover object-center opacity-90"
-          />
-        </motion.div>
-
-        {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/40 via-[#f8fafc]/40 to-[#f8fafc] z-0" />
+      <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
+        <div className="absolute inset-0 z-0">
+          <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
+        </div>
 
         {/* Hero Content */}
         <motion.div 
@@ -243,16 +229,16 @@ export default function AboutUs() {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/90 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-[#7c3aed]" /> South India's Premier Drop Taxi
+          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 text-[#1bc5d8]" /> South India's Premier Drop Taxi
           </motion.div>
           
-          <motion.h1 variants={fadeInUp} className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-gray-900">
+          <motion.h1 variants={fadeInUp} className="page-title-pattern">
             Driven By Integrity. <br />
-            <span className="text-[#7c3aed]">Powered By Transparency.</span>
+            <span className="text-[#1bc5d8]">Powered By Transparency.</span>
           </motion.h1>
           
-          <motion.p variants={fadeInUp} className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto">
+          <motion.p variants={fadeInUp} className="text-white text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto">
             PurpleDropTaxi was founded with one clear mission: to eliminate unfair return-kilometer charges for one-way outstation travelers. Pay strictly for the distance you travel, with zero compromise on comfort and safety.
           </motion.p>
         </motion.div>
@@ -279,7 +265,7 @@ export default function AboutUs() {
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="bg-white border border-gray-100 shadow-xl shadow-slate-200/50 p-6 rounded-2xl text-center space-y-2 hover:border-purple-200 transition-colors group"
               >
-                <div className="w-10 h-10 mx-auto rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="w-10 h-10 mx-auto rounded-xl bg-purple-100 text-[#7c2bea] flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Icon className="w-5 h-5" />
                 </div>
                 <p className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">{stat.value}</p>
@@ -300,11 +286,11 @@ export default function AboutUs() {
           className="space-y-8"
         >
           <motion.div variants={fadeInUp} className="text-center space-y-2 max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
               Why Choose Us
             </div>
-            <h2 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
-              Features Built For <span className="text-[#7c3aed]">Highway Travelers</span>
+            <h2 className="section-title-pattern">
+              Features Built For <span className="text-[#7c2bea]">Highway Travelers</span>
             </h2>
             <p className="text-gray-500 text-xs sm:text-sm font-medium">
               Designed from the ground up to offer the most convenient and cost-effective outstation ride experience.
@@ -326,7 +312,7 @@ export default function AboutUs() {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center transition-colors">
+                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c2bea] flex items-center justify-center transition-colors">
                       <Icon className="w-5 h-5" />
                     </div>
                     <h3 className="uiverse-card-title text-base font-bold text-gray-900 transition-colors">{item.title}</h3>
@@ -349,12 +335,12 @@ export default function AboutUs() {
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-white border border-purple-100 rounded-3xl p-6 sm:p-10 shadow-xl shadow-purple-500/5"
         >
           <motion.div variants={fadeInUp} className="space-y-6">
-            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
               Our Journey
             </div>
             
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-gray-900 leading-snug">
-              Why Pay For The <span className="text-[#7c3aed]">Driver's Return Journey?</span>
+            <h2 className="section-title-pattern">
+              Why Pay For The <span className="text-[#7c2bea]">Driver's Return Journey?</span>
             </h2>
 
             <p className="text-gray-500 text-xs sm:text-sm leading-relaxed font-medium">
@@ -367,13 +353,13 @@ export default function AboutUs() {
 
             <div className="pt-2 flex flex-wrap gap-3 text-xs font-bold text-gray-700">
               <span className="flex items-center gap-1.5 bg-purple-50/60 border border-purple-100 px-3 py-1.5 rounded-lg text-purple-900">
-                <CheckCircle2 className="w-4 h-4 text-[#7c3aed]" /> Doorstep Pickups
+                <CheckCircle2 className="w-4 h-4 text-[#7c2bea]" /> Doorstep Pickups
               </span>
               <span className="flex items-center gap-1.5 bg-purple-50/60 border border-purple-100 px-3 py-1.5 rounded-lg text-purple-900">
-                <CheckCircle2 className="w-4 h-4 text-[#7c3aed]" /> Dual-AC Fleets
+                <CheckCircle2 className="w-4 h-4 text-[#7c2bea]" /> Dual-AC Fleets
               </span>
               <span className="flex items-center gap-1.5 bg-purple-50/60 border border-purple-100 px-3 py-1.5 rounded-lg text-purple-900">
-                <CheckCircle2 className="w-4 h-4 text-[#7c3aed]" /> Zero Cancellation Fees
+                <CheckCircle2 className="w-4 h-4 text-[#7c2bea]" /> Zero Cancellation Fees
               </span>
             </div>
           </motion.div>
@@ -387,7 +373,7 @@ export default function AboutUs() {
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-gray-950/20 to-transparent" />
             
             <div className="absolute bottom-6 left-6 right-6 p-4 bg-white/90 backdrop-blur-md rounded-xl border border-white/20 shadow-lg">
-              <p className="text-xs font-black text-[#7c3aed] uppercase tracking-widest">Highway Guarantee</p>
+              <p className="text-xs font-black text-[#7c2bea] uppercase tracking-widest">Highway Guarantee</p>
               <p className="text-sm font-bold text-gray-900 mt-0.5">Prompt door-to-door connections across 100+ cities.</p>
             </div>
           </motion.div>
@@ -406,8 +392,8 @@ export default function AboutUs() {
           className="space-y-8"
         >
           <motion.div variants={fadeInUp} className="text-center space-y-2">
-            <h2 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
-              Traditional Cabs vs. <span className="text-[#7c3aed]">PurpleDropTaxi</span>
+            <h2 className="section-title-pattern">
+              Traditional Cabs vs. <span className="text-[#7c2bea]">PurpleDropTaxi</span>
             </h2>
             <p className="text-gray-500 text-xs sm:text-sm font-medium">
               See how our distance-only model saves you up to 40% on every outstation route.
@@ -416,7 +402,7 @@ export default function AboutUs() {
 
           <motion.div variants={fadeInUp} className="overflow-x-auto rounded-2xl border border-gray-200 bg-white shadow-xl shadow-slate-200/40">
             <table className="w-full min-w-[640px] text-left text-xs sm:text-sm text-gray-700 table-fixed">
-              <thead className="bg-purple-50 text-[#7c3aed] font-black uppercase tracking-wider text-[11px] border-b border-purple-100">
+              <thead className="bg-purple-50 text-[#7c2bea] font-black uppercase tracking-wider text-[11px] border-b border-purple-100">
                 <tr>
                   <th className="p-4 sm:p-5 w-[34%]">Feature</th>
                   <th className="p-4 sm:p-5 w-[33%] text-rose-600">Traditional Cabs</th>
@@ -461,8 +447,8 @@ export default function AboutUs() {
           className="space-y-8"
         >
           <motion.div variants={fadeInUp} className="text-center space-y-2">
-            <h2 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
-              Safety & <span className="text-[#7c3aed]">Passenger Protection</span>
+            <h2 className="section-title-pattern">
+              Safety & <span className="text-[#7c2bea]">Passenger Protection</span>
             </h2>
             <p className="text-gray-500 text-xs sm:text-sm font-medium">
               Built for solo travelers, families, seniors, and corporate executives.
@@ -483,7 +469,7 @@ export default function AboutUs() {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center transition-colors">
+                    <div className="uiverse-card-icon w-10 h-10 rounded-xl bg-purple-100 text-[#7c2bea] flex items-center justify-center transition-colors">
                       <Icon className="w-5 h-5" />
                     </div>
                     <h3 className="uiverse-card-title text-sm font-bold text-gray-900 transition-colors">{item.title}</h3>
@@ -503,11 +489,11 @@ export default function AboutUs() {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-purple-900 via-[#7c3aed] to-purple-950 p-8 sm:p-12 rounded-3xl text-center space-y-6 shadow-2xl shadow-purple-900/20 text-white relative overflow-hidden"
+          className="bg-gradient-to-r from-purple-900 via-[#7c2bea] to-purple-950 p-8 sm:p-12 rounded-3xl text-center space-y-6 shadow-2xl shadow-purple-900/20 text-white relative overflow-hidden"
         >
           <div className="max-w-2xl mx-auto space-y-3 relative z-10">
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight">
-              Ready For Your Next Outstation Journey?
+            <h2 className="section-title-pattern-on-dark">
+              Ready For <span>Your Next Outstation Journey?</span>
             </h2>
             <p className="text-purple-100 text-xs sm:text-sm font-medium">
               Book your ride in less than 60 seconds with instant fare calculation and zero advance deposit requirements.

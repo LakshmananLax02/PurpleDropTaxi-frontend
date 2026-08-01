@@ -81,7 +81,7 @@ export default function FaqSection() {
   });
 
   return (
-    <section className="w-full bg-[#f8fafc] py-5 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#f8f6fc] py-5 px-4 sm:px-6 lg:px-8 relative overflow-hidden font-sans">
       
       {/* Decorative Brand Gradient Orbs */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-200/40 rounded-full blur-3xl pointer-events-none" />
@@ -91,11 +91,11 @@ export default function FaqSection() {
         
         {/* --- SECTION HEADER --- */}
         <div className="text-center space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+          <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
             <HelpCircle className="w-4 h-4" /> Got Questions?
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-            Frequently Asked <span className="text-[#7c3aed]">Questions</span>
+          <h2 className="section-title-pattern">
+            Frequently Asked <span className="text-[#7c2bea]">Questions</span>
           </h2>
           <p className="text-gray-500 text-sm max-w-lg mx-auto font-medium">
             Everything you need to know about our drop taxi services, one-way pricing, and travel safety across South India.
@@ -110,7 +110,7 @@ export default function FaqSection() {
               onClick={() => setActiveCategory(cat.id)}
               className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${
                 activeCategory === cat.id
-                  ? "bg-[#7c3aed] text-white shadow-md shadow-purple-600/20 scale-105"
+                  ? "bg-[#7c2bea] text-white shadow-md shadow-purple-600/20 scale-105"
                   : "bg-white text-gray-600 border border-gray-200 hover:border-purple-300 hover:bg-purple-50/50"
               }`}
             >
@@ -134,7 +134,7 @@ export default function FaqSection() {
                     transition={{ duration: 0.2 }}
                     className={`rounded-2xl border transition-all duration-300 overflow-hidden ${
                       isOpen
-                        ? "bg-white border-[#7c3aed] shadow-lg shadow-purple-900/5 ring-1 ring-[#7c3aed]/20"
+                        ? "bg-white border-[#7c2bea] shadow-lg shadow-purple-900/5 ring-1 ring-[#7c2bea]/20"
                         : "bg-white border-gray-200/80 hover:border-purple-200 shadow-sm"
                     }`}
                   >
@@ -151,7 +151,7 @@ export default function FaqSection() {
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors ${
-                          isOpen ? "bg-purple-100 text-[#7c3aed]" : "bg-gray-100 text-gray-500"
+                          isOpen ? "bg-purple-100 text-[#7c2bea]" : "bg-gray-100 text-gray-500"
                         }`}
                       >
                         <ChevronDown className="w-4 h-4" />
@@ -191,7 +191,7 @@ export default function FaqSection() {
                     setSearchQuery("");
                     setActiveCategory("all");
                   }}
-                  className="mt-3 text-xs font-bold text-[#7c3aed] hover:underline"
+                  className="mt-3 text-xs font-bold text-[#7c2bea] hover:underline"
                 >
                   Clear search filters
                 </button>
@@ -201,9 +201,9 @@ export default function FaqSection() {
         </div>
 
         {/* --- CALL TO ACTION SUPPORT CARD --- */}
-        <div className="mt-12 p-6 sm:p-8 bg-gradient-to-r from-[#7c3aed] to-[#6D28D9] rounded-3xl text-white shadow-xl shadow-purple-600/20 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="mt-12 p-6 sm:p-8 bg-gradient-to-r from-[#7c2bea] to-[#5815b7] rounded-3xl text-white shadow-xl shadow-purple-600/20 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="text-lg font-black tracking-tight">Still have questions?</h3>
+            <h3 className="section-title-pattern-on-dark">Still have <span>questions?</span></h3>
             <p className="text-purple-100 text-xs font-medium max-w-sm">
               Can’t find the answer you’re looking for? Reach out to our 24/7 tele-support team.
             </p>

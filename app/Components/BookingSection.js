@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AnimatePresence, motion } from "framer-motion";
-import { Autocomplete, useJsApiLoader } from "@react-google-maps/api";
+import { Autocomplete, GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import {
   Calendar,
   Car,
@@ -49,6 +49,7 @@ import {
   VEHICLE_IMAGES,
   TAMIL_NADU_AIRPORTS,
   GOOGLE_MAPS_LIBRARIES,
+  DEFAULT_CENTER,
   bookingFormSchema,
   defaultFormValues,
   apiGetVehicles,
@@ -106,11 +107,11 @@ function InputShell({ icon, children, hasError }) {
     <div
       className={[
         "flex items-center gap-2.5 h-[50px] rounded-xl bg-white border px-3.5 transition-all duration-200",
-        "focus-within:ring-2 focus-within:ring-[#8B5CF6]/40 focus-within:border-[#8B5CF6]",
+        "focus-within:ring-2 focus-within:ring-[#1bc5d8]/40 focus-within:border-[#1bc5d8]",
         hasError ? "border-red-400" : "border-[#E2E8F0]",
       ].join(" ")}
     >
-      <span className="text-[#8B5CF6] shrink-0">{icon}</span>
+      <span className="text-[#1bc5d8] shrink-0">{icon}</span>
       {children}
     </div>
   );
@@ -160,7 +161,7 @@ function ClockFace({ mode, hour, minute, onPickHour, onPickMinute }) {
 
   return (
     <svg viewBox="0 0 220 220" className="w-full h-auto select-none" role="img" aria-label={`${mode} dial`}>
-      <circle cx={cx} cy={cy} r={100} fill="#F5F3FF" />
+      <circle cx={cx} cy={cy} r={100} fill="#f1fbfc" />
       {handPoint && (
         <>
           <line x1={cx} y1={cy} x2={handPoint.x} y2={handPoint.y} stroke={COLORS.gradientFrom} strokeWidth={2} />
@@ -290,7 +291,7 @@ function TimePicker12h({ value, onChange }) {
               <button
                 type="button"
                 onClick={() => setMode("hour")}
-                className={mode === "hour" ? "text-[#6D28D9]" : "text-[#1E293B]"}
+                className={mode === "hour" ? "text-[#5815b7]" : "text-[#1E293B]"}
               >
                 {hour || "--"}
               </button>
@@ -298,7 +299,7 @@ function TimePicker12h({ value, onChange }) {
               <button
                 type="button"
                 onClick={() => setMode("minute")}
-                className={mode === "minute" ? "text-[#6D28D9]" : "text-[#1E293B]"}
+                className={mode === "minute" ? "text-[#5815b7]" : "text-[#1E293B]"}
               >
                 {minute || "--"}
               </button>
@@ -471,8 +472,8 @@ function DatePickerCalendar({ value, onChange }) {
                   disabled={isPast}
                   className={[
                     "h-8 w-8 mx-auto rounded-full text-xs font-semibold transition-colors",
-                    isSelected ? "text-white" : isPast ? "text-slate-300" : "text-[#1E293B] hover:bg-[#F5F3FF]",
-                    isToday && !isSelected ? "ring-1 ring-[#8B5CF6]" : "",
+                    isSelected ? "text-white" : isPast ? "text-slate-300" : "text-[#1E293B] hover:bg-[#f1fbfc]",
+                    isToday && !isSelected ? "ring-1 ring-[#1bc5d8]" : "",
                   ].join(" ")}
                   style={isSelected ? { background: COLORS.gradientFrom } : undefined}
                 >
@@ -492,11 +493,11 @@ function CheckboxPill({ label, icon, checked, onChange }) {
     <label
       className={[
         "h-full flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 cursor-pointer select-none transition-colors",
-        checked ? "border-[#8B5CF6] bg-[#F5F3FF]" : "border-[#E2E8F0] bg-white hover:bg-slate-50",
+        checked ? "border-[#1bc5d8] bg-[#f1fbfc]" : "border-[#E2E8F0] bg-white hover:bg-slate-50",
       ].join(" ")}
     >
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="sr-only" />
-      <span className={["shrink-0", checked ? "text-[#8B5CF6]" : "text-[#64748B]"].join(" ")}>{icon}</span>
+      <span className={["shrink-0", checked ? "text-[#1bc5d8]" : "text-[#64748B]"].join(" ")}>{icon}</span>
       <span className="text-sm font-medium text-[#1E293B] leading-snug text-center">{label}</span>
     </label>
   );
@@ -581,11 +582,11 @@ function AirportSelect({ airports, value, onChange }) {
                   }}
                   className={[
                     "w-full flex items-center gap-2.5 rounded-xl border-2 px-3 py-2.5 text-left transition-all duration-150",
-                    isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#C4B5FD]",
+                    isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#b8eaf0]",
                   ].join(" ")}
                   style={isSelected ? { background: `linear-gradient(135deg, ${COLORS.gradientFrom}, ${COLORS.gradientTo})` } : undefined}
                 >
-                  <MapPin className={["w-4 h-4 shrink-0", isSelected ? "text-white" : "text-[#8B5CF6]"].join(" ")} />
+                  <MapPin className={["w-4 h-4 shrink-0", isSelected ? "text-white" : "text-[#1bc5d8]"].join(" ")} />
                   <span className="text-sm font-semibold flex-1">{a.name}</span>
                 </button>
               );
@@ -622,13 +623,13 @@ function VehicleSelectGrid({ vehicles, value, onChange, hasError }) {
               onClick={() => onChange(v.id)}
               className={[
                 "shrink-0 w-[104px] sm:w-auto flex flex-col items-center gap-1.5 rounded-xl border-2 px-2.5 py-3 transition-all duration-150",
-                isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#C4B5FD]",
+                isSelected ? "text-white border-transparent shadow-md" : "text-[#1E293B] bg-white border-[#E2E8F0] hover:border-[#b8eaf0]",
               ].join(" ")}
               style={isSelected ? { background: `linear-gradient(135deg, ${COLORS.gradientFrom}, ${COLORS.gradientTo})` } : undefined}
             >
               <VehicleImage src={VEHICLE_IMAGES[v.id]} alt={v.label} className="w-12 h-9 object-contain" />
               <span className="text-xs font-bold">{v.label}</span>
-              <span className={isSelected ? "text-white/85 text-[11px] font-semibold" : "text-[#8B5CF6] text-[11px] font-semibold"}>
+              <span className={isSelected ? "text-white/85 text-[11px] font-semibold" : "text-[#1bc5d8] text-[11px] font-semibold"}>
                 ₹{v.ratePerKm}/km
               </span>
               <span className={["flex items-center gap-1 text-[10px]", isSelected ? "text-white/75" : "text-[#94A3B8]"].join(" ")}>
@@ -664,21 +665,61 @@ function CarouselContent({ slide }) {
           <ShieldCheck className="w-3.5 h-3.5" />
           {slide.badge}
         </span>
-        <h1 className="text-3xl md:text-4xl lg:text-[2.9rem] font-bold leading-tight text-[#1E293B]">
+        <h1 className="page-title-pattern">
           {slide.prefix}
           <br />
           <span style={{ color: COLORS.gradientTo }}>{slide.highlight}</span>
         </h1>
-        <p className="mt-4 text-sm md:text-base text-[#475569]">{slide.subtext}</p>
+        <p className="mt-4 text-sm md:text-base text-white">{slide.subtext}</p>
       </motion.div>
     </AnimatePresence>
+  );
+}
+
+function BookingMapPreview({ isLoaded, pickupCoords, dropCoords }) {
+  const mapRef = React.useRef(null);
+  const center = pickupCoords ?? DEFAULT_CENTER;
+
+  useEffect(() => {
+    if (mapRef.current) mapRef.current.panTo(center);
+  }, [center]);
+
+  return (
+    <aside className="order-2 lg:col-span-2 min-h-[360px] lg:min-h-[620px] rounded-[20px] border border-[#E2E8F0] bg-white p-4 md:p-5 shadow-xl">
+      <div className="mb-4">
+        <h2 className="text-lg font-bold text-[#1E293B]">Route Preview</h2>
+        <p className="mt-0.5 text-xs text-[#64748B]">Select your locations to preview them on the map.</p>
+      </div>
+
+      <div className="h-[calc(100%-60px)] min-h-[285px] overflow-hidden rounded-2xl bg-slate-100">
+        {isLoaded ? (
+          <GoogleMap
+            mapContainerStyle={{ width: "100%", height: "100%" }}
+            center={center}
+            zoom={pickupCoords || dropCoords ? 12 : 10}
+            onLoad={(map) => (mapRef.current = map)}
+            options={{ streetViewControl: false, mapTypeControl: false, fullscreenControl: false }}
+          >
+            {pickupCoords && <Marker position={pickupCoords} label="P" />}
+            {dropCoords && <Marker position={dropCoords} label="D" />}
+          </GoogleMap>
+        ) : (
+          <div className="flex h-full flex-col items-center justify-center gap-2 px-6 text-center text-sm font-semibold text-[#94A3B8]">
+            <MapPin className="h-7 w-7 text-[#1bc5d8]" />
+            Map preview
+            <span className="text-[11px] font-normal">Add a Google Maps API key to see live locations.</span>
+          </div>
+        )}
+      </div>
+    </aside>
   );
 }
 
 /* ============================================================================
  * MAIN — PAGE 1
  * ========================================================================== */
-export default function BookingSection() {
+export default function BookingSection({ variant = "carousel" }) {
+  const isBookingPage = variant === "booking";
   const router = useRouter();
   const { setBooking } = useBooking();
 
@@ -787,32 +828,34 @@ export default function BookingSection() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ background: COLORS.bg }}>
-      {/* ---- Carousel background image layer ---- */}
-      <div className="absolute inset-0 z-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={slide.id}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
-            className="absolute inset-0"
-          >
-            <img src={slide.image} alt="" className="w-full h-full object-cover object-center opacity-30 md:opacity-40" />
-            <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/10 to-white/10" />
-          </motion.div>
-        </AnimatePresence>
-      </div>
+    <section className={`relative w-full overflow-hidden ${!isBookingPage ? "brand-hero" : ""}`} style={isBookingPage ? { background: COLORS.bg } : undefined}>
+      {!isBookingPage && (
+        <div className="absolute inset-0 z-0">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={slide.id}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="absolute inset-0"
+            >
+              <img src={slide.image} alt="" className="h-full w-full object-cover object-center" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      )}
 
+      {/* ---- Carousel background image layer ---- */}
       {/* ---- Foreground: carousel content (left) + form (right) ---- */}
-      <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-8 py-5 md:py-6">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 py-8 md:px-8 md:py-10">
         {/* Mobile: carousel content first, then the form peeking up beneath it
             (tight gap so at least the top half of the form is on-screen).
             Desktop: content left, form right. */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-10 items-center">
+        <div className={isBookingPage ? "grid grid-cols-1 gap-6 lg:grid-cols-5 lg:items-stretch" : "grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 lg:items-start"}>
           {/* LEFT — carousel content + slide dots */}
-          <div className="order-1">
+          {!isBookingPage && <div className="order-1 lg:pt-12">
             <CarouselContent slide={slide} />
             <div className="flex items-center gap-1.5 mt-5 md:mt-8">
               {SLIDES.map((s, i) => (
@@ -821,11 +864,11 @@ export default function BookingSection() {
                   type="button"
                   onClick={() => setSlideIndex(i)}
                   aria-label={`Go to slide ${i + 1}`}
-                  className={["h-1.5 rounded-full transition-all", i === slideIndex ? "w-6 bg-[#8B5CF6]" : "w-1.5 bg-[#C4B5FD]"].join(" ")}
+                  className={["h-1.5 rounded-full transition-all", i === slideIndex ? "w-6 bg-[#1bc5d8]" : "w-1.5 bg-[#b8eaf0]"].join(" ")}
                 />
               ))}
             </div>
-          </div>
+          </div>}
 
           {/* RIGHT — enquiry form card, with the same rotating-gradient
               border used on the fleet cards (Cars.js) for visual
@@ -833,12 +876,12 @@ export default function BookingSection() {
               rounded card, with a 2px-inset white plate masking everything
               except a thin rotating sliver around the edge. */}
           <div
-            className="order-2 relative rounded-[20px] shadow-xl overflow-hidden"
-            style={{ boxShadow: "0 20px 45px -12px rgba(109,40,217,0.22)" }}
+            className={`${isBookingPage ? "order-1 lg:col-span-3" : "order-2"} relative rounded-[20px] shadow-xl overflow-hidden`}
+            style={{ boxShadow: "0 20px 45px -12px rgba(88,21,183,0.22)" }}
           >
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-32 -translate-x-1/2 -translate-y-1/2 animate-spin [animation-duration:6s]"
-              style={{ background: "linear-gradient(180deg, #7c3aed 0%, #a855f7 35%, #c084fc 70%, #6D28D9 100%)" }}
+              style={{ background: "linear-gradient(180deg, #7c2bea 0%, #a55cff 35%, #1bc5d8 70%, #5815b7 100%)" }}
             />
             <div className="absolute inset-[2px] rounded-[18px] bg-white" />
 
@@ -1021,6 +1064,14 @@ export default function BookingSection() {
               </button>
             </form>
           </div>
+
+          {isBookingPage && (
+            <BookingMapPreview
+              isLoaded={isLoaded}
+              pickupCoords={pickupCoords}
+              dropCoords={dropCoords}
+            />
+          )}
         </div>
       </div>
     </section>

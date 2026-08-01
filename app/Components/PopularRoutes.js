@@ -79,7 +79,7 @@ export default function PopularRoutes() {
   };
 
   return (
-    <section className="w-full bg-[#f8fafc] py-5 px-4 md:px-8 relative overflow-hidden font-sans select-none">
+    <section className="w-full bg-[#f8f6fc] py-5 px-4 md:px-8 relative overflow-hidden font-sans select-none">
       
       {/* Embedded CSS - Fixed Stacking, Hover Animation, and Mobile Centering */}
       <style jsx global>{`
@@ -135,7 +135,7 @@ export default function PopularRoutes() {
           width: 226px;
           height: 301px;
           border-radius: 16px;
-          background: linear-gradient(-45deg, #7c3aed 0%, #a855f7 50%, #38bdf8 100%);
+          background: linear-gradient(-45deg, #5815b7 0%, #7c2bea 50%, #1bc5d8 100%);
           z-index: 1;
           pointer-events: none;
           transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -147,7 +147,7 @@ export default function PopularRoutes() {
           z-index: 0;
           position: absolute;
           inset: 0;
-          background: linear-gradient(-45deg, #7c3aed 0%, #38bdf8 100%);
+          background: linear-gradient(-45deg, #7c2bea 0%, #1bc5d8 100%);
           transform: translate3d(0, 0, 0) scale(0.95);
           filter: blur(18px);
           opacity: 0.35;
@@ -170,17 +170,17 @@ export default function PopularRoutes() {
         {/* --- HEADER --- */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
-              <MapPin className="w-3.5 h-3.5 text-[#7c3aed]" /> Top Outstation Routes
+            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
+              <MapPin className="w-3.5 h-3.5 text-[#7c2bea]" /> Top Outstation Routes
             </div>
-            <h2 className="text-2xl md:text-4xl font-black text-gray-900 tracking-tight">
-              Popular <span className="text-[#7c3aed]">One-Way Drop Routes</span>
+            <h2 className="section-title-pattern">
+              Popular <span className="text-[#7c2bea]">One-Way Drop Routes</span>
             </h2>
           </div>
 
           <a 
             href="#all-routes" 
-            className="inline-flex items-center gap-1.5 text-xs font-black text-[#7c3aed] hover:text-[#5b21b6] transition-colors group"
+            className="inline-flex items-center gap-1.5 text-xs font-black text-[#7c2bea] hover:text-[#5815b7] transition-colors group"
           >
             <span>View All Routes</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -239,16 +239,16 @@ export default function PopularRoutes() {
                   <div className="p-3.5 flex flex-col justify-between flex-1 bg-white">
                     <div>
                       <h3 className="text-sm font-black text-gray-900 tracking-tight leading-snug line-clamp-1">
-                        {route.origin} <span className="text-[#7c3aed]">→</span> {route.destination}
+                        {route.origin} <span className="text-[#7c2bea]">→</span> {route.destination}
                       </h3>
 
                       <div className="mt-2 flex items-center gap-2.5 text-[10px] font-bold text-gray-400">
                         <span className="flex items-center gap-1">
-                          <Navigation className="w-3 h-3 text-[#7c3aed]" /> {route.distance}
+                          <Navigation className="w-3 h-3 text-[#7c2bea]" /> {route.distance}
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3 text-[#7c3aed]" /> {route.duration}
+                          <Clock className="w-3 h-3 text-[#7c2bea]" /> {route.duration}
                         </span>
                       </div>
                     </div>
@@ -259,7 +259,7 @@ export default function PopularRoutes() {
                         <span className="text-[9px] font-extrabold uppercase text-gray-400 block -mb-1">
                           Starting from
                         </span>
-                        <span className="text-lg font-black text-[#7c3aed]">
+                        <span className="text-lg font-black text-[#7c2bea]">
                           ₹{route.fare}
                         </span>
                       </div>

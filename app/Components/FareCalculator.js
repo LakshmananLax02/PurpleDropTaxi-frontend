@@ -12,17 +12,16 @@ import {
   ShieldCheck,
   ChevronDown,
   Navigation,
-  Info,
   Sparkles
 } from "lucide-react";
 
 /* ============================================================================
- * FLEET RATES DATASET (WITH CAR IMAGES FOR TABLE & CARDS)
+ * FLEET RATES DATASET
  * ========================================================================= */
 const FLEETS = [
   {
     id: "sedan",
-    name: "Sedan",
+    name: "Compact Sedan",
     models: "Etios, Dzire, Aura",
     seats: "4 Passengers",
     luggage: "2 Bags",
@@ -30,7 +29,7 @@ const FLEETS = [
     roundTripRate: 11, // ₹11 / km for Round Trip
     driverBata: 400,   // Fixed driver bata per day
     badge: "Budget Friendly",
-    image: "/images/primesedanimg.png", // Update this path to your car image file
+    image: "/images/sedanimg.png",
   },
   {
     id: "prime-sedan",
@@ -40,21 +39,21 @@ const FLEETS = [
     luggage: "3 Bags",
     oneWayRate: 15,    // ₹15 / km
     roundTripRate: 13, // ₹13 / km
-    driverBata: 500,
+    driverBata: 500,   // Fixed driver bata per day
     badge: "Extra Comfort",
-    image: "/images/sedanimg.png", // Update this path
+    image: "/images/sedanimg.png",
   },
   {
     id: "suv",
-    name: "SUV",
+    name: "Executive SUV",
     models: "Ertiga, Triber, Carens",
     seats: "6 Passengers",
     luggage: "4 Bags",
     oneWayRate: 18,    // ₹18 / km
     roundTripRate: 15, // ₹15 / km
-    driverBata: 600,
+    driverBata: 600,   // Fixed driver bata per day
     badge: "Family Favorite",
-    image: "/images/suvimg.png", // Update this path
+    image: "/images/sedanimg.png",
   },
   {
     id: "prime-suv",
@@ -64,12 +63,14 @@ const FLEETS = [
     luggage: "5 Bags",
     oneWayRate: 22,    // ₹22 / km
     roundTripRate: 18, // ₹18 / km
-    driverBata: 700,
+    driverBata: 700,   // Fixed driver bata per day
     badge: "Luxury Cruiser",
-    image: "/images/primesuvimg.png", // Update this path
+    image: "/images/sedanimg.png",
   }
 ];
 
+const ONE_WAY_MIN_KM = 130;
+const ROUND_TRIP_MIN_KM = 250;
 const QUICK_DISTANCES = [100, 250, 400, 550];
 
 export default function FareCalculator() {
@@ -78,14 +79,21 @@ export default function FareCalculator() {
   const [selectedFleet, setSelectedFleet] = useState("sedan");
   const [showTable, setShowTable] = useState(false);
 
-  // Billable Distance: One-Way is 1x, Round Trip doubles the distance
-  const billableKm = tripType === "roundTrip" ? kilometers * 2 : kilometers;
+  /* ============================================================================
+   * SILENT BACKGROUND CALCULATION LOGIC
+   * (Minimum threshold applied behind the scenes)
+   * ========================================================================= */
+  const actualTotalKm = tripType === "roundTrip" ? kilometers * 2 : kilometers;
+  const minKmThreshold = tripType === "roundTrip" ? ROUND_TRIP_MIN_KM : ONE_WAY_MIN_KM;
+
+  // Billable distance threshold applies silently
+  const billableKm = actualTotalKm < minKmThreshold ? minKmThreshold : actualTotalKm;
 
   // Estimated Travel Time Calculation (~50 km/hr average highway speed)
   const estimatedHours = Math.floor(kilometers / 50);
   const estimatedMinutes = Math.round(((kilometers % 50) / 50) * 60);
 
-  // Helper function to calculate total fare for any fleet item
+  // Calculate total fare for any fleet item
   const calculateFare = (fleet) => {
     const ratePerKm = tripType === "oneWay" ? fleet.oneWayRate : fleet.roundTripRate;
     const baseFare = billableKm * ratePerKm;
@@ -101,7 +109,7 @@ export default function FareCalculator() {
   };
 
   return (
-    <section className="w-full bg-[#f8fafc] py-16 px-4 sm:px-6 lg:px-8 font-sans select-none relative overflow-hidden">
+    <section className="w-full bg-[#f8f6fc] py-16 px-4 sm:px-6 lg:px-8 font-sans select-none relative overflow-hidden">
       
       {/* 🌟 AMBIENT GLOW EFFECTS */}
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-purple-200/40 rounded-full blur-3xl pointer-events-none -translate-y-1/2" />
@@ -111,30 +119,20 @@ export default function FareCalculator() {
 
         {/* --- 1. SECTION HEADER --- */}
         <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-white border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-md shadow-purple-500/10 backdrop-blur-md">
-            <Calculator className="w-3.5 h-3.5 text-[#7c3aed]" /> Instant Fare Estimator
+          <div className="inline-flex items-center gap-2 bg-white border border-purple-200 text-[#7c2bea] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-md shadow-purple-500/10 backdrop-blur-md">
+            <Calculator className="w-3.5 h-3.5 text-[#7c2bea]" /> Instant Fare Estimator
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 tracking-tight">
-            Calculate Your <span className="text-[#7c3aed]">Highway Trip Fare</span>
+          <h2 className="section-title-pattern">
+            Calculate Your <span className="text-[#7c2bea]">Highway Trip Fare</span>
           </h2>
           <p className="text-gray-500 text-xs sm:text-sm font-medium">
-            Type your travel distance in kilometers below to generate instant, transparent price estimates.
+            Select your trip type and enter your travel distance to view transparent fare estimates across all fleets.
           </p>
         </div>
 
         {/* --- 2. MAIN CALCULATOR CARD --- */}
         <div className="bg-white border-2 border-purple-100/80 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-500/10 space-y-8">
           
-          {/* TOP INTIMATION BANNER */}
-          <div className="bg-purple-50 border border-purple-200 p-4 rounded-2xl flex items-center gap-3 text-purple-950 shadow-sm">
-            <div className="w-8 h-8 rounded-xl bg-[#7c3aed] text-white flex items-center justify-center shrink-0 shadow-md">
-              <Info className="w-4 h-4" />
-            </div>
-            <p className="text-xs sm:text-sm font-bold leading-relaxed">
-              <span className="text-[#7c3aed] font-black uppercase tracking-wider">How To Check:</span> Enter your trip distance in kilometers below to instantly preview fare estimations across all fleet options!
-            </p>
-          </div>
-
           {/* TABS: ONE-WAY vs ROUND TRIP */}
           <div className="flex justify-center">
             <div className="inline-flex p-1.5 bg-slate-100 rounded-2xl border border-gray-200/80 w-full max-w-md shadow-inner">
@@ -146,7 +144,7 @@ export default function FareCalculator() {
                 }}
                 className={`flex-1 py-3 px-6 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
                   tripType === "oneWay"
-                    ? "bg-[#7c3aed] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
+                    ? "bg-[#7c2bea] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -160,7 +158,7 @@ export default function FareCalculator() {
                 }}
                 className={`flex-1 py-3 px-6 rounded-xl text-xs sm:text-sm font-black uppercase tracking-wider transition-all duration-300 ${
                   tripType === "roundTrip"
-                    ? "bg-[#7c3aed] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
+                    ? "bg-[#7c2bea] text-white shadow-lg shadow-purple-600/30 scale-[1.02]"
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
@@ -176,10 +174,10 @@ export default function FareCalculator() {
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <label htmlFor="km-input" className="block text-xs font-black text-gray-900 uppercase tracking-wider flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#7c3aed]" /> Enter Distance
+                  <MapPin className="w-4 h-4 text-[#7c2bea]" /> Enter Distance
                 </label>
 
-                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#7c3aed] bg-purple-100 px-2.5 py-0.5 rounded-full border border-purple-200 animate-pulse">
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold text-[#7c2bea] bg-purple-100 px-2.5 py-0.5 rounded-full border border-purple-200 animate-pulse">
                   <Navigation className="w-3 h-3" /> Type KMs Below
                 </span>
               </div>
@@ -188,7 +186,7 @@ export default function FareCalculator() {
                 <input
                   id="km-input"
                   type="number"
-                  min="10"
+                  min="1"
                   max="3000"
                   placeholder="e.g. 250"
                   value={kilometers}
@@ -196,15 +194,15 @@ export default function FareCalculator() {
                     setKilometers(Math.max(1, Number(e.target.value)));
                     setShowTable(false);
                   }}
-                  className="w-full bg-slate-50 border-2 border-purple-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/15 text-xl font-black text-gray-900 rounded-2xl p-4 pr-16 outline-none transition-all shadow-md shadow-purple-500/5 group-hover:border-purple-400"
+                  className="w-full bg-slate-50 border-2 border-purple-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/15 text-xl font-black text-gray-900 rounded-2xl p-4 pr-16 outline-none transition-all shadow-md shadow-purple-500/5 group-hover:border-purple-400"
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-[#7c3aed] bg-purple-100/80 border border-purple-200 px-2.5 py-1 rounded-lg">
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-black text-[#7c2bea] bg-purple-100/80 border border-purple-200 px-2.5 py-1 rounded-lg">
                   KM
                 </span>
               </div>
 
               <div className="flex items-center gap-2 pt-1">
-                <span className="text-[10px] font-bold text-gray-400 uppercase">Preset KMs:</span>
+                <span className="text-[10px] font-bold text-gray-400 uppercase">Presets:</span>
                 {QUICK_DISTANCES.map((dist) => (
                   <button
                     key={dist}
@@ -215,7 +213,7 @@ export default function FareCalculator() {
                     }}
                     className={`text-[11px] font-extrabold px-2.5 py-1 rounded-lg border transition-all ${
                       kilometers === dist
-                        ? "bg-[#7c3aed] text-white border-[#7c3aed] shadow-md shadow-purple-500/20"
+                        ? "bg-[#7c2bea] text-white border-[#7c2bea] shadow-md shadow-purple-500/20"
                         : "bg-white text-gray-600 border-gray-200 hover:border-purple-300 hover:bg-purple-50/50"
                     }`}
                   >
@@ -225,27 +223,27 @@ export default function FareCalculator() {
               </div>
             </div>
 
-            {/* BILLABLE DISTANCE DISPLAY CARD */}
+            {/* TOTAL MILEAGE CARD */}
             <div className="bg-purple-50/70 border-2 border-purple-100 p-4 sm:p-5 rounded-2xl flex items-center gap-4 shadow-md shadow-purple-500/5">
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 border border-purple-200 text-[#7c3aed] flex items-center justify-center shrink-0 shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 border border-purple-200 text-[#7c2bea] flex items-center justify-center shrink-0 shadow-sm">
                 <Car className="w-6 h-6" />
               </div>
-              <div>
+              <div className="space-y-0.5">
                 <p className="text-[11px] font-black uppercase tracking-wider text-purple-900">
-                  Billable Mileage
+                  Total Trip Mileage
                 </p>
                 <p className="text-xl font-black text-gray-900">
-                  {billableKm} <span className="text-xs font-bold text-gray-500">KM Total</span>
+                  {actualTotalKm} <span className="text-xs font-bold text-gray-500">KM</span>
                 </p>
-                {tripType === "roundTrip" && (
-                  <p className="text-[10px] text-purple-700 font-bold">(2x Round Trip Distance)</p>
-                )}
+                <p className="text-[10px] text-gray-500 font-bold">
+                  {tripType === "roundTrip" ? "Round Trip Total" : "One-Way Distance"}
+                </p>
               </div>
             </div>
 
             {/* ESTIMATED DURATION DISPLAY CARD */}
             <div className="bg-purple-50/70 border-2 border-purple-100 p-4 sm:p-5 rounded-2xl flex items-center gap-4 shadow-md shadow-purple-500/5">
-              <div className="w-12 h-12 rounded-2xl bg-purple-100 border border-purple-200 text-[#7c3aed] flex items-center justify-center shrink-0 shadow-sm">
+              <div className="w-12 h-12 rounded-2xl bg-purple-100 border border-purple-200 text-[#7c2bea] flex items-center justify-center shrink-0 shadow-sm">
                 <Clock className="w-6 h-6" />
               </div>
               <div>
@@ -264,7 +262,7 @@ export default function FareCalculator() {
           {/* --- 3. FLEET SELECTION CARDS --- */}
           <div className="space-y-4">
             <p className="text-xs font-black text-gray-800 uppercase tracking-wider flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4 text-[#7c3aed]" /> Fleet Fare Preview for {kilometers} KM:
+              <Sparkles className="w-4 h-4 text-[#7c2bea]" /> Fleet Preview:
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -281,12 +279,12 @@ export default function FareCalculator() {
                     }}
                     className={`relative p-5 rounded-2xl border-2 transition-all duration-300 cursor-pointer flex flex-col justify-between ${
                       isSelected
-                        ? "bg-purple-50/90 border-[#7c3aed] shadow-xl shadow-purple-500/15 -translate-y-1"
+                        ? "bg-purple-50/90 border-[#7c2bea] shadow-xl shadow-purple-500/15 -translate-y-1"
                         : "bg-white border-gray-100 hover:border-purple-300 hover:shadow-lg hover:shadow-slate-200/50"
                     }`}
                   >
                     <span className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-md self-start mb-2 ${
-                      isSelected ? "bg-[#7c3aed] text-white shadow-sm" : "bg-slate-100 text-gray-600 border border-gray-200"
+                      isSelected ? "bg-[#7c2bea] text-white shadow-sm" : "bg-slate-100 text-gray-600 border border-gray-200"
                     }`}>
                       {fleet.badge}
                     </span>
@@ -299,7 +297,7 @@ export default function FareCalculator() {
                     <div className="my-4 pt-3 border-t border-gray-100 space-y-1.5">
                       <div className="flex items-center justify-between text-xs font-bold text-gray-600">
                         <span>Rate:</span>
-                        <span className="text-[#7c3aed] font-black">₹{ratePerKm} / KM</span>
+                        <span className="text-[#7c2bea] font-black">₹{ratePerKm} / KM</span>
                       </div>
                       <div className="flex items-center justify-between text-xs font-bold text-gray-600">
                         <span>Driver Bata:</span>
@@ -322,7 +320,7 @@ export default function FareCalculator() {
             <button
               type="button"
               onClick={handleGetEstimation}
-              className="px-10 py-4 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black text-xs sm:text-sm uppercase tracking-widest rounded-2xl shadow-xl shadow-purple-600/30 transition-all active:scale-95 inline-flex items-center gap-2"
+              className="px-10 py-4 bg-[#7c2bea] hover:bg-[#5815b7] text-white font-black text-xs sm:text-sm uppercase tracking-widest rounded-2xl shadow-xl shadow-purple-600/30 transition-all active:scale-95 inline-flex items-center gap-2"
             >
               Get Full Tariff Estimation Table <ChevronDown className="w-4 h-4" />
             </button>
@@ -330,7 +328,7 @@ export default function FareCalculator() {
 
         </div>
 
-        {/* --- 4. DETAILED ESTIMATION TABLE (WITH CAR IMAGES INJECTED) --- */}
+        {/* --- 4. DETAILED ESTIMATION TABLE --- */}
         <AnimatePresence>
           {showTable && (
             <motion.div
@@ -344,7 +342,7 @@ export default function FareCalculator() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-purple-100 pb-4">
                 <div>
                   <div className="inline-flex items-center gap-2 bg-emerald-100 border border-emerald-200 text-emerald-800 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-1">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Complete Tariff Breakdown
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Tariff Breakdown
                   </div>
                   <h3 className="text-xl sm:text-2xl font-black text-gray-900">
                     Estimated Comparison for {kilometers} KM ({tripType === "oneWay" ? "One-Way Drop" : "Round Trip"})
@@ -358,11 +356,11 @@ export default function FareCalculator() {
               {/* TABLE CONTAINER */}
               <div className="overflow-x-auto rounded-2xl border-2 border-gray-100 shadow-inner">
                 <table className="w-full min-w-[650px] text-left text-xs sm:text-sm text-gray-700 table-fixed">
-                  <thead className="bg-purple-50 text-[#7c3aed] font-black uppercase tracking-wider text-[11px] border-b-2 border-purple-100">
+                  <thead className="bg-purple-50 text-[#7c2bea] font-black uppercase tracking-wider text-[11px] border-b-2 border-purple-100">
                     <tr>
                       <th className="p-4 sm:p-5 w-[30%]">Fleet Category</th>
                       <th className="p-4 sm:p-5 w-[15%]">Rate / KM</th>
-                      <th className="p-4 sm:p-5 w-[20%]">Base Fare ({billableKm} KM)</th>
+                      <th className="p-4 sm:p-5 w-[20%]">Base Fare</th>
                       <th className="p-4 sm:p-5 w-[15%]">Driver Bata</th>
                       <th className="p-4 sm:p-5 w-[20%] text-right">Total Est. Fare</th>
                     </tr>
@@ -379,7 +377,6 @@ export default function FareCalculator() {
                             isCurrent ? "bg-purple-50/60 font-bold" : "hover:bg-slate-50"
                           }`}
                         >
-                          {/* CAR IMAGE + FLEET NAME IN TABLE CELL */}
                           <td className="p-4 sm:p-5 font-black text-gray-900">
                             <div className="flex items-center gap-3">
                               <img
@@ -401,7 +398,7 @@ export default function FareCalculator() {
                             ₹{fleet.driverBata}
                           </td>
                           <td className="p-4 sm:p-5 text-right font-black text-gray-900 text-base">
-                            <span className="text-[#7c3aed]">₹{totalFare.toLocaleString()}</span>
+                            <span className="text-[#7c2bea]">₹{totalFare.toLocaleString()}</span>
                           </td>
                         </tr>
                       );
@@ -413,7 +410,7 @@ export default function FareCalculator() {
               {/* FOOTNOTE DISCLAIMER */}
               <div className="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl text-xs text-gray-500 font-medium flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-inner">
                 <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4 text-[#7c3aed] shrink-0" />
+                  <ShieldCheck className="w-4 h-4 text-[#7c2bea] shrink-0" />
                   <span>* Toll charges, state permits, and parking fees (if applicable) are extra at actuals.</span>
                 </div>
 

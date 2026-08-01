@@ -15,10 +15,10 @@ import { z } from "zod";
 
 /* ---- Design tokens -------------------------------------------------------- */
 export const COLORS = {
-  gradientFrom: "#6D28D9",
-  gradientTo: "#8B5CF6",
-  accent: "#A855F7",
-  bg: "#F8FAFC",
+  gradientFrom: "#5815b7",
+  gradientTo: "#1bc5d8",
+  accent: "#a55cff",
+  bg: "#f8f6fc",
   card: "#FFFFFF",
   textPrimary: "#1E293B",
   textSecondary: "#64748B",

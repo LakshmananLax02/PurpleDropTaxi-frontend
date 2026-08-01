@@ -49,9 +49,9 @@ import { ChevronLeft, ChevronRight, ShieldCheck } from "lucide-react";
  * ========================================================================= */
 
 const COLORS = {
-  gradientFrom: "#6D28D9",
-  gradientTo: "#8B5CF6",
-  accent: "#A855F7",
+  gradientFrom: "#5815b7",
+  gradientTo: "#1bc5d8",
+  accent: "#a55cff",
   whatsapp: "#22C55E",
   textPrimary: "#1E293B",
   textSecondary: "#64748B",
@@ -114,11 +114,11 @@ export default function HeroSection() {
   return (
     <div>
       <section
-        className="relative w-full min-h-[300px] sm:min-h-[420px] md:min-h-[520px] flex items-center overflow-hidden pb-20 md:pb-36"
+        className="relative w-full min-h-[300px] sm:min-h-[420px] md:min-h-[520px] flex items-center overflow-hidden pb-20 md:pb-36 bg-[#1f043e]"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
-        {/* Slide backgrounds */}
+        {/* Content — centered */}
         <AnimatePresence mode="wait">
           <motion.div
             key={slide.id}
@@ -128,20 +128,11 @@ export default function HeroSection() {
             transition={{ duration: 0.6 }}
             className="absolute inset-0"
           >
-            {slide.image ? (
-              <img
-                src={slide.image}
-                alt=""
-                className="w-full h-full object-cover object-bottom scale-150 origin-bottom md:scale-100"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-[#DDE9D8] via-[#C9DFC4] to-[#B9D6B3]" />
-            )}
-            <div className="absolute inset-0 bg-white/40" />
+            <img src={slide.image} alt="" className="h-full w-full object-cover object-center" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/90 via-[#1f043e]/72 to-black/65" />
           </motion.div>
         </AnimatePresence>
 
-        {/* Content — centered */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 md:px-8 w-full flex justify-center">
           <div className="max-w-xl text-center flex flex-col items-center">
             <AnimatePresence mode="wait">
@@ -161,13 +152,13 @@ export default function HeroSection() {
                   {slide.badge}
                 </span>
 
-                <h1 className="text-3xl md:text-4xl lg:text-[2.75rem] font-bold leading-tight text-[#1E293B]">
+                <h1 className="page-title-pattern">
                   {slide.headlinePrefix}
                   <br />
                   <span style={{ color: COLORS.gradientTo }}>{slide.headlineHighlight}</span>
                 </h1>
 
-                <p className="hidden md:block mt-4 text-sm md:text-base text-[#475569] max-w-md">
+                <p className="hidden md:block mt-4 text-sm md:text-base text-white max-w-md">
                   {slide.subtext}
                 </p>
               </motion.div>

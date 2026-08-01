@@ -56,7 +56,7 @@ export default function PopularRoutes() {
   const [hoveredIdx, setHoveredIdx] = useState(null);
 
   return (
-    <section className="w-full bg-[#f8fafc] py-2 px-4 sm:px-2 lg:px-8 font-sans select-none">
+    <section className="w-full bg-[#f8f6fc] py-10 px-4 sm:px-2 lg:px-8 font-sans select-none">
       
       {/* 🌟 KEYFRAME ANIMATION FOR THE RUNNING INNER DASH BORDER */}
       <style jsx global>{`
@@ -70,8 +70,8 @@ export default function PopularRoutes() {
         
         {/* --- SECTION TITLE --- */}
         <div className="border-b border-gray-200 pb-4">
-          <h2 className="text-xl sm:text-2xl font-black text-gray-900 tracking-tight">
-            Popular Routes
+          <h2 className="section-title-pattern">
+            Popular <span>Routes</span>
           </h2>
         </div>
 
@@ -103,11 +103,11 @@ export default function PopularRoutes() {
                   <div 
                     className="absolute inset-0 rounded-xl transition-all duration-300 z-0"
                     style={{
-                      backgroundColor: isHovered ? "#7c3aed" : "#ffffff",
-                      border: isHovered ? "3px solid #ffffff" : "4px solid #7c3aed", // Thick 3px border
+                      backgroundColor: isHovered ? "#7c2bea" : "#ffffff",
+                      border: isHovered ? "3px solid #ffffff" : "4px solid #7c2bea", // Thick 3px border
                       boxShadow: isHovered 
-                        ? "0 0 0 4px rgba(124, 58, 237, 0.4), 0 10px 20px -5px rgba(124, 58, 237, 0.4)" 
-                        : "0 2px 6px -1px rgba(124, 58, 237, 0.12)"
+                        ? "0 0 0 4px rgba(124, 43, 234, 0.4), 0 10px 20px -5px rgba(124, 43, 234, 0.4)"
+                        : "0 2px 6px -1px rgba(124, 43, 234, 0.12)"
                     }}
                   />
 
@@ -122,7 +122,7 @@ export default function PopularRoutes() {
                       height="calc(100% - 4px)"
                       rx="10"
                       fill="none"
-                      stroke={isHovered ? "#ffffff" : "#c084fc"}
+                      stroke={isHovered ? "#ffffff" : "#b16cff"}
                       strokeWidth="2"
                       strokeDasharray="16 12"
                       style={{
@@ -136,7 +136,7 @@ export default function PopularRoutes() {
                   <Car 
                     className="w-4 h-4 shrink-0 relative z-10 transition-all duration-300"
                     style={{
-                      color: isHovered ? "#ffffff" : "#7c3aed",
+                      color: isHovered ? "#ffffff" : "#7c2bea",
                       transform: isHovered ? "scale(1.15) translateX(1px)" : "scale(1)"
                     }}
                   />

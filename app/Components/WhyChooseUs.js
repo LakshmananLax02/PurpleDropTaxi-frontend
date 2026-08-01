@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   ShieldCheck, 
   Receipt, 
@@ -87,28 +87,12 @@ const cardScrollVariants = {
 };
 
 export default function WhyChooseUs() {
-  const { scrollYProgress } = useScroll();
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
-
   return (
-    <section className="w-full relative py-10 px-4 sm:px-6 lg:px-8 overflow-hidden font-sans">
-      
-      {/* ========================================================================
-       * BACKGROUND IMAGE & GRADIENT OVERLAY
-       * ========================================================================= */}
-      <motion.div 
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
-        style={{ scale: bgScale }}
-      >
-        <img
-          src="/images/sedanimg.png"
-          alt="PurpleDropTaxi Why Choose Us Background"
-          className="w-full h-full object-cover object-center opacity-85"
-        />
-      </motion.div>
-
-      {/* Dark & Subtle Purple Gradient Overlay to guarantee high contrast */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/30 via-[#f8fafc]/10 to-[#f8fafc]/20 z-0" />
+    <section className="relative w-full overflow-hidden py-10 px-4 sm:px-6 lg:px-8 font-sans bg-[#1f043e]">
+      <div className="absolute inset-0 z-0">
+        <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/90 via-[#1f043e]/72 to-black/65" />
+      </div>
 
       {/* --- EMBEDDED STYLES FOR THE 3D STACKED HOVER CARD EFFECT --- */}
       <style jsx global>{`
@@ -134,7 +118,7 @@ export default function WhyChooseUs() {
           border-radius: 22px;
           color: #ffffff;
           overflow: visible; /* Allows stacked layers to peek out */
-          background: #6D28D9; /* Purple Brand Color */
+          background: #5815b7; /* Purple Brand Color */
           transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
@@ -146,7 +130,7 @@ export default function WhyChooseUs() {
           width: 90%;
           height: 90%;
           transform: translate(-50%, 0);
-          background: #DDD6FE; /* Purple Accent Layer 1 */
+          background: #c7eef2; /* Purple Accent Layer 1 */
           z-index: -1;
           transform-origin: bottom;
           border-radius: inherit;
@@ -161,7 +145,7 @@ export default function WhyChooseUs() {
           width: 80%;
           height: 80%;
           transform: translate(-50%, 0);
-          background: #EDE9FE; /* Purple Accent Layer 2 */
+          background: #f1fbfc; /* Purple Accent Layer 2 */
           z-index: -2;
           transform-origin: bottom;
           border-radius: inherit;
@@ -177,14 +161,14 @@ export default function WhyChooseUs() {
           z-index: 1;
           opacity: 1;
           font-size: 13px;
-          color: #e9d5ff;
+          color: #e1ccff;
           line-height: 1.6;
           transition: all 0.48s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .content .link {
           z-index: 1;
-          color: #fde047; /* Yellow Accent Link */
+          color: #1bc5d8; /* PurpleDropTaxi cyan accent link */
           text-decoration: none;
           font-family: inherit;
           font-size: 14px;
@@ -257,13 +241,13 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 bg-white/90 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm backdrop-blur-md"
+            className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm backdrop-blur-md"
           >
             <motion.div
               animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Sparkles className="w-4 h-4 text-[#7c3aed]" />
+              <Sparkles className="w-4 h-4 text-[#1bc5d8]" />
             </motion.div>
             <span>Why Choose PurpleDropTaxi</span>
           </motion.div>
@@ -273,10 +257,10 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-3xl sm:text-5xl font-black text-gray-900 tracking-tight leading-tight"
+            className="page-title-pattern"
           >
             The Premier Choice for <br />
-            <span className="text-[#7c3aed]">One-Way Outstation Travel</span>
+            <span className="text-[#1bc5d8]">One-Way Outstation Travel</span>
           </motion.h2>
 
           <motion.p 
@@ -284,7 +268,7 @@ export default function WhyChooseUs() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.5 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-gray-600 text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed"
+            className="text-white text-xs sm:text-sm max-w-xl mx-auto font-medium leading-relaxed"
           >
             We combine transparent pricing, certified highway safety, and premium vehicle comfort so you can travel across Tamil Nadu & South India worry-free.
           </motion.p>

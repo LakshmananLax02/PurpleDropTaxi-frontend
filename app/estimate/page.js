@@ -55,7 +55,7 @@ const MAP_CONTAINER_STYLE = { width: "100%", height: "100%", borderRadius: "16px
 function DetailRow({ icon, label, value }) {
   return (
     <div className="flex items-center gap-2">
-      <span className="text-[#8B5CF6] shrink-0">{icon}</span>
+      <span className="text-[#1bc5d8] shrink-0">{icon}</span>
       <div>
         <p className="text-[11px] text-[#64748B] leading-none">{label}</p>
         <p className="text-sm font-semibold text-[#1E293B] mt-0.5">{value || "—"}</p>
@@ -186,7 +186,7 @@ export default function EstimatePage() {
           >
             <ArrowLeft className="w-4 h-4" /> Edit booking
           </button>
-          <span className="text-[11px] font-bold uppercase tracking-wide px-3 py-1 rounded-full text-[#8B5CF6] bg-[#F5F3FF]">
+          <span className="text-[11px] font-bold uppercase tracking-wide px-3 py-1 rounded-full text-[#1bc5d8] bg-[#f1fbfc]">
             {tripType === "roundtrip" ? "Round Trip" : tripType === "airport" ? "Airport Pickup" : "One Way"}
           </span>
         </div>
@@ -198,11 +198,11 @@ export default function EstimatePage() {
               cards, for visual consistency across the site. */}
           <div
             className="relative order-1 lg:col-span-3 rounded-[20px] shadow-xl overflow-hidden"
-            style={{ boxShadow: "0 20px 45px -12px rgba(109,40,217,0.18)" }}
+            style={{ boxShadow: "0 20px 45px -12px rgba(88,21,183,0.18)" }}
           >
             <div
               className="pointer-events-none absolute left-1/2 top-1/2 h-[200%] w-32 -translate-x-1/2 -translate-y-1/2 animate-spin [animation-duration:6s]"
-              style={{ background: "linear-gradient(180deg, #7c3aed 0%, #a855f7 35%, #c084fc 70%, #6D28D9 100%)" }}
+              style={{ background: "linear-gradient(180deg, #7c2bea 0%, #a55cff 35%, #1bc5d8 70%, #5815b7 100%)" }}
             />
             <div className="absolute inset-[2px] rounded-[18px] bg-white" />
 
@@ -234,12 +234,12 @@ export default function EstimatePage() {
                   {/* Route */}
                   <div className="text-center mb-5">
                     <p className="text-sm font-semibold text-[#1E293B]">{form?.pickup}</p>
-                    <div className="text-[#8B5CF6] my-0.5">↓</div>
+                    <div className="text-[#1bc5d8] my-0.5">↓</div>
                     <p className="text-sm font-semibold text-[#1E293B]">{form?.drop}</p>
                   </div>
 
                   {/* Fare */}
-                  <div className="rounded-2xl border-2 border-dashed p-6 text-center mb-6" style={{ borderColor: "#C4B5FD", background: "#F5F3FF" }}>
+                  <div className="rounded-2xl border-2 border-dashed p-6 text-center mb-6" style={{ borderColor: "#b8eaf0", background: "#f1fbfc" }}>
                     {fare ? (
                       <>
                         <p className="text-4xl font-extrabold text-[#1E293B]">₹{fare.fare.toLocaleString("en-IN")}</p>
@@ -379,10 +379,10 @@ export default function EstimatePage() {
               {routeMeta && (
                 <div className="absolute bottom-8 left-8 flex gap-2">
                   <div className="flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-[#1E293B] shadow-md">
-                    <RouteIcon className="w-3.5 h-3.5 text-[#8B5CF6]" /> {routeMeta.distanceKm} km
+                    <RouteIcon className="w-3.5 h-3.5 text-[#1bc5d8]" /> {routeMeta.distanceKm} km
                   </div>
                   <div className="flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3 py-1.5 text-xs font-semibold text-[#1E293B] shadow-md">
-                    <Clock className="w-3.5 h-3.5 text-[#8B5CF6]" /> {routeMeta.durationMins} min
+                    <Clock className="w-3.5 h-3.5 text-[#1bc5d8]" /> {routeMeta.durationMins} min
                   </div>
                 </div>
               )}
@@ -398,19 +398,19 @@ export default function EstimatePage() {
                 <span className="font-semibold text-[#1E293B] truncate">{form?.pickup}</span>
               </div>
               <div className="flex items-center gap-2 text-sm">
-                <span className="w-2 h-2 rounded-full bg-[#8B5CF6] shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-[#1bc5d8] shrink-0" />
                 <span className="text-[#64748B]">To</span>
                 <span className="font-semibold text-[#1E293B] truncate">{form?.drop}</span>
               </div>
               {routeMeta && (
                 <div className="flex items-center gap-4 pt-1">
                   <div className="flex items-center gap-1.5 text-sm">
-                    <RouteIcon className="w-3.5 h-3.5 text-[#8B5CF6]" />
+                    <RouteIcon className="w-3.5 h-3.5 text-[#1bc5d8]" />
                     <span className="text-[#64748B]">Distance</span>
                     <span className="font-semibold text-[#1E293B]">{routeMeta.distanceKm} km</span>
                   </div>
                   <div className="flex items-center gap-1.5 text-sm">
-                    <Clock className="w-3.5 h-3.5 text-[#8B5CF6]" />
+                    <Clock className="w-3.5 h-3.5 text-[#1bc5d8]" />
                     <span className="text-[#64748B]">Duration</span>
                     <span className="font-semibold text-[#1E293B]">{routeMeta.durationMins} min</span>
                   </div>

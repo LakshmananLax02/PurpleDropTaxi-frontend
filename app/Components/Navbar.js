@@ -102,13 +102,13 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   onClick={() => setActive(link.label)}
-                  className={`relative text-[17px] font-medium transition-colors hover:text-[#7b2ff7] ${
-                    active === link.label ? "text-[#7b2ff7]" : "text-gray-900"
+                  className={`relative text-[17px] font-medium transition-colors hover:text-[#7c2bea] ${
+                    active === link.label ? "text-[#7c2bea]" : "text-gray-900"
                   }`}
                 >
                   {link.label}
                   {active === link.label && (
-                    <span className="absolute -bottom-1.5 left-0 h-0.5 w-full rounded-full bg-[#7b2ff7]" />
+                    <span className="absolute -bottom-1.5 left-0 h-0.5 w-full rounded-full bg-[#7c2bea]" />
                   )}
                 </Link>
               </li>
@@ -165,7 +165,7 @@ export default function Navbar() {
                     setMenuOpen(false)
                   }}
                   className={`block rounded-md px-3 py-3 text-base font-medium transition-colors hover:bg-gray-100 ${
-                    active === link.label ? "text-[#7b2ff7]" : "text-gray-900"
+                    active === link.label ? "text-[#7c2bea]" : "text-gray-900"
                   }`}
                 >
                   {link.label}
@@ -177,7 +177,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-3 px-4 pb-5 pt-2 sm:flex-row sm:px-6">
             <Link
               href={`tel:${PHONE_NUMBER}`}
-              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#7b2ff7] px-4 py-3 text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:brightness-110 active:scale-95"
+              className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#7c2bea] px-4 py-3 text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:brightness-110 active:scale-95"
             >
               <Phone className="h-4 w-4" />
               Call now

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Phone, 
   MessageSquare, 
@@ -75,9 +75,6 @@ const CONTACT_CARDS = [
 ];
 
 export default function ContactUs() {
-  const { scrollYProgress } = useScroll();
-  const heroImageScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.15]);
-
   const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -100,7 +97,7 @@ export default function ContactUs() {
   };
 
   return (
-    <div className="w-full bg-[#f8fafc] text-gray-900 relative overflow-hidden font-sans select-none">
+    <div className="w-full bg-[#f8f6fc] text-gray-900 relative overflow-hidden font-sans select-none">
       
       {/* 🎨 CUSTOM UIVERSE EXPANDING HOVER STYLES (THEMED PURPLE) */}
       <style jsx global>{`
@@ -119,7 +116,7 @@ export default function ContactUs() {
           z-index: -1;
           top: -16px;
           right: -16px;
-          background: linear-gradient(135deg, #7c3aed, #4c1d95);
+          background: linear-gradient(135deg, #7c2bea, #3d0c79);
           height: 32px;
           width: 32px;
           border-radius: 32px;
@@ -137,7 +134,7 @@ export default function ContactUs() {
           overflow: hidden;
           top: 0;
           right: 0;
-          background: linear-gradient(135deg, #a855f7, #7c3aed);
+          background: linear-gradient(135deg, #7c2bea, #1bc5d8);
           border-radius: 0 16px 0 24px;
         }
         /* Hover Effects */
@@ -158,21 +155,11 @@ export default function ContactUs() {
       {/* ========================================================================
        * 1. HERO HEADER SECTION (PARALLAX BACKGROUND)
        * ========================================================================= */}
-      <section className="relative w-full py-5 md:py-5 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
-        
-        <motion.div 
-          className="absolute inset-0 w-full h-full pointer-events-none z-0"
-          style={{ scale: heroImageScale }}
-        >
-          <img
-            src="/images/sedanimg.png"
-            alt="PurpleDropTaxi Command Center"
-            className="w-full h-full object-cover object-center opacity-90"
-          />
-        </motion.div>
-
-        {/* Gradient Overlay for Readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/50 via-[#f8fafc]/70 to-[#f8fafc] z-0" />
+      <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
+        <div className="absolute inset-0 z-0">
+          <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
+        </div>
 
         <motion.div 
           className="relative z-10 max-w-4xl mx-auto text-center space-y-5"
@@ -180,16 +167,16 @@ export default function ContactUs() {
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/90 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-[#7c3aed]" /> Command & Dispatch Center
+          <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md">
+            <Sparkles className="w-3.5 h-3.5 text-[#1bc5d8]" /> Command & Dispatch Center
           </motion.div>
           
-          <motion.h1 variants={fadeInUp} className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-gray-900">
+          <motion.h1 variants={fadeInUp} className="page-title-pattern">
             We're On The Highway 24/7 <br />
-            <span className="text-[#7c3aed]">Get In Touch Instantly.</span>
+            <span className="text-[#1bc5d8]">Get In Touch Instantly.</span>
           </motion.h1>
           
-          <motion.p variants={fadeInUp} className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto">
+          <motion.p variants={fadeInUp} className="text-white text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto">
             Need an instant quote, modifying a booking, or stuck on the highway? Our dispatch desk is active 24/7 across South India. Choose your fastest way to connect below.
           </motion.p>
         </motion.div>
@@ -221,12 +208,12 @@ export default function ContactUs() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="uiverse-card-icon w-12 h-12 rounded-xl bg-purple-100 text-[#7c3aed] flex items-center justify-center transition-colors">
+                  <div className="uiverse-card-icon w-12 h-12 rounded-xl bg-purple-100 text-[#7c2bea] flex items-center justify-center transition-colors">
                     <Icon className="w-6 h-6" />
                   </div>
                   <div>
                     <h3 className="uiverse-card-title text-sm font-bold text-gray-900 transition-colors">{card.title}</h3>
-                    <p className="uiverse-card-desc text-lg sm:text-xl font-black text-[#7c3aed] mt-1 transition-colors">{card.detail}</p>
+                    <p className="uiverse-card-desc text-lg sm:text-xl font-black text-[#7c2bea] mt-1 transition-colors">{card.detail}</p>
                   </div>
                   <p className="uiverse-card-sub text-xs text-gray-500 font-medium leading-relaxed transition-colors border-t border-gray-100/50 pt-3">
                     {card.subtext}
@@ -254,11 +241,11 @@ export default function ContactUs() {
             <Car className="absolute -bottom-10 -right-10 w-64 h-64 text-slate-50 opacity-50 pointer-events-none rotate-12" />
 
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-3">
+              <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-3">
                 Inquiry Form
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
-                Send Us A <span className="text-[#7c3aed]">Message</span>
+              <h2 className="section-title-pattern">
+                Send Us A <span className="text-[#7c2bea]">Message</span>
               </h2>
               <p className="text-xs sm:text-sm text-gray-500 font-medium mt-1">
                 Have a question or feedback? Fill out the form below and our team will get back to you shortly.
@@ -293,7 +280,7 @@ export default function ContactUs() {
                       placeholder="Enter your full name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -310,7 +297,7 @@ export default function ContactUs() {
                       placeholder="Enter your email address"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -328,7 +315,7 @@ export default function ContactUs() {
                       placeholder="Enter 10-digit mobile number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
+                      className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 pl-10 outline-none transition-all font-medium"
                     />
                   </div>
                 </div>
@@ -343,13 +330,13 @@ export default function ContactUs() {
                     placeholder="Type your message, inquiry, or feedback here..."
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c3aed] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium resize-none"
+                    className="w-full bg-slate-50 border border-gray-200 focus:border-[#7c2bea] focus:bg-white focus:ring-4 focus:ring-purple-500/10 text-sm text-gray-900 rounded-xl p-3.5 outline-none transition-all font-medium resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-4 bg-[#7c3aed] hover:bg-[#6d28d9] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 active:scale-95"
+                  className="w-full py-4 bg-[#7c2bea] hover:bg-[#5815b7] text-white font-black text-xs uppercase tracking-widest rounded-xl transition-all shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 active:scale-95"
                 >
                   <Send className="w-4 h-4" /> Send Message
                 </button>
@@ -360,7 +347,7 @@ export default function ContactUs() {
           {/* RIGHT: LIVE DISPATCH CARD & ADVANTAGES (5 COLUMNS) */}
           <motion.div variants={fadeInUp} className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
             
-            <div className="bg-gradient-to-br from-purple-900 via-[#7c3aed] to-purple-950 p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-purple-900/20 space-y-6 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-purple-900 via-[#7c2bea] to-purple-950 p-6 sm:p-8 rounded-3xl text-white shadow-xl shadow-purple-900/20 space-y-6 relative overflow-hidden">
               <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
               
               <div className="flex flex-wrap items-center justify-between gap-3 relative z-10">
@@ -375,7 +362,7 @@ export default function ContactUs() {
               </div>
 
               <div className="relative z-10">
-                <h3 className="text-2xl font-black">Need A Taxi Right Now?</h3>
+                <h3 className="section-title-pattern-on-dark">Need A Taxi <span>Right Now?</span></h3>
                 <p className="text-sm text-purple-100 font-medium mt-2 leading-relaxed">
                   Our automated highway dispatch system routes your vehicle in less than 15 minutes. Call for emergencies.
                 </p>
@@ -408,19 +395,19 @@ export default function ContactUs() {
               <div className="space-y-4 text-sm text-gray-600 font-medium">
                 <div className="flex items-start gap-3">
                   <div className="bg-purple-100 p-1.5 rounded-lg shrink-0">
-                    <ShieldCheck className="w-4 h-4 text-[#7c3aed]" />
+                    <ShieldCheck className="w-4 h-4 text-[#7c2bea]" />
                   </div>
                   <span className="pt-1">Instant GST Invoices for Corporate Bookings</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="bg-purple-100 p-1.5 rounded-lg shrink-0">
-                    <Headphones className="w-4 h-4 text-[#7c3aed]" />
+                    <Headphones className="w-4 h-4 text-[#7c2bea]" />
                   </div>
                   <span className="pt-1">24/7 Route & Highway Breakdown Assistance</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <div className="bg-purple-100 p-1.5 rounded-lg shrink-0">
-                    <AlertCircle className="w-4 h-4 text-[#7c3aed]" />
+                    <AlertCircle className="w-4 h-4 text-[#7c2bea]" />
                   </div>
                   <span className="pt-1">Zero Cancellation Charge Before Dispatch</span>
                 </div>
@@ -446,11 +433,11 @@ export default function ContactUs() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2">
+            <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider mb-2">
               Our Depot Location
             </div>
-            <h2 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
-              Visit Our <span className="text-[#7c3aed]">Coimbatore Dispatch Hub</span>
+            <h2 className="section-title-pattern">
+              Visit Our <span className="text-[#7c2bea]">Coimbatore Dispatch Hub</span>
             </h2>
             <p className="text-xs sm:text-sm text-gray-500 font-medium mt-1">
               Conveniently located for highway pickups and 24/7 driver partner onboarding.
@@ -472,7 +459,7 @@ export default function ContactUs() {
           
           {/* FLOATING OVERLAY INFO CARD */}
           <div className="absolute top-4 left-4 sm:top-6 sm:left-6 z-10 bg-white/95 backdrop-blur-md border border-purple-100 p-4 sm:p-5 rounded-2xl shadow-xl max-w-xs sm:max-w-sm hidden xs:block">
-            <div className="flex items-center gap-2.5 text-[#7c3aed]">
+            <div className="flex items-center gap-2.5 text-[#7c2bea]">
               <MapPin className="w-5 h-5 shrink-0" />
               <p className="text-xs font-black uppercase tracking-wider">Main Dispatch Terminal</p>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 
 const fadeInUp = {
@@ -22,26 +22,12 @@ const staggerContainer = {
 };
 
 export default function TariffHeroHeader() {
-  const { scrollYProgress } = useScroll();
-  const heroImageScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.15]);
-
   return (
-    <section className="relative w-full py-10 md:py-10 px-4 sm:px-6 lg:px-8 border-b border-purple-100/60 overflow-hidden bg-[#f8fafc]">
-      
-      {/* Background Image with Parallax Scale */}
-      <motion.div 
-        className="absolute inset-0 w-full h-full pointer-events-none z-0"
-        style={{ scale: heroImageScale }}
-      >
-        <img
-          src="/images/sedanimg.png"
-          alt="PurpleDropTaxi Tariff & Pricing Background"
-          className="w-full h-full object-cover object-center opacity-90"
-        />
-      </motion.div>
-
-      {/* Gradient Overlay for Text High Contrast Readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#f8fafc]/50 via-[#f8fafc]/70 to-[#f8fafc] z-0" />
+    <section className="relative w-full overflow-hidden py-16 md:py-20 px-4 sm:px-6 lg:px-8 border-b border-purple-700/60 bg-[#1f043e]">
+      <div className="absolute inset-0 z-0">
+        <img src="/images/sedanimg.png" alt="" className="h-full w-full object-cover object-center" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1f043e]/40 via-[#1f043e]/40 to-black/40" />
+      </div>
 
       {/* Hero Content */}
       <motion.div 
@@ -52,22 +38,22 @@ export default function TariffHeroHeader() {
       >
         <motion.div 
           variants={fadeInUp} 
-          className="inline-flex items-center gap-2 bg-white/90 border border-purple-200 text-[#7c3aed] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md"
+          className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md"
         >
-          <Sparkles className="w-3.5 h-3.5 text-[#7c3aed]" /> Transparent One-Way Fares
+          <Sparkles className="w-3.5 h-3.5 text-[#1bc5d8]" /> Transparent One-Way Fares
         </motion.div>
         
         <motion.h1 
           variants={fadeInUp} 
-          className="text-3xl md:text-5xl lg:text-5xl font-black tracking-tight leading-tight text-gray-900"
+          className="page-title-pattern"
         >
           Pay Only For What You Travel. <br />
-          <span className="text-[#7c3aed]">Zero Return Charges.</span>
+          <span className="text-[#1bc5d8]">Zero Return Charges.</span>
         </motion.h1>
         
         <motion.p 
           variants={fadeInUp} 
-          className="text-gray-600 text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto"
+          className="text-white text-xs sm:text-sm md:text-base leading-relaxed font-medium max-w-2xl mx-auto"
         >
           Explore fixed kilometer rates for Sedans, SUVs, and Premium Cruisers. Upfront transparent pricing with zero surprise charges or hidden driver bata demands.
         </motion.p>

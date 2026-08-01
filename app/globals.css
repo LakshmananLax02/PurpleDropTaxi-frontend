@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-purple: #7c2bea;
+  --brand-purple-deep: #5815b7;
+  --brand-cyan: #1bc5d8;
+  --brand-cyan-soft: #f1fbfc;
 }
 
 @theme inline {
@@ -10,6 +14,19 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* PurpleDropTaxi brand scale: purple forms the foundation and the cyan
+     highlight is reserved for the brighter, high-attention states. */
+  --color-purple-50: #f7f2ff;
+  --color-purple-100: #ede1ff;
+  --color-purple-200: #d8bfff;
+  --color-purple-300: #bd91ff;
+  --color-purple-400: #9e5cff;
+  --color-purple-500: #7c2bea;
+  --color-purple-600: #681bc9;
+  --color-purple-700: #5815b7;
+  --color-purple-800: #430d89;
+  --color-purple-900: #2f075c;
+  --color-purple-950: #1f043e;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -37,6 +54,87 @@ body {
  * of the flow. Safe to remove once a valid, billed key is in place. */
 .pac-container:empty {
   display: none !important;
+}
+
+/* Shared page-banner treatment. It mirrors the PurpleDropTaxi lock-up:
+   deep purple field, clean white copy, and cyan used only for emphasis. */
+.brand-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #ffffff;
+  background:
+    radial-gradient(circle at 88% 76%, rgba(27, 197, 216, 0.22) 0 3%, transparent 3.2%),
+    linear-gradient(118deg, #2f075c 0%, #5815b7 52%, #3d0c79 100%);
+}
+
+.brand-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.34;
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 38px 38px;
+  mask-image: linear-gradient(90deg, transparent, black 38%, black 100%);
+}
+
+.brand-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  right: -6rem;
+  bottom: -7rem;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 9999px;
+  background: rgba(27, 197, 216, 0.2);
+  filter: blur(36px);
+}
+
+/* Shared two-line headline treatment used on every page banner. */
+.page-title-pattern {
+  color: #ffffff;
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  font-weight: 900;
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+}
+
+.page-title-pattern > span {
+  display: block;
+  color: #1bc5d8;
+}
+
+/* The same composition for major headings inside light content sections. */
+.section-title-pattern {
+  color: #2f075c;
+  font-size: clamp(1.9rem, 3.7vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.section-title-pattern > span,
+.section-title-pattern-accent {
+  display: inline;
+  color: #1bc5d8;
+}
+
+/* Use on title blocks that sit on a dark photo/gradient background. */
+.section-title-pattern-on-dark {
+  color: #ffffff;
+  font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.section-title-pattern-on-dark > span {
+  display: block;
+  color: #1bc5d8;
 }
 
 /* Pickup Date and Pickup Time are no longer native <input type="date"/"time">
@@ -114,7 +212,7 @@ body {
   }
 
   .btn:focus-visible {
-    outline: 2px solid #7c3aed;
+    outline: 2px solid #1bc5d8;
     outline-offset: 3px;
   }
 
@@ -136,7 +234,7 @@ body {
     box-shadow: none;
   }
 
-  /* ---- Primary: solid purple, main CTAs ---------------------------------
+  /* ---- Primary: PurpleDropTaxi purple + cyan, main CTAs -----------------
    * The base fill is a ::after at z-index -2 rather than a background-color
    * on the element itself, so the ::before flood (z-index -1) can sit on top
    * of the fill while both stay behind the label. */
@@ -150,32 +248,32 @@ body {
     inset: 0;
     z-index: -2;
     border-radius: inherit;
-    background-image: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
+    background-image: linear-gradient(135deg, #7c2bea 0%, #5815b7 52%, #1bc5d8 100%);
   }
 
   .btn-primary::before {
-    background-color: #a855f7;
+    background-color: #1bc5d8;
   }
 
   .btn-primary:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 22px rgba(124, 58, 237, 0.45);
+    box-shadow: 0 0 22px rgba(27, 197, 216, 0.45);
   }
 
   /* ---- Outline: transparent until hovered, secondary CTAs ---------------- */
   .btn-outline {
-    color: #7c3aed;
-    border-color: #7c3aed;
+    color: #7c2bea;
+    border-color: #7c2bea;
   }
 
   .btn-outline::before {
-    background-color: #7c3aed;
+    background-color: #1bc5d8;
   }
 
   .btn-outline:hover {
     color: #ffffff;
     transform: scale(1.04);
-    box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+    box-shadow: 0 0 20px rgba(27, 197, 216, 0.4);
   }
 
   /* ---- Ghost: quiet neutral action (Back, Cancel) ------------------------ */
@@ -186,12 +284,12 @@ body {
   }
 
   .btn-ghost::before {
-    background-color: #f5f3ff;
+    background-color: #f1fbfc;
   }
 
   .btn-ghost:hover {
-    color: #6d28d9;
-    border-color: #c4b5fd;
+    color: #5815b7;
+    border-color: #b8eaf0;
     transform: scale(1.02);
   }
 
@@ -218,9 +316,8 @@ body {
     box-shadow: 0 0 20px rgba(37, 211, 102, 0.45);
   }
 
-  /* ---- Amber: CTA sitting ON a purple surface -------------------------
-   * .btn-primary would vanish into a purple card, so the accent inverts to
-   * amber with dark text. Used on the flip-card backs. */
+  /* ---- Accent: CTA sitting on a purple surface -------------------------
+   * The logo cyan keeps this action visually distinct on dark purple cards. */
   .btn-amber {
     color: #0f172a;
   }
@@ -231,22 +328,22 @@ body {
     inset: 0;
     z-index: -2;
     border-radius: inherit;
-    background-image: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    background-image: linear-gradient(135deg, #d8f8fa 0%, #1bc5d8 52%, #1098aa 100%);
   }
 
   .btn-amber::before {
-    background-color: #fcd34d;
+    background-color: #b8eaf0;
   }
 
   .btn-amber:hover {
     transform: scale(1.04);
-    box-shadow: 0 0 22px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 22px rgba(27, 197, 216, 0.5);
   }
 
   /* ---- Light: white CTA on a dark / photographic surface ---------------
    * Inverts on hover — the purple floods in and the label turns white. */
   .btn-light {
-    color: #7c3aed;
+    color: #7c2bea;
     backdrop-filter: blur(4px);
   }
 
@@ -260,13 +357,13 @@ body {
   }
 
   .btn-light::before {
-    background-color: #7c3aed;
+    background-color: #1bc5d8;
   }
 
   .btn-light:hover {
     color: #ffffff;
     transform: scale(1.04);
-    box-shadow: 0 0 20px rgba(124, 58, 237, 0.35);
+    box-shadow: 0 0 20px rgba(27, 197, 216, 0.35);
   }
 
   /* ---- Icon modifier: square/circular, no label ------------------------

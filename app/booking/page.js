@@ -3,7 +3,7 @@ import BookingSection from '../Components/BookingSection'
 export default function Booking(){
     return(
         <>
-        <BookingSection/>
+        <BookingSection variant="booking" />
         </>
     )
 }

@@ -65,7 +65,7 @@ export default function DesignedForTravellers() {
   };
 
   return (
-    <section className="w-full bg-[#f8fafc] py-16 px-4 md:px-8 relative overflow-hidden font-sans">
+    <section className="w-full bg-[#f8f6fc] py-16 px-4 md:px-8 relative overflow-hidden font-sans">
       
       {/* Embedded CSS - Reduced Card Height + Mobile Carousel / Desktop Grid */}
       <style jsx global>{`
@@ -119,14 +119,14 @@ export default function DesignedForTravellers() {
         }
 
         .flip-card-back {
-          background: linear-gradient(135deg, #6D28D9 0%, #4C1D95 100%);
+          background: linear-gradient(135deg, #5815b7 0%, #3d0c79 100%);
           color: #ffffff;
           padding: 18px;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           transform: rotateY(180deg);
-          border-color: #6D28D9;
+          border-color: #5815b7;
           box-shadow: 0 15px 30px -10px rgba(109, 40, 217, 0.3);
         }
 
@@ -179,11 +179,11 @@ export default function DesignedForTravellers() {
         
         {/* --- HEADER --- */}
         <div className="text-center space-y-2 mb-10">
-          <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c3aed] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-[#7c3aed]" /> Tailored Experiences
+          <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
+            <Sparkles className="w-3.5 h-3.5 text-[#7c2bea]" /> Tailored Experiences
           </div>
-          <h2 className="text-2xl font-black text-gray-900 md:text-3xl lg:text-4xl tracking-tight">
-            Designed For <span className="text-[#7c3aed]">Every Traveller</span>
+          <h2 className="section-title-pattern">
+            Designed For <span className="text-[#7c2bea]">Every Traveller</span>
           </h2>
           <p className="text-gray-500 text-xs sm:text-sm max-w-md mx-auto font-medium">
             Hover over any card to flip and explore our specialized travel accommodations.
@@ -235,7 +235,7 @@ export default function DesignedForTravellers() {
                       <div className="p-4 flex-1 flex flex-col justify-between bg-white rounded-b-xl">
                         <div>
                           <div className="flex items-center gap-2 mb-1.5">
-                            <div className="w-6 h-6 rounded-md bg-purple-100 text-[#7c3aed] flex items-center justify-center shrink-0">
+                            <div className="w-6 h-6 rounded-md bg-purple-100 text-[#7c2bea] flex items-center justify-center shrink-0">
                               <IconComponent className="w-3.5 h-3.5" />
                             </div>
                             <h3 className="text-xs font-black text-gray-900 tracking-tight">
@@ -247,7 +247,7 @@ export default function DesignedForTravellers() {
                           </p>
                         </div>
 
-                        <div className="pt-2.5 border-t border-gray-100 flex items-center text-[10px] font-extrabold text-[#7c3aed]">
+                        <div className="pt-2.5 border-t border-gray-100 flex items-center text-[10px] font-extrabold text-[#7c2bea]">
                           <span>Hover to explore</span>
                           <ArrowRight className="w-3 h-3 ml-1 transition-transform group-hover:translate-x-1" />
                         </div>

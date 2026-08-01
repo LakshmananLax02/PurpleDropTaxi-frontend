@@ -66,7 +66,7 @@ export default function CarLoadingAnimation({
           transition={{ duration: 0.4 }}
           className="absolute inset-0 z-30 flex flex-col items-center justify-center rounded-[20px] overflow-hidden"
           style={{
-            background: `linear-gradient(135deg, #2E1065 0%, #4C1D95 45%, ${COLORS.gradientFrom} 100%)`,
+            background: `linear-gradient(135deg, #26074b 0%, #3d0c79 45%, ${COLORS.gradientFrom} 100%)`,
           }}
         >
           {/* Drifting clouds */}
@@ -148,7 +148,7 @@ export default function CarLoadingAnimation({
                   P
                 </div>
                 {/* Drop (D) marker */}
-                <div className="absolute bottom-[26px] right-1 w-5 h-5 rounded-full bg-white border-2 border-white/80 flex items-center justify-center text-[9px] font-black text-[#6D28D9] shadow">
+                <div className="absolute bottom-[26px] right-1 w-5 h-5 rounded-full bg-white border-2 border-white/80 flex items-center justify-center text-[9px] font-black text-[#5815b7] shadow">
                   D
                 </div>
 
@@ -182,7 +182,7 @@ export default function CarLoadingAnimation({
                         className="w-16 h-10 object-contain drop-shadow-[0_6px_10px_rgba(0,0,0,0.4)]"
                       />
                     ) : (
-                      <CarIcon className="w-9 h-9 text-white drop-shadow-[0_0_10px_rgba(168,85,247,0.8)]" />
+                      <CarIcon className="w-9 h-9 text-white drop-shadow-[0_0_10px_rgba(27,197,216,0.8)]" />
                     )}
                   </motion.div>
                 </motion.div>
@@ -192,7 +192,7 @@ export default function CarLoadingAnimation({
             {/* Progress bar */}
             <div className="w-full max-w-sm h-1.5 rounded-full bg-white/15 overflow-hidden">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-white to-[#C4B5FD]"
+                className="h-full rounded-full bg-gradient-to-r from-white to-[#b8eaf0]"
                 style={{ width: `${progress}%` }}
               />
             </div>
