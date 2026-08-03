@@ -10,60 +10,293 @@ import { ChevronDown, ChevronUp } from "lucide-react";
  * (POPULAR / MAJOR HUBS AT THE TOP)
  * ========================================================================= */
 const ALL_ROUTES = [
-  // --- TOP POPULAR & HIGH-DEMAND HUBS (FIRST 6 PREVIEWED INITIALLY) ---
-  { name: "Chennai Drop Taxi", district: "Chennai", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Coimbatore Drop Taxi", district: "Coimbatore", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Madurai Drop Taxi", district: "Madurai", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tiruchirappalli Drop Taxi", district: "Tiruchirappalli (Trichy)", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Salem Drop Taxi", district: "Salem", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Bengaluru Drop Taxi", district: "Bengaluru", state: "Karnataka", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
+  // Popular cities
+  {
+  "Chennai Drop Taxi": {
+    place: "Chennai Central",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/3/32/Chennai_Central.jpg",
+  },
 
-  // --- MAJOR CITIES & TOURIST DESTINATIONS ---
-  { name: "Puducherry Drop Taxi", district: "Puducherry", state: "Union Territory", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tirunelveli Drop Taxi", district: "Tirunelveli", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Erode Drop Taxi", district: "Erode", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Vellore Drop Taxi", district: "Vellore", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tiruppur Drop Taxi", district: "Tiruppur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Thanjavur Drop Taxi", district: "Thanjavur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Dindigul Drop Taxi", district: "Dindigul", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Nilgiris / Ooty Drop Taxi", district: "Nilgiris (Ooty)", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kanyakumari Drop Taxi", district: "Kanyakumari", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kochi Drop Taxi", district: "Ernakulam / Kochi", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Trivandrum Drop Taxi", district: "Thiruvananthapuram", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
+  "Coimbatore Drop Taxi": {
+    place: "Marudhamalai Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/4/46/Maruthamalai_Rajagopuram_1.jpg",
+  },
 
-  // --- OTHER TAMIL NADU DISTRICTS ---
-  { name: "Ariyalur Drop Taxi", district: "Ariyalur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Chengalpattu Drop Taxi", district: "Chengalpattu", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Cuddalore Drop Taxi", district: "Cuddalore", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Dharmapuri Drop Taxi", district: "Dharmapuri", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kallakurichi Drop Taxi", district: "Kallakurichi", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kanchipuram Drop Taxi", district: "Kanchipuram", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Karur Drop Taxi", district: "Karur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Krishnagiri Drop Taxi", district: "Krishnagiri", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Mayiladuthurai Drop Taxi", district: "Mayiladuthurai", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Nagapattinam Drop Taxi", district: "Nagapattinam", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Namakkal Drop Taxi", district: "Namakkal", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Perambalur Drop Taxi", district: "Perambalur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Pudukkottai Drop Taxi", district: "Pudukkottai", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Ramanathapuram Drop Taxi", district: "Ramanathapuram", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Ranipet Drop Taxi", district: "Ranipet", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Sivaganga Drop Taxi", district: "Sivaganga", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tenkasi Drop Taxi", district: "Tenkasi", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Theni Drop Taxi", district: "Theni", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Thoothukudi Drop Taxi", district: "Thoothukudi", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tirupathur Drop Taxi", district: "Tirupathur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tiruvallur Drop Taxi", district: "Tiruvallur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tiruvannamalai Drop Taxi", district: "Tiruvannamalai", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Tiruvarur Drop Taxi", district: "Tiruvarur", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Viluppuram Drop Taxi", district: "Viluppuram", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Virudhunagar Drop Taxi", district: "Virudhunagar", state: "Tamil Nadu", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
+  "Madurai Drop Taxi": {
+    place: "Meenakshi Amman Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/f4/Meenakshi_Amman_West_Tower.jpg",
+  },
 
-  // --- KERALA MAIN DISTRICTS ---
-  { name: "Palakkad Drop Taxi", district: "Palakkad", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kozhikode Drop Taxi", district: "Kozhikode", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Wayanad Drop Taxi", district: "Wayanad", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Thrissur Drop Taxi", district: "Thrissur", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" },
-  { name: "Kannur Drop Taxi", district: "Kannur", state: "Kerala", image: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?q=80&w=300&auto=format&fit=crop" }
+  "Tiruchirappalli Drop Taxi": {
+    place: "Rockfort Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/fb/Rock_Fortress_-_Tiruchirappalli_-_India.JPG",
+  },
+
+  "Salem Drop Taxi": {
+    place: "Salem Hills View",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/9/92/Salem_city_from_Hills.jpg",
+  },
+
+  "Bengaluru Drop Taxi": {
+    place: "Bengaluru City View",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/c/cd/View_from_Visvesvaraya_Industrial_and_Technological_Museum_%282025%29_02.jpg",
+  },
+
+  // Major cities and tourist destinations
+  "Puducherry Drop Taxi": {
+    place: "Puducherry Rock Beach",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/8c/Pondicherry-Rock_beach_aerial_view.jpg",
+  },
+
+  "Tirunelveli Drop Taxi": {
+    place: "Nellaiappar Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9a/Nellaiappar_temple_tower.jpg",
+  },
+
+  "Erode Drop Taxi": {
+    place: "Cauvery River",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/7/76/Cauvery_at_Erode.JPG",
+  },
+
+  "Vellore Drop Taxi": {
+    place: "Vellore Fort",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/e/ea/Vellorefort.jpg",
+  },
+
+  "Tiruppur Drop Taxi": {
+    place: "Noyyal River",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/3/37/Noyyal_River_in_Tiruppur_JEG0334.jpg",
+  },
+
+  "Thanjavur Drop Taxi": {
+    place: "Brihadisvara Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/81/Thanjavur_2.jpg",
+  },
+
+  "Dindigul Drop Taxi": {
+    place: "Dindigul Fort",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/53/Temple_atop_the_Dindigul_Fort.jpg",
+  },
+
+  "Nilgiris / Ooty Drop Taxi": {
+    place: "Ooty Lake",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/d/db/Ooty_lake.jpg",
+  },
+
+  "Kanyakumari Drop Taxi": {
+    place: "Vivekananda Rock Memorial",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/5b/Vivekananda_Rock_Memorial%2C_Kanyakumari.jpg",
+  },
+
+  "Kochi Drop Taxi": {
+    place: "Kochi Skyline",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/8f/Kochi_Skyline.jpg",
+  },
+
+  "Trivandrum Drop Taxi": {
+    place: "Padmanabhaswamy Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/a/ad/Padmanabhaswamy_Temple_Thiruvananthapuram.jpg",
+  },
+
+  // Other Tamil Nadu districts
+  "Ariyalur Drop Taxi": {
+    place: "Ariyalur Perumal Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/6/60/Ariyalur_perumal_temple.jpg",
+  },
+
+  "Chengalpattu Drop Taxi": {
+    place: "Chengalpattu Lake",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/3/35/Chengalpat_lake.jpg",
+  },
+
+  "Cuddalore Drop Taxi": {
+    place: "Cuddalore Coastal View",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/4/48/Early_morning_in_cuddalore%2C_india.jpg",
+  },
+
+  "Dharmapuri Drop Taxi": {
+    place: "Dharmapuri City View",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/1/1d/Aerial_view_dharmapuri.jpg",
+  },
+
+  "Kallakurichi Drop Taxi": {
+    place: "Kallakurichi Landscape",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/7/78/Kallai.jpg",
+  },
+
+  "Kanchipuram Drop Taxi": {
+    place: "Vaikunta Perumal Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c2/Parameswara_Vinnagaram.JPG",
+  },
+
+  "Karur Drop Taxi": {
+    place: "Karur City View",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/b/ba/City_of_karur.jpg",
+  },
+
+  "Krishnagiri Drop Taxi": {
+    place: "Krishnagiri Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/50/Krishnagiri_temple.jpg",
+  },
+
+  "Mayiladuthurai Drop Taxi": {
+    place: "Mayuranathaswamy Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/2/21/Gopura_of_the_Mayuranathaswamy_Temple.jpg",
+  },
+
+  "Nagapattinam Drop Taxi": {
+    place: "Velankanni Basilica",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/9/93/Velankanni_Church_2026.jpg",
+  },
+
+  "Namakkal Drop Taxi": {
+    place: "Namakkal Fort",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/9/9c/Namakkal_Fort_%282%29.jpg",
+  },
+
+  "Perambalur Drop Taxi": {
+    place: "Ranjankudi Fort",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/e/e8/Ranjankudi_Fort-Perambalur_district-Tamil_Nadu.jpg",
+  },
+
+  "Pudukkottai Drop Taxi": {
+    place: "Viralimalai Murugan Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/1/1f/Viralimalai_Murugan_Temple.jpg",
+  },
+
+  "Ramanathapuram Drop Taxi": {
+    place: "Ramanathaswamy Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/84/Ramanathaswamy_temple7.JPG",
+  },
+
+  "Ranipet Drop Taxi": {
+    place: "Delhi Gate, Arcot",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/52/Delhi_gate_-_river_side_view.jpg",
+  },
+
+  "Sivaganga Drop Taxi": {
+    place: "Sivaganga",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Government_medical_college%2C_Sivaganga.jpg",
+  },
+
+  "Tenkasi Drop Taxi": {
+    place: "Kasi Viswanathar Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/f5/Kasi_Viswanathar_temple%2C_Tenkasi_2014_%2813%29.jpg",
+  },
+
+  "Theni Drop Taxi": {
+    place: "Theni Western Ghats",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/54/Theniviewfromforestroad1.jpg",
+  },
+
+  "Thoothukudi Drop Taxi": {
+    place: "Our Lady of Snows Basilica",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/5/59/Our_lady_of_snows_basilica.JPG",
+  },
+
+  "Tirupathur Drop Taxi": {
+    place: "Yelagiri Hills",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/3/30/Yelagiri.jpg",
+  },
+
+  "Tiruvallur Drop Taxi": {
+    place: "Tiruvallur",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Tiruvallur_HD_Image.jpg",
+  },
+
+  "Tiruvannamalai Drop Taxi": {
+    place: "Arunachaleswarar Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/8a/Tiruvannamalai_Montage.jpg",
+  },
+
+  "Tiruvarur Drop Taxi": {
+    place: "Thyagaraja Temple",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/89/Thyagarajar_temple%2C_Tiruvarur_%289%29.jpg",
+  },
+
+  "Viluppuram Drop Taxi": {
+    place: "Viluppuram",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/c/c6/Glory_Of_Viluppuram_2.jpg",
+  },
+
+  "Virudhunagar Drop Taxi": {
+    place: "Virudhunagar City",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/1/11/%E0%AE%B5%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%A4%E0%AF%81%E0%AE%A8%E0%AE%95%E0%AE%B0%E0%AF%8D_%28%E0%AE%B5%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%A4%E0%AF%81%E0%AE%AA%E0%AE%9F%E0%AF%8D%E0%AE%9F%E0%AE%BF%29.JPG",
+  },
+
+  // Kerala districts
+  "Palakkad Drop Taxi": {
+    place: "Palakkad",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/8/81/Palakkad_City_collage.jpg",
+  },
+
+  "Kozhikode Drop Taxi": {
+    place: "Kozhikode Beach",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/4/45/Kozhikode_beach_kites.jpg",
+  },
+
+  "Wayanad Drop Taxi": {
+    place: "Wayanad Landscape",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/e/e8/Blue%2C_Green_%26_White.jpg",
+  },
+
+  "Thrissur Drop Taxi": {
+    place: "Thrissur",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/0/04/JJP_112.jpg",
+  },
+
+  "Kannur Drop Taxi": {
+    place: "Kannur Skyline",
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/f/f6/Kannur_Skyline_3.jpg",
+  },
+}
 ];
 
 export default function PopularRoutes() {
