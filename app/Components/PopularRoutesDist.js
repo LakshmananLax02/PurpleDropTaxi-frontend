@@ -14,287 +14,240 @@ const ALL_ROUTES = [
   {
   "Chennai Drop Taxi": {
     place: "Chennai Central",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/3/32/Chennai_Central.jpg",
+    image: "/images/cities/city1.png",
   },
 
   "Coimbatore Drop Taxi": {
     place: "Marudhamalai Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/4/46/Maruthamalai_Rajagopuram_1.jpg",
+    image: "/images/cities/city2.png",
   },
 
   "Madurai Drop Taxi": {
     place: "Meenakshi Amman Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f4/Meenakshi_Amman_West_Tower.jpg",
+    image: "/images/cities/city3.png",
   },
 
   "Tiruchirappalli Drop Taxi": {
     place: "Rockfort Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/fb/Rock_Fortress_-_Tiruchirappalli_-_India.JPG",
+    image: "/images/cities/city4.png",
   },
 
   "Salem Drop Taxi": {
     place: "Salem Hills View",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/92/Salem_city_from_Hills.jpg",
+    image: "/images/cities/city5.png",
   },
 
   "Bengaluru Drop Taxi": {
     place: "Bengaluru City View",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/c/cd/View_from_Visvesvaraya_Industrial_and_Technological_Museum_%282025%29_02.jpg",
+    image: "/images/cities/city6.png",
   },
 
   // Major cities and tourist destinations
   "Puducherry Drop Taxi": {
     place: "Puducherry Rock Beach",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/8c/Pondicherry-Rock_beach_aerial_view.jpg",
+    image: "/images/cities/city7.png",
   },
 
   "Tirunelveli Drop Taxi": {
     place: "Nellaiappar Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/9a/Nellaiappar_temple_tower.jpg",
+    image: "/images/cities/city8.png",
   },
 
   "Erode Drop Taxi": {
     place: "Cauvery River",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/7/76/Cauvery_at_Erode.JPG",
+    image: "/images/cities/city9.png",
   },
 
   "Vellore Drop Taxi": {
     place: "Vellore Fort",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/e/ea/Vellorefort.jpg",
+    image: "/images/cities/city10.png",
   },
 
   "Tiruppur Drop Taxi": {
     place: "Noyyal River",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/3/37/Noyyal_River_in_Tiruppur_JEG0334.jpg",
+    image: "/images/cities/city11.png",
   },
 
   "Thanjavur Drop Taxi": {
     place: "Brihadisvara Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/81/Thanjavur_2.jpg",
+    image: "/images/cities/city12.png",
   },
 
   "Dindigul Drop Taxi": {
     place: "Dindigul Fort",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/53/Temple_atop_the_Dindigul_Fort.jpg",
+    image: "/images/cities/city13.png",
   },
 
   "Nilgiris / Ooty Drop Taxi": {
     place: "Ooty Lake",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/d/db/Ooty_lake.jpg",
+    image: "/images/cities/city14.png",
   },
 
   "Kanyakumari Drop Taxi": {
     place: "Vivekananda Rock Memorial",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/5b/Vivekananda_Rock_Memorial%2C_Kanyakumari.jpg",
+    image: "/images/cities/city15.png",
   },
 
   "Kochi Drop Taxi": {
     place: "Kochi Skyline",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/8f/Kochi_Skyline.jpg",
+    image: "/images/cities/city16.png",
   },
 
   "Trivandrum Drop Taxi": {
     place: "Padmanabhaswamy Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/a/ad/Padmanabhaswamy_Temple_Thiruvananthapuram.jpg",
+    image: "/images/cities/city17.png",
   },
 
   // Other Tamil Nadu districts
   "Ariyalur Drop Taxi": {
     place: "Ariyalur Perumal Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/6/60/Ariyalur_perumal_temple.jpg",
+    image: "/images/cities/city18.png",
   },
 
   "Chengalpattu Drop Taxi": {
     place: "Chengalpattu Lake",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/3/35/Chengalpat_lake.jpg",
+    image: "/images/cities/city19.png",
   },
 
   "Cuddalore Drop Taxi": {
     place: "Cuddalore Coastal View",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/4/48/Early_morning_in_cuddalore%2C_india.jpg",
+    image: "/images/cities/city20.png",
   },
 
   "Dharmapuri Drop Taxi": {
     place: "Dharmapuri City View",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/1/1d/Aerial_view_dharmapuri.jpg",
+    image: "/images/cities/city21.png",
   },
 
   "Kallakurichi Drop Taxi": {
     place: "Kallakurichi Landscape",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/7/78/Kallai.jpg",
+    image: "/images/cities/city22.png",
   },
 
   "Kanchipuram Drop Taxi": {
     place: "Vaikunta Perumal Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/c/c2/Parameswara_Vinnagaram.JPG",
+    image: "/images/cities/city23.png",
   },
 
   "Karur Drop Taxi": {
     place: "Karur City View",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/b/ba/City_of_karur.jpg",
+    image: "/images/cities/city24.png",
   },
 
   "Krishnagiri Drop Taxi": {
     place: "Krishnagiri Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/50/Krishnagiri_temple.jpg",
+    image: "/images/cities/city25.png",
   },
 
   "Mayiladuthurai Drop Taxi": {
     place: "Mayuranathaswamy Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/2/21/Gopura_of_the_Mayuranathaswamy_Temple.jpg",
+    image: "/images/cities/city26.png",
   },
 
   "Nagapattinam Drop Taxi": {
     place: "Velankanni Basilica",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/93/Velankanni_Church_2026.jpg",
+    image: "/images/cities/city27.png",
   },
 
   "Namakkal Drop Taxi": {
     place: "Namakkal Fort",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/9/9c/Namakkal_Fort_%282%29.jpg",
+    image: "/images/cities/city28.png",
   },
 
   "Perambalur Drop Taxi": {
     place: "Ranjankudi Fort",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e8/Ranjankudi_Fort-Perambalur_district-Tamil_Nadu.jpg",
+    image: "/images/cities/city29.png",
   },
 
   "Pudukkottai Drop Taxi": {
     place: "Viralimalai Murugan Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/1/1f/Viralimalai_Murugan_Temple.jpg",
+    image: "/images/cities/city30.png",
   },
 
   "Ramanathapuram Drop Taxi": {
     place: "Ramanathaswamy Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/84/Ramanathaswamy_temple7.JPG",
+    image: "/images/cities/city31.png",
   },
 
   "Ranipet Drop Taxi": {
     place: "Delhi Gate, Arcot",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/52/Delhi_gate_-_river_side_view.jpg",
+    image: "/images/cities/city32.png",
   },
 
   "Sivaganga Drop Taxi": {
     place: "Sivaganga",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/4/4b/Government_medical_college%2C_Sivaganga.jpg",
+    image: "/images/cities/city33.png",
   },
 
   "Tenkasi Drop Taxi": {
     place: "Kasi Viswanathar Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f5/Kasi_Viswanathar_temple%2C_Tenkasi_2014_%2813%29.jpg",
+    image: "/images/cities/city34.png",
   },
 
   "Theni Drop Taxi": {
     place: "Theni Western Ghats",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/54/Theniviewfromforestroad1.jpg",
+    image: "/images/cities/city35.png",
   },
 
   "Thoothukudi Drop Taxi": {
     place: "Our Lady of Snows Basilica",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/5/59/Our_lady_of_snows_basilica.JPG",
+    image: "/images/cities/city36.png",
   },
 
   "Tirupathur Drop Taxi": {
     place: "Yelagiri Hills",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/3/30/Yelagiri.jpg",
+    image: "/images/cities/city37.png",
   },
 
   "Tiruvallur Drop Taxi": {
     place: "Tiruvallur",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Tiruvallur_HD_Image.jpg",
+    image: "/images/cities/city38.png",
   },
 
   "Tiruvannamalai Drop Taxi": {
     place: "Arunachaleswarar Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/8a/Tiruvannamalai_Montage.jpg",
+    image: "/images/cities/city39.png",
   },
 
   "Tiruvarur Drop Taxi": {
     place: "Thyagaraja Temple",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/89/Thyagarajar_temple%2C_Tiruvarur_%289%29.jpg",
+    image: "/images/cities/city40.png",
   },
 
   "Viluppuram Drop Taxi": {
     place: "Viluppuram",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/c/c6/Glory_Of_Viluppuram_2.jpg",
+    image: "/images/cities/city41.png",
   },
 
   "Virudhunagar Drop Taxi": {
     place: "Virudhunagar City",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/1/11/%E0%AE%B5%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%A4%E0%AF%81%E0%AE%A8%E0%AE%95%E0%AE%B0%E0%AF%8D_%28%E0%AE%B5%E0%AE%BF%E0%AE%B0%E0%AF%81%E0%AE%A4%E0%AF%81%E0%AE%AA%E0%AE%9F%E0%AF%8D%E0%AE%9F%E0%AE%BF%29.JPG",
+    image: "/images/cities/city42.png",
   },
 
   // Kerala districts
   "Palakkad Drop Taxi": {
     place: "Palakkad",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/8/81/Palakkad_City_collage.jpg",
+    image: "/images/cities/city43.png",
   },
 
   "Kozhikode Drop Taxi": {
     place: "Kozhikode Beach",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/4/45/Kozhikode_beach_kites.jpg",
+    image: "/images/cities/city44.png",
   },
 
   "Wayanad Drop Taxi": {
     place: "Wayanad Landscape",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/e/e8/Blue%2C_Green_%26_White.jpg",
+    image: "/images/cities/city45.png",
   },
 
   "Thrissur Drop Taxi": {
     place: "Thrissur",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/0/04/JJP_112.jpg",
+    image: "/images/cities/city46.png",
   },
 
   "Kannur Drop Taxi": {
     place: "Kannur Skyline",
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/f/f6/Kannur_Skyline_3.jpg",
+    image: "/images/cities/city47.png",
   },
 }
 ];
