@@ -9,248 +9,250 @@ import { ChevronDown, ChevronUp } from "lucide-react";
  * ALL DISTRICTS & INTERSTATE ROUTES DATASET
  * (POPULAR / MAJOR HUBS AT THE TOP)
  * ========================================================================= */
-const ALL_ROUTES = [
+const ALL_ROUTES = Object.entries({
   // Popular cities
-  {
   "Chennai Drop Taxi": {
     place: "Chennai Central",
-    image: "/images/cities/city1.png",
+    image: "/cities/city1.png",
   },
 
   "Coimbatore Drop Taxi": {
     place: "Marudhamalai Temple",
-    image: "/images/cities/city2.png",
+    image: "/cities/city2.png",
   },
 
   "Madurai Drop Taxi": {
     place: "Meenakshi Amman Temple",
-    image: "/images/cities/city3.png",
+    image: "/cities/city3.png",
   },
 
   "Tiruchirappalli Drop Taxi": {
     place: "Rockfort Temple",
-    image: "/images/cities/city4.png",
+    image: "/cities/city4.png",
   },
 
   "Salem Drop Taxi": {
     place: "Salem Hills View",
-    image: "/images/cities/city5.png",
+    image: "/cities/city5.png",
   },
 
   "Bengaluru Drop Taxi": {
     place: "Bengaluru City View",
-    image: "/images/cities/city6.png",
+    image: "/cities/city6.png",
   },
 
   // Major cities and tourist destinations
   "Puducherry Drop Taxi": {
     place: "Puducherry Rock Beach",
-    image: "/images/cities/city7.png",
+    image: "/cities/city7.png",
   },
 
   "Tirunelveli Drop Taxi": {
     place: "Nellaiappar Temple",
-    image: "/images/cities/city8.png",
+    image: "/cities/city8.png",
   },
 
   "Erode Drop Taxi": {
     place: "Cauvery River",
-    image: "/images/cities/city9.png",
+    image: "/cities/city9.png",
   },
 
   "Vellore Drop Taxi": {
     place: "Vellore Fort",
-    image: "/images/cities/city10.png",
+    image: "/cities/city10.png",
   },
 
   "Tiruppur Drop Taxi": {
     place: "Noyyal River",
-    image: "/images/cities/city11.png",
+    image: "/cities/city11.png",
   },
 
   "Thanjavur Drop Taxi": {
     place: "Brihadisvara Temple",
-    image: "/images/cities/city12.png",
+    image: "/cities/city12.png",
   },
 
   "Dindigul Drop Taxi": {
     place: "Dindigul Fort",
-    image: "/images/cities/city13.png",
+    image: "/cities/city13.png",
   },
 
   "Nilgiris / Ooty Drop Taxi": {
     place: "Ooty Lake",
-    image: "/images/cities/city14.png",
+    image: "/cities/city14.png",
   },
 
   "Kanyakumari Drop Taxi": {
     place: "Vivekananda Rock Memorial",
-    image: "/images/cities/city15.png",
+    image: "/cities/city15.png",
   },
 
   "Kochi Drop Taxi": {
     place: "Kochi Skyline",
-    image: "/images/cities/city16.png",
+    image: "/cities/city16.png",
   },
 
   "Trivandrum Drop Taxi": {
     place: "Padmanabhaswamy Temple",
-    image: "/images/cities/city17.png",
+    image: "/cities/city17.png",
   },
 
   // Other Tamil Nadu districts
   "Ariyalur Drop Taxi": {
     place: "Ariyalur Perumal Temple",
-    image: "/images/cities/city18.png",
+    image: "/cities/city18.png",
   },
 
   "Chengalpattu Drop Taxi": {
     place: "Chengalpattu Lake",
-    image: "/images/cities/city19.png",
+    image: "/cities/city19.png",
   },
 
   "Cuddalore Drop Taxi": {
     place: "Cuddalore Coastal View",
-    image: "/images/cities/city20.png",
+    image: "/cities/city20.png",
   },
 
   "Dharmapuri Drop Taxi": {
     place: "Dharmapuri City View",
-    image: "/images/cities/city21.png",
+    image: "/cities/city21.png",
   },
 
   "Kallakurichi Drop Taxi": {
     place: "Kallakurichi Landscape",
-    image: "/images/cities/city22.png",
+    image: "/cities/city22.png",
   },
 
   "Kanchipuram Drop Taxi": {
     place: "Vaikunta Perumal Temple",
-    image: "/images/cities/city23.png",
+    image: "/cities/city23.png",
   },
 
   "Karur Drop Taxi": {
     place: "Karur City View",
-    image: "/images/cities/city24.png",
+    image: "/cities/city24.png",
   },
 
   "Krishnagiri Drop Taxi": {
     place: "Krishnagiri Temple",
-    image: "/images/cities/city25.png",
+    image: "/cities/city25.png",
   },
 
   "Mayiladuthurai Drop Taxi": {
     place: "Mayuranathaswamy Temple",
-    image: "/images/cities/city26.png",
+    image: "/cities/city26.png",
   },
 
   "Nagapattinam Drop Taxi": {
     place: "Velankanni Basilica",
-    image: "/images/cities/city27.png",
+    image: "/cities/city27.png",
   },
 
   "Namakkal Drop Taxi": {
     place: "Namakkal Fort",
-    image: "/images/cities/city28.png",
+    image: "/cities/city28.png",
   },
 
   "Perambalur Drop Taxi": {
     place: "Ranjankudi Fort",
-    image: "/images/cities/city29.png",
+    image: "/cities/city29.png",
   },
 
   "Pudukkottai Drop Taxi": {
     place: "Viralimalai Murugan Temple",
-    image: "/images/cities/city30.png",
+    image: "/cities/city30.png",
   },
 
   "Ramanathapuram Drop Taxi": {
     place: "Ramanathaswamy Temple",
-    image: "/images/cities/city31.png",
+    image: "/cities/city31.png",
   },
 
   "Ranipet Drop Taxi": {
     place: "Delhi Gate, Arcot",
-    image: "/images/cities/city32.png",
+    image: "/cities/city32.png",
   },
 
   "Sivaganga Drop Taxi": {
     place: "Sivaganga",
-    image: "/images/cities/city33.png",
+    image: "/cities/city33.png",
   },
 
   "Tenkasi Drop Taxi": {
     place: "Kasi Viswanathar Temple",
-    image: "/images/cities/city34.png",
+    image: "/cities/city34.png",
   },
 
   "Theni Drop Taxi": {
     place: "Theni Western Ghats",
-    image: "/images/cities/city35.png",
+    image: "/cities/city35.png",
   },
 
   "Thoothukudi Drop Taxi": {
     place: "Our Lady of Snows Basilica",
-    image: "/images/cities/city36.png",
+    image: "/cities/city36.png",
   },
 
   "Tirupathur Drop Taxi": {
     place: "Yelagiri Hills",
-    image: "/images/cities/city37.png",
+    image: "/cities/city37.png",
   },
 
   "Tiruvallur Drop Taxi": {
     place: "Tiruvallur",
-    image: "/images/cities/city38.png",
+    image: "/cities/city38.png",
   },
 
   "Tiruvannamalai Drop Taxi": {
     place: "Arunachaleswarar Temple",
-    image: "/images/cities/city39.png",
+    image: "/cities/city39.png",
   },
 
   "Tiruvarur Drop Taxi": {
     place: "Thyagaraja Temple",
-    image: "/images/cities/city40.png",
+    image: "/cities/city40.png",
   },
 
   "Viluppuram Drop Taxi": {
     place: "Viluppuram",
-    image: "/images/cities/city41.png",
+    image: "/cities/city41.png",
   },
 
   "Virudhunagar Drop Taxi": {
     place: "Virudhunagar City",
-    image: "/images/cities/city42.png",
+    image: "/cities/city42.png",
   },
 
   // Kerala districts
   "Palakkad Drop Taxi": {
     place: "Palakkad",
-    image: "/images/cities/city43.png",
+    image: "/cities/city43.png",
   },
 
   "Kozhikode Drop Taxi": {
     place: "Kozhikode Beach",
-    image: "/images/cities/city44.png",
+    image: "/cities/city44.png",
   },
 
   "Wayanad Drop Taxi": {
     place: "Wayanad Landscape",
-    image: "/images/cities/city45.png",
+    image: "/cities/city45.png",
   },
 
   "Thrissur Drop Taxi": {
     place: "Thrissur",
-    image: "/images/cities/city46.png",
+    image: "/cities/city46.png",
   },
 
   "Kannur Drop Taxi": {
     place: "Kannur Skyline",
-    image: "/images/cities/city47.png",
+    image: "/cities/city47.png",
   },
-}
-];
+}).map(([name, details]) => ({
+  name,
+  district: name.replace(/\s+Drop Taxi$/, ""),
+  ...details,
+}));
 
 export default function PopularRoutes() {
   const [hoveredIdx, setHoveredIdx] = useState(null);

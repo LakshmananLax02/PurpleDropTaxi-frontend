@@ -234,7 +234,7 @@ export default function AboutUs() {
           variants={staggerContainer}
         >
           <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-sm backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-[#1bc5d8]" /> South India's Premier Drop Taxi
+            <Sparkles className="w-3.5 h-3.5 text-[#1bc5d8]" /> South India&apos;s Premier Drop Taxi
           </motion.div>
           
           <motion.h1 variants={fadeInUp} className="page-title-pattern">
@@ -344,7 +344,7 @@ export default function AboutUs() {
             </div>
             
             <h2 className="section-title-pattern">
-              Why Pay For The <span className="text-[#7c2bea]">Driver's Return Journey?</span>
+              Why Pay For The <span className="text-[#7c2bea]">Driver&apos;s Return Journey?</span>
             </h2>
 
             <p className="text-gray-500 text-xs sm:text-sm leading-relaxed font-medium">
@@ -493,13 +493,13 @@ export default function AboutUs() {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           viewport={{ once: true }}
-          className="bg-gradient-to-r from-purple-900 via-[#7c2bea] to-purple-950 p-8 sm:p-12 rounded-3xl text-center space-y-6 shadow-2xl shadow-purple-900/20 text-white relative overflow-hidden"
+          className="bg-gradient-to-r from-[#0f172a] via-[#1e293b] to-[#0b1120] p-8 sm:p-12 rounded-3xl text-center space-y-6 shadow-2xl shadow-slate-900/30 text-white relative overflow-hidden"
         >
           <div className="max-w-2xl mx-auto space-y-3 relative z-10">
             <h2 className="section-title-pattern-on-dark">
               Ready For <span>Your Next Outstation Journey?</span>
             </h2>
-            <p className="text-purple-100 text-xs sm:text-sm font-medium">
+            <p className="text-slate-200 text-xs sm:text-sm font-medium">
               Book your ride in less than 60 seconds with instant fare calculation and zero advance deposit requirements.
             </p>
           </div>
@@ -507,16 +507,16 @@ export default function AboutUs() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2 relative z-10">
             <button
               type="button"
-              className="btn btn-primary px-8 py-3.5 text-xs font-black uppercase tracking-wider flex items-center gap-2 rounded-xl shadow-lg active:scale-95 bg-amber-400 hover:bg-amber-300 text-gray-950 border-none transition-transform"
+              className="btn btn-primary px-8 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg"
             >
               Book Drop Taxi Now <ArrowRight className="w-4 h-4" />
             </button>
 
             <a
               href="tel:+918110880500"
-              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center gap-2 active:scale-95 backdrop-blur-md"
+              className="btn btn-primary px-8 py-3.5 text-xs font-black uppercase tracking-wider shadow-lg"
             >
-              <Phone className="w-4 h-4 text-amber-300" /> Call Dispatch Desk
+              <Phone className="w-4 h-4" /> Call Dispatch Desk
             </a>
           </div>
         </motion.section>

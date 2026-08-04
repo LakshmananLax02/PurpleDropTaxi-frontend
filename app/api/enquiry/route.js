@@ -65,6 +65,22 @@ function selectedRequirements(form) {
 }
 
 function telegramMessage({ event, form, fare, tripType, enquiryId }) {
+  const isInstantEnquiry = event === "instant-enquiry";
+  if (isInstantEnquiry) {
+    return [
+      "⚡ <b>INSTANT WEBSITE ENQUIRY</b>",
+      "━━━━━━━━━━━━━━━━━━━",
+      "👤 <b>CUSTOMER DETAILS</b>",
+      `🧑 <b>Name:</b> ${escapeHtml(form?.customerName)}`,
+      `📞 <b>Mobile:</b> ${escapeHtml(form?.mobile)}`,
+      "",
+      "🌐 <b>Source:</b> 15-second website popup",
+      `🕒 <b>Received:</b> ${new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" }).format(new Date())}`,
+      "",
+      "<i>Please contact this customer as soon as possible.</i>",
+    ].join("\n");
+  }
+
   const isConfirmation = event === "booking-confirmed";
   const title = isConfirmation ? "✅ <b>BOOKING CONFIRMED</b>" : "📝 <b>NEW FARE ENQUIRY</b>";
   const bookingLines = [
@@ -139,9 +155,10 @@ export async function POST(request) {
   try {
     const payload = await request.json();
     const { form, fare, tripType, event } = payload ?? {};
-    const validEvent = event === "enquiry" || event === "booking-confirmed";
+    const validEvent = event === "enquiry" || event === "booking-confirmed" || event === "instant-enquiry";
+    const isInstantEnquiry = event === "instant-enquiry";
 
-    if (!validEvent || !form?.pickup || !form?.drop || !form?.customerName || !form?.mobile) {
+    if (!validEvent || !form?.customerName || !form?.mobile || (!isInstantEnquiry && (!form?.pickup || !form?.drop))) {
       return Response.json({ error: "Invalid booking notification data." }, { status: 400 });
     }
 
