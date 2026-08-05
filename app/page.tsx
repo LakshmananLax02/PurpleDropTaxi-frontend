@@ -12,6 +12,7 @@ export default function Home() {
     <>
       {/* Page 1: carousel-background hero with the enquiry form.
           Submitting it navigates to /estimate (page 2). */}
+      
       <BookingSection />
       <DesignedForTravellers/>
       <Cars />

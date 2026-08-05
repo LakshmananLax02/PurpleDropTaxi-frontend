@@ -136,7 +136,8 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
       .then(({ AutocompleteSuggestion }) => {
         if (active) setPlacesLibrary({ AutocompleteSuggestion });
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Google Places library could not be loaded:", error);
         if (active) setPlacesLibrary(null);
       });
 
@@ -159,7 +160,8 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
         if (requestId === requestIdRef.current) {
           setSuggestions(nextSuggestions.filter((item) => item.placePrediction));
         }
-      } catch {
+      } catch (error) {
+        console.error("Google place recommendations could not be loaded:", error);
         if (requestId === requestIdRef.current) setSuggestions([]);
       }
     }, 250);
@@ -178,7 +180,8 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
       const location = place.location;
       onValueChange(address);
       if (location) onPlaceSelect({ lat: location.lat(), lng: location.lng() });
-    } catch {
+    } catch (error) {
+      console.error("Google place details could not be loaded:", error);
       onValueChange(prediction.text?.text || value);
     } finally {
       setSuggestions([]);
