@@ -74,7 +74,7 @@ function telegramMessage({ event, form, fare, tripType, enquiryId }) {
       `🧑 <b>Name:</b> ${escapeHtml(form?.customerName)}`,
       `📞 <b>Mobile:</b> ${escapeHtml(form?.mobile)}`,
       "",
-      "🌐 <b>Source:</b> 15-second website popup",
+      "🌐 <b>Source:</b> 10-second website popup",
       `🕒 <b>Received:</b> ${new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" }).format(new Date())}`,
       "",
       "<i>Please contact this customer as soon as possible.</i>",

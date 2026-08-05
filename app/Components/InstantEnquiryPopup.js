@@ -4,31 +4,38 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, LoaderCircle, Phone, Send, Sparkles, User, X } from "lucide-react";
 
-const POPUP_DELAY_MS = 15_000;
-const SESSION_KEY = "purpledroptaxi-instant-enquiry-sent";
+const POPUP_DELAY_MS = 10_000;
+const SESSION_KEY = "purpledroptaxi-instant-enquiry-dismissed";
 
 export default function InstantEnquiryPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isComplete, setIsComplete] = useState(() => (
+  const [isDismissed, setIsDismissed] = useState(() => (
     typeof window !== "undefined" && window.sessionStorage.getItem(SESSION_KEY) === "true"
   ));
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (isComplete) return undefined;
+    if (isDismissed) return undefined;
 
-    const popupTimer = window.setInterval(() => setIsOpen(true), POPUP_DELAY_MS);
-    return () => window.clearInterval(popupTimer);
-  }, [isComplete]);
+    const popupTimer = window.setTimeout(() => setIsOpen(true), POPUP_DELAY_MS);
+    return () => window.clearTimeout(popupTimer);
+  }, [isDismissed]);
 
   useEffect(() => {
-    if (!isComplete || !isOpen) return undefined;
+    if (!hasSubmitted || !isOpen) return undefined;
     const closeTimer = window.setTimeout(() => setIsOpen(false), 2_600);
     return () => window.clearTimeout(closeTimer);
-  }, [isComplete, isOpen]);
+  }, [hasSubmitted, isOpen]);
+
+  const dismissPopup = () => {
+    window.sessionStorage.setItem(SESSION_KEY, "true");
+    setIsDismissed(true);
+    setIsOpen(false);
+  };
 
   const submitEnquiry = async (event) => {
     event.preventDefault();
@@ -54,7 +61,8 @@ export default function InstantEnquiryPopup() {
       if (!response.ok) throw new Error(result.error || "Could not submit your enquiry.");
 
       window.sessionStorage.setItem(SESSION_KEY, "true");
-      setIsComplete(true);
+      setIsDismissed(true);
+      setHasSubmitted(true);
     } catch (submitError) {
       setError(submitError.message || "Could not submit your enquiry. Please try again.");
     } finally {
@@ -64,7 +72,7 @@ export default function InstantEnquiryPopup() {
 
   return (
     <AnimatePresence>
-      {isOpen && !isComplete && (
+      {isOpen && !isDismissed && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -85,7 +93,7 @@ export default function InstantEnquiryPopup() {
             <div className="relative rounded-[26px] bg-white p-6 sm:p-8">
               <button
                 type="button"
-                onClick={() => setIsOpen(false)}
+                onClick={dismissPopup}
                 className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition-colors hover:border-[#1bc5d8] hover:text-[#5815b7]"
                 aria-label="Close enquiry form"
               >
@@ -154,7 +162,7 @@ export default function InstantEnquiryPopup() {
         </motion.div>
       )}
 
-      {isOpen && isComplete && (
+      {isOpen && hasSubmitted && (
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}

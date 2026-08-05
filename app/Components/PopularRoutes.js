@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { MapPin, ChevronLeft, ChevronRight, ArrowRight, Clock, Navigation } from "lucide-react";
+import Link from "next/link";
 
 /* ============================================================================
  * 1. POPULAR ROUTES DATASET
@@ -263,13 +264,14 @@ export default function PopularRoutes() {
                           ₹{route.fare}
                         </span>
                       </div>
-
+                       <Link href='/booking'>
                       <button
                         type="button"
                         className="btn btn-primary px-2.5 py-1.5 text-[10px] font-black uppercase tracking-wider shrink-0"
                       >
                         Book Route →
                       </button>
+                      </Link>
                     </div>
                   </div>
 
