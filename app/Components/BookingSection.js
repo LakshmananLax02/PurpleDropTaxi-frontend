@@ -1101,7 +1101,7 @@ export default function BookingSection({ variant = "carousel", presetRoute = nul
               className="absolute inset-0"
             >
               <img src={slide.image} alt="" className="h-full w-full object-contain object-top lg:object-cover lg:object-center" />
-              <div className="absolute inset-0  from-[#1f043e]/40 via-[#1f043e]/40 to-black/40 lg:bg-gradient-to-r lg:from-[#1f043e]/70 lg:via-[#1f043e]/55 lg:to-black/50" />
+              <div className="absolute inset-0  from-[#1f043e]/40 via-[#1f043e]/40 to-black/40 lg:bg-gradient-to-r lg:from-[#1f043e]/70 lg:via-[#1f043e]/70 lg:to-black/70" />
             </motion.div>
           </AnimatePresence>
         </div>
