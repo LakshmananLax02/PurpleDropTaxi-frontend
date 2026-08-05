@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MessageCircle, PhoneCall } from "lucide-react";
+import { PhoneCall } from "lucide-react";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 const PHONE_NUMBER = "+918110880500";
 const WHATSAPP_NUMBER = "918110880500";
@@ -48,9 +49,9 @@ export default function FloatingContactButtons() {
         aria-label="Message PurpleDropTaxi on WhatsApp"
         className={isFooterVisible ? "shrink-0" : "fixed bottom-4 right-4 z-[60] shrink-0 sm:bottom-6 sm:right-8 py-4"}
       >
-        <span className="btn btn-whatsapp btn-icon relative h-14 w-14 border-0 shadow-xl shadow-emerald-500/35 animate-pulse">
+        <span className="btn btn-whatsapp btn-icon relative h-14 w-14 border-0 shadow-xl shadow-[#25D366]/35 animate-pulse">
           <span className="absolute inset-1 rounded-full border border-white/25 animate-ping opacity-30" />
-          <MessageCircle className="h-6 w-6" aria-hidden="true" />
+          <WhatsAppIcon className="h-6 w-6" />
         </span>
       </a>
     </div>

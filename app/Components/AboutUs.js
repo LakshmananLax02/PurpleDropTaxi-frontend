@@ -370,7 +370,7 @@ export default function AboutUs() {
 
           <motion.div variants={fadeInUp} className="relative rounded-2xl overflow-hidden border border-purple-100 shadow-xl group">
             <img 
-              src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?q=80&w=800&auto=format&fit=crop" 
+              src="/images/carouselimg2.png" 
               alt="PurpleDropTaxi Highway Drive" 
               className="w-full h-[380px] object-cover transition-transform duration-700 group-hover:scale-105"
             />

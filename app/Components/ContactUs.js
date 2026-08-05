@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Phone, 
-  MessageSquare, 
   Mail, 
   MapPin, 
   Clock, 
@@ -19,6 +18,7 @@ import {
   Navigation,
   User
 } from "lucide-react";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 /* ============================================================================
  * ANIMATION VARIANTS (FOR SCROLL EFFECTS)
@@ -55,7 +55,7 @@ const CONTACT_CARDS = [
     title: "WhatsApp Booking",
     detail: "+91 81108 80500",
     subtext: "Get instant fare quotes and vehicle options on WhatsApp.",
-    icon: MessageSquare,
+    icon: WhatsAppIcon,
     action: "https://wa.me/918110880500",
   },
   {
@@ -380,9 +380,9 @@ export default function ContactUs() {
                   href="https://wa.me/918110880500"
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-4 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95 block text-center"
+                  className="w-full py-4 bg-[#25D366] hover:bg-[#1FAF53] border border-[#25D366] text-white font-extrabold text-xs uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 active:scale-95 block text-center"
                 >
-                  <MessageSquare className="w-4 h-4 text-emerald-300" /> WhatsApp Direct
+                  <WhatsAppIcon className="w-4 h-4" /> WhatsApp Direct
                 </a>
               </div>
             </div>

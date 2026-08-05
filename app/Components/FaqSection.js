@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, HelpCircle, Phone, MessageSquare, Search } from "lucide-react";
+import { ChevronDown, HelpCircle, Phone, Search } from "lucide-react";
+import WhatsAppIcon from "./WhatsAppIcon";
 
 /* ============================================================================
  * 1. FAQ DATASET
@@ -222,7 +223,7 @@ export default function FaqSection() {
               rel="noreferrer"
               className="btn btn-whatsapp px-5 py-3 rounded-xl text-xs font-extrabold shadow-md"
             >
-              <MessageSquare className="w-4 h-4" /> WhatsApp Us
+              <WhatsAppIcon className="w-4 h-4" /> WhatsApp Us
             </a>
           </div>
         </div>

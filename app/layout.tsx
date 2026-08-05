@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "./Components/Navbar";
 import Footer from './Components/Footer'
 import InstantEnquiryPopup from "./Components/InstantEnquiryPopup";
+import PWAInstallPrompt from "./Components/PWAInstallPrompt";
+import ServiceWorkerRegistration from "./Components/ServiceWorkerRegistration";
 import { BookingProvider } from "./context/BookingContext";
 
 const geistSans = Geist({
@@ -20,6 +22,17 @@ export const metadata: Metadata = {
   title: "PurpleDrop Taxi — One-Way & Outstation Drop Taxi in Tamil Nadu",
   description:
     "Book verified, transparent-priced one-way and outstation drop taxis across Tamil Nadu. Instant fare estimate, no hidden return charges.",
+  applicationName: "PurpleDropTaxi",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "PurpleDropTaxi",
+  },
+  icons: {
+    icon: [{ url: "/images/logoimg.png", type: "image/png", sizes: "2000x2000" }],
+    apple: [{ url: "/images/logoimg.png", type: "image/png", sizes: "2000x2000" }],
+  },
 };
 
 export default function RootLayout({
@@ -41,6 +54,8 @@ export default function RootLayout({
           {children}
           <Footer/>
           <InstantEnquiryPopup />
+          <PWAInstallPrompt />
+          <ServiceWorkerRegistration />
         </BookingProvider>
       </body>
     </html>

@@ -52,7 +52,7 @@ const COLORS = {
   gradientFrom: "#5815b7",
   gradientTo: "#1bc5d8",
   accent: "#a55cff",
-  whatsapp: "#22C55E",
+  whatsapp: "#25D366",
   textPrimary: "#1E293B",
   textSecondary: "#64748B",
 };

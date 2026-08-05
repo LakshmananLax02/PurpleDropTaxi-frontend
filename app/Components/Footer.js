@@ -8,7 +8,6 @@ import {
   ArrowRight, 
   ShieldCheck, 
   Sparkles, 
-  MessageSquare, 
   Clock, 
   Heart,
   Car,
@@ -16,6 +15,7 @@ import {
   Apple,
   Play
 } from "lucide-react";
+import WhatsAppIcon from "./WhatsAppIcon";
 import Link from "next/link";
 import FloatingContactButtons from "./FloatingContactButtons";
 
@@ -93,9 +93,9 @@ export default function Footer() {
               href="https://wa.me/918110880500"
               target="_blank"
               rel="noreferrer"
-              className="w-full sm:w-auto bg-white/10 hover:bg-[#1bc5d8]/20 border border-[#1bc5d8]/50 text-[#b8eaf0] font-extrabold px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 backdrop-blur-md active:scale-95"
+              className="w-full sm:w-auto bg-[#25D366] hover:bg-[#1FAF53] border border-[#25D366] text-white font-extrabold px-6 py-3.5 rounded-2xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 active:scale-95"
             >
-              <MessageSquare className="w-4 h-4 text-[#1bc5d8]" /> WhatsApp Booking
+              <WhatsAppIcon className="w-4 h-4" /> WhatsApp Booking
             </a>
           </div>
 

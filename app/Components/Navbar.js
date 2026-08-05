@@ -3,7 +3,8 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Phone, MessageCircle, Menu, X, ShieldCheck, Users, Leaf, BadgeDollarSign } from "lucide-react"
+import { Phone, Menu, X, ShieldCheck, Users, Leaf, BadgeDollarSign } from "lucide-react"
+import WhatsAppIcon from "./WhatsAppIcon"
 
 // ---- Config: replace with your real values ----
 const PHONE_NUMBER = "+918110880500"
@@ -130,7 +131,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="btn btn-whatsapp px-4 py-2.5 text-sm font-semibold shadow-md"
             >
-              <MessageCircle className="h-4 w-4" />
+              <WhatsAppIcon className="h-4 w-4" />
               Whatsapp
             </Link>
           </div>
@@ -188,7 +189,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#25d366] px-4 py-3 text-sm font-semibold text-white shadow-md transition-transform duration-200 hover:brightness-110 active:scale-95"
             >
-              <MessageCircle className="h-4 w-4" />
+              <WhatsAppIcon className="h-4 w-4" />
               Whatsapp
             </Link>
           </div>
