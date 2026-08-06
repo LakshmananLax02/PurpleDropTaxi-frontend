@@ -5,6 +5,15 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 /* ============================================================================
  * ALL DISTRICTS & INTERSTATE ROUTES DATASET
  * (POPULAR / MAJOR HUBS AT THE TOP)
@@ -275,15 +284,25 @@ export default function PopularRoutes() {
       <div className="max-w-7xl mx-auto space-y-6">
         
         {/* --- SECTION TITLE --- */}
-        <div className="border-b border-purple-100 pb-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="border-b border-purple-100 pb-4"
+        >
           <h2 className="text-2xl sm:text-4xl font-black text-gray-900 tracking-tight">
             Popular Routes in <span className="text-[#7c3aed]">Tamil Nadu & Interstate</span>
           </h2>
-        </div>
+        </motion.div>
 
         {/* --- CARDS GRID (INITIAL 6 TOP POPULAR CARDS) --- */}
-        <motion.div 
+        <motion.div
           layout
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
         >
           <AnimatePresence>

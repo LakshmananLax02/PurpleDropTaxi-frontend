@@ -1,8 +1,18 @@
 "use client";
 
 import React, { useRef } from "react";
+import { motion } from "framer-motion";
 import { MapPin, ChevronLeft, ChevronRight, ArrowRight, Clock, Navigation } from "lucide-react";
 import Link from "next/link";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 /* ============================================================================
  * 1. POPULAR ROUTES DATASET
@@ -169,7 +179,13 @@ export default function PopularRoutes() {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* --- HEADER --- */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4"
+        >
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
               <MapPin className="w-3.5 h-3.5 text-[#7c2bea]" /> Top Outstation Routes
@@ -179,14 +195,14 @@ export default function PopularRoutes() {
             </h2>
           </div>
 
-          <a 
-            href="#all-routes" 
+          <a
+            href="#all-routes"
             className="inline-flex items-center gap-1.5 text-xs font-black text-[#7c2bea] hover:text-[#5815b7] transition-colors group"
           >
             <span>View All Routes</span>
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </a>
-        </div>
+        </motion.div>
 
         {/* --- CAROUSEL WITH PREV / NEXT ARROWS --- */}
         <div className="relative group/carousel px-2 py-6">
@@ -212,8 +228,12 @@ export default function PopularRoutes() {
           </button>
 
           {/* CAROUSEL TRACK */}
-          <div
+          <motion.div
             ref={scrollRef}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
             className="route-track flex items-center gap-8 overflow-x-auto no-scrollbar py-6 px-4 scroll-smooth"
           >
             {POPULAR_ROUTES.map((route) => (
@@ -279,7 +299,7 @@ export default function PopularRoutes() {
 
               </div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
 
