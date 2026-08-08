@@ -18,7 +18,7 @@
  * distance feeds the fare. Without a key it shows a graceful placeholder and
  * the fare falls back to a distance-0 estimate until the key is added.
  * ========================================================================== */
-//new functionalities added
+//new functionalities added new
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
