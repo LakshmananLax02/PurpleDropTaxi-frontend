@@ -189,8 +189,8 @@ export default function EstimatePage() {
       ]);
       setEnquiry(record);
       setStage("confirmed");
-    } catch {
-      setSubmitError("Something went wrong while sending your enquiry. Please try again.");
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Something went wrong while sending your enquiry. Please try again.");
       setStage("estimate");
     }
   };
@@ -246,7 +246,6 @@ export default function EstimatePage() {
               active={stage === "confirming"}
               pickup={form?.pickup}
               drop={form?.drop}
-              vehicleId={form?.vehicle}
             />
 
             <AnimatePresence mode="wait">

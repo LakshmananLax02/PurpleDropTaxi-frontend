@@ -38,7 +38,7 @@ const TRAVELLERS = [
     id: "senior",
     title: "Senior Citizens",
     icon: HeartHandshake,
-    frontImage: "https://images.unsplash.com/photo-1581579438747-1dc8d1e2729f?q=80&w=600&auto=format&fit=crop",
+    frontImage: "/images/seniourcitizenimg.jpg",
     shortDesc: "Extra care and assistance for elderly travellers.",
     backDesc: "Patient chauffeurs trained to assist with boarding, comfort stops, and smooth driving.",
   },
@@ -100,16 +100,19 @@ export default function DesignedForTravellers() {
     };
   }, []);
 
-  /* Scroll Carousel Controls (mobile only) */
+  /* Scroll exactly one card at a time on mobile. This keeps every slide
+     centred instead of leaving a partial next card in view. */
   const handleScroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.9;
-      scrollRef.current.scrollTo({
-        left: direction === "left" ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
-        behavior: "smooth",
-      });
-    }
+    const track = scrollRef.current;
+    const card = track?.querySelector(".flip-card");
+    if (!track || !card) return;
+
+    isPausedRef.current = true;
+    const gap = Number.parseFloat(window.getComputedStyle(track).gap) || 0;
+    track.scrollBy({
+      left: (direction === "left" ? -1 : 1) * (card.offsetWidth + gap),
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -193,6 +196,23 @@ export default function DesignedForTravellers() {
           flex-shrink: 0;
         }
 
+        /* A single, fully visible card is centred on every mobile width.
+           Scroll snapping makes arrow/touch navigation land precisely on it. */
+        @media (max-width: 639px) {
+          .travellers-track {
+            --traveller-card-width: min(260px, calc(100vw - 3.5rem));
+            gap: 16px;
+            padding-inline: max(4px, calc((100% - var(--traveller-card-width)) / 2));
+            scroll-padding-inline: max(4px, calc((100% - var(--traveller-card-width)) / 2));
+            scroll-snap-type: x mandatory;
+          }
+          .travellers-track .flip-card {
+            width: var(--traveller-card-width);
+            scroll-snap-align: center;
+            scroll-snap-stop: always;
+          }
+        }
+
         @media (min-width: 640px) {
           .travellers-track {
             padding: 0 6px;
@@ -261,7 +281,6 @@ export default function DesignedForTravellers() {
             onFocusCapture={() => { isPausedRef.current = true; }}
             onBlurCapture={() => { isPausedRef.current = false; }}
             onPointerDown={() => { isPausedRef.current = true; }}
-            onPointerUp={() => { isPausedRef.current = false; }}
           >
             {[...TRAVELLERS, ...TRAVELLERS].map((item, index) => {
               const IconComponent = item.icon;

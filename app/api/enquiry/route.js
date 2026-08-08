@@ -201,11 +201,17 @@ export async function POST(request) {
     });
 
     if (!telegramResponse.ok) {
-      console.error("Telegram notification failed", telegramResponse.status);
+      const telegramError = await telegramResponse.json().catch(() => null);
+      const description = typeof telegramError?.description === "string" ? telegramError.description : "";
+      console.error("Telegram notification failed", telegramResponse.status, description);
       const error = telegramResponse.status === 401 || telegramResponse.status === 404
         ? "Telegram rejected the bot token. Add the BotFather API token to TELEGRAM_BOT_TOKEN."
-        : telegramResponse.status === 400 || telegramResponse.status === 403
+        : telegramResponse.status === 403
           ? "Telegram could not access the target chat. Verify TELEGRAM_CHAT_ID and add the bot to that group or channel."
+          : telegramResponse.status === 429
+            ? "Telegram is temporarily busy. Please wait a moment and confirm the booking again."
+            : telegramResponse.status === 400 && /parse entities/i.test(description)
+              ? "Telegram could not format this booking message. Please try confirming again."
           : "Could not notify the booking team. Please try again.";
       return Response.json({ error }, { status: 502 });
     }
