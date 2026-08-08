@@ -311,17 +311,17 @@ export default function EstimatePage() {
                   )}
                   {submitError && <p className="text-xs font-medium text-red-500 mb-3 text-center">{submitError}</p>}
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
                     <button
                       onClick={() => router.push("/")}
-                      className="btn btn-ghost flex-1 h-[54px] font-bold text-sm"
+                      className="btn btn-ghost h-[54px] w-full whitespace-nowrap px-3 text-xs font-bold sm:min-w-0 sm:flex-1 sm:px-6 sm:text-sm"
                     >
                       ← Back
                     </button>
                     <button
                       onClick={handleConfirm}
                       disabled={!fare || !routeMeta}
-                      className="btn btn-primary flex-1 h-[54px] text-sm font-black uppercase tracking-wider"
+                      className="btn btn-primary h-[54px] w-full whitespace-nowrap px-3 text-xs font-black uppercase tracking-[0.08em] sm:min-w-0 sm:flex-1 sm:px-6 sm:text-sm sm:tracking-wider"
                     >
                       Confirm Booking →
                     </button>

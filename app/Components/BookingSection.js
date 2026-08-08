@@ -127,6 +127,10 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
   const [suggestions, setSuggestions] = useState([]);
   const [placesLibrary, setPlacesLibrary] = useState(null);
   const requestIdRef = React.useRef(0);
+  // Once a customer chooses a prediction, its full address becomes the input
+  // value. Keep that value out of the next autocomplete request; otherwise
+  // Google returns suggestions again for the address that was just selected.
+  const selectedValueRef = React.useRef("");
 
   useEffect(() => {
     let active = true;
@@ -146,7 +150,7 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
 
   useEffect(() => {
     const query = value?.trim();
-    if (!placesLibrary || !query) {
+    if (!placesLibrary || !query || query === selectedValueRef.current) {
       return undefined;
     }
 
@@ -178,28 +182,37 @@ function PlacesAutocompleteInput({ value, onValueChange, onPlaceSelect, onBlur, 
       await place.fetchFields({ fields: ["displayName", "formattedAddress", "location"] });
       const address = place.formattedAddress || place.displayName || prediction.text?.text || value;
       const location = place.location;
+      requestIdRef.current += 1;
+      selectedValueRef.current = address.trim();
       onValueChange(address);
       if (location) onPlaceSelect({ lat: location.lat(), lng: location.lng() });
     } catch (error) {
       console.error("Google place details could not be loaded:", error);
-      onValueChange(prediction.text?.text || value);
+      const address = prediction.text?.text || value;
+      requestIdRef.current += 1;
+      selectedValueRef.current = address.trim();
+      onValueChange(address);
     } finally {
       setSuggestions([]);
     }
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative min-w-0 w-full">
       <input
         value={value}
-        onChange={(event) => onValueChange(event.target.value)}
+        onChange={(event) => {
+          // A new keystroke means the customer is making a new search.
+          selectedValueRef.current = "";
+          onValueChange(event.target.value);
+        }}
         onBlur={() => {
           window.setTimeout(() => setSuggestions([]), 150);
           onBlur?.();
         }}
         placeholder={placeholder}
         autoComplete="off"
-        className="w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
+        className="min-w-0 w-full bg-transparent outline-none text-sm text-[#1E293B] placeholder:text-slate-400"
       />
       {value?.trim() && suggestions.length > 0 && (
         <div
