@@ -84,7 +84,7 @@ export default function CarLoadingAnimation({
             className="absolute inset-0 h-full w-full object-cover"
             src={CONFIRMATION_BACKGROUND_VIDEO}
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#1f043e]/80 via-[#5815b7]/70 to-[#1bc5d8]/55" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#1f043e]/50 via-[#5815b7]/50 to-[#1bc5d8]/50" />
 
           {/* Drifting clouds */}
           {[0, 1, 2].map((i) => (
