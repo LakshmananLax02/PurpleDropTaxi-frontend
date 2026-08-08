@@ -1,8 +1,18 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { User, Users, HeartHandshake, Plane, Briefcase, ArrowRight, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
 
 /* ============================================================================
  * 1. TRAVELLERS DATASET
@@ -203,7 +213,13 @@ export default function DesignedForTravellers() {
       <div className="max-w-7xl mx-auto relative z-10">
         
         {/* --- HEADER --- */}
-        <div className="text-center space-y-2 mb-10">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="text-center space-y-2 mb-10"
+        >
           <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-3.5 py-1 rounded-xl text-xs font-extrabold uppercase tracking-widest shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-[#7c2bea]" /> Tailored Experiences
           </div>
@@ -213,7 +229,7 @@ export default function DesignedForTravellers() {
           <p className="text-gray-500 text-xs sm:text-sm max-w-md mx-auto font-medium">
             Hover over any card to flip and explore our specialized travel accommodations.
           </p>
-        </div>
+        </motion.div>
 
         {/* --- CARDS: mobile carousel w/ arrows, sm+ static grid --- */}
         <div className="relative group/carousel">

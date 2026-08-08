@@ -1,14 +1,15 @@
 "use client";
 
 import React from "react";
-import { 
-  Phone, 
-  Mail, 
-  MapPin, 
-  ArrowRight, 
-  ShieldCheck, 
-  Sparkles, 
-  Clock, 
+import { motion } from "framer-motion";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  ArrowRight,
+  ShieldCheck,
+  Sparkles,
+  Clock,
   Heart,
   Car,
   CheckCircle2,
@@ -18,6 +19,26 @@ import {
 import WhatsAppIcon from "./WhatsAppIcon";
 import Link from "next/link";
 import FloatingContactButtons from "./FloatingContactButtons";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 /* ============================================================================
  * FOOTER DATASETS
@@ -45,11 +66,11 @@ const POPULAR_ROUTES = [
 const QUICK_LINKS = [
   { name: "About Us", href: "/about-us" },
   { name: "Tariff & Fare Card", href: "/tariff" },
-  { name: "Our Fleet", href: "#fleet" },
-  { name: "Service Routes", href: "/service-routes" },
+  { name: "Services", href: "/services" },
+  { name: "Routes", href: "/service-routes" },
+  { name: "Contact Us", href: "/contact-us" },
   { name: "Privacy Policy", href: "#privacy" },
   { name: "Terms & Conditions", href: "#terms" },
-  { name: "Contact Us", href: "/contact-us" },
 
 ];
 
@@ -65,7 +86,12 @@ export default function Footer() {
        * 1. TOP NEWSLETTER & QUICK CALLOUT BANNER
        * ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="bg-gradient-to-r from-[#26074b] via-[#5815b7] to-[#3d0c79] rounded-3xl p-6 sm:p-10 border border-[#a55cff]/40 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="bg-gradient-to-r from-[#26074b] via-[#5815b7] to-[#3d0c79] rounded-3xl p-6 sm:p-10 border border-[#a55cff]/40 backdrop-blur-xl shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
           
           <div className="space-y-2 text-center lg:text-left z-10">
             <div className="inline-flex items-center gap-2 bg-white/10 border border-[#1bc5d8]/40 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -99,17 +125,23 @@ export default function Footer() {
             </a>
           </div>
 
-        </div>
+        </motion.div>
       </div>
 
       {/* ========================================================================
        * 2. MAIN FOOTER CONTENT GRID
        * ========================================================================= */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-[#5815b7]/60">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10"
+        >
+
           {/* COLUMN 1: BRAND & APP LINKS */}
-          <div className="lg:col-span-2 space-y-6">
+          <motion.div variants={fadeInUp} className="lg:col-span-2 space-y-6">
             <div className="flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#5815b7] to-[#1bc5d8] flex items-center justify-center shadow-lg shadow-purple-600/30">
                 <Car className="w-5 h-5 text-white" />
@@ -134,11 +166,11 @@ export default function Footer() {
               </span>
             </div>
 
-            
-          </div>
+
+          </motion.div>
 
           {/* COLUMN 2: POPULAR CITIES */}
-          <div className="space-y-4">
+          <motion.div variants={fadeInUp} className="space-y-4">
             <h4 className="text-xs font-black text-white uppercase tracking-widest border-l-2 border-[#1bc5d8] pl-2.5">
               Major Drop Cities
             </h4>
@@ -151,10 +183,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* COLUMN 3: POPULAR ROUTES */}
-          <div className="space-y-4">
+          <motion.div variants={fadeInUp} className="space-y-4">
             <h4 className="text-xs font-black text-white uppercase tracking-widest border-l-2 border-[#1bc5d8] pl-2.5">
               Top Highway Routes
             </h4>
@@ -170,10 +202,10 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
           {/* COLUMN 4: QUICK LINKS & DISPATCH ADDRESS */}
-          <div className="space-y-4">
+          <motion.div variants={fadeInUp} className="space-y-4">
             <h4 className="text-xs font-black text-white uppercase tracking-widest border-l-2 border-[#1bc5d8] pl-2.5">
               Company & Help
             </h4>
@@ -186,9 +218,9 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
 
-        </div>
+        </motion.div>
         <FloatingContactButtons />
       </div>
 

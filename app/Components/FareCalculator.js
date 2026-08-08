@@ -16,6 +16,15 @@ import {
 } from "lucide-react";
 import { calculateFareEstimate, DRIVER_BATA, getTripDistanceKm } from "../lib/booking";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 /* ============================================================================
  * FLEET RATES DATASET
  * ========================================================================= */
@@ -111,7 +120,13 @@ export default function FareCalculator() {
       <div className="max-w-7xl mx-auto space-y-10 relative z-10">
 
         {/* --- 1. SECTION HEADER --- */}
-        <div className="text-center space-y-3 max-w-2xl mx-auto">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="text-center space-y-3 max-w-2xl mx-auto"
+        >
           <div className="inline-flex items-center gap-2 bg-white border border-purple-200 text-[#7c2bea] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest shadow-md shadow-purple-500/10 backdrop-blur-md">
             <Calculator className="w-3.5 h-3.5 text-[#7c2bea]" /> Instant Fare Estimator
           </div>
@@ -121,11 +136,17 @@ export default function FareCalculator() {
           <p className="text-gray-500 text-xs sm:text-sm font-medium">
             Select your trip type and enter your travel distance to view transparent fare estimates across all fleets.
           </p>
-        </div>
+        </motion.div>
 
         {/* --- 2. MAIN CALCULATOR CARD --- */}
-        <div className="bg-white border-2 border-purple-100/80 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-500/10 space-y-8">
-          
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="bg-white border-2 border-purple-100/80 rounded-3xl p-6 sm:p-10 shadow-2xl shadow-purple-500/10 space-y-8"
+        >
+
           {/* TABS: ONE-WAY, ROUND TRIP, AIRPORT PICKUP */}
           <div className="flex justify-center">
             <div className="inline-flex p-1.5 bg-slate-100 rounded-2xl border border-gray-200/80 w-full max-w-xl shadow-inner">
@@ -333,7 +354,7 @@ export default function FareCalculator() {
             </button>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* --- 4. DETAILED ESTIMATION TABLE --- */}
         <AnimatePresence>

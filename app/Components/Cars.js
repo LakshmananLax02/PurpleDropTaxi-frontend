@@ -1,8 +1,29 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import Link from "next/link";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
 
 const FLEET_CARS = [
   {
@@ -139,7 +160,13 @@ export default function FleetSection() {
       <div className="mx-auto max-w-7xl relative z-10">
         
         {/* Header */}
-        <div className="flex flex-col items-center text-center space-y-3">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="flex flex-col items-center text-center space-y-3"
+        >
           <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest shadow-sm">
             <Sparkles className="w-4 h-4" /> Our Fleet
           </div>
@@ -149,7 +176,7 @@ export default function FleetSection() {
           <p className="text-gray-500 text-xs sm:text-sm max-w-lg font-medium">
             Pristine, climate-controlled outstation vehicles with transparent per-kilometer rates and certified professional chauffeurs.
           </p>
-        </div>
+        </motion.div>
 
         {/* Outer Rotating Glowing Panel */}
         <div className="relative mt-12 overflow-hidden rounded-[32px] p-[2px]">
@@ -167,11 +194,19 @@ export default function FleetSection() {
           <div className="absolute inset-[2px] rounded-[30px] bg-white/90 backdrop-blur-xl" />
 
           {/* Grid Layout Container */}
-          <div className="relative z-10 grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+            className="relative z-10 grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4 md:p-8"
+          >
             {FLEET_CARS.map((car) => (
-              <FleetCard key={car.id} car={car} />
+              <motion.div key={car.id} variants={fadeInUp}>
+                <FleetCard car={car} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
       </div>

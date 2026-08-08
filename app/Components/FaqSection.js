@@ -5,6 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, HelpCircle, Phone, Search } from "lucide-react";
 import WhatsAppIcon from "./WhatsAppIcon";
 
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+  },
+};
+
 /* ============================================================================
  * 1. FAQ DATASET
  * ========================================================================= */
@@ -91,7 +100,13 @@ export default function FaqSection() {
       <div className="max-w-4xl mx-auto relative z-10">
         
         {/* --- SECTION HEADER --- */}
-        <div className="text-center space-y-4 mb-12">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="text-center space-y-4 mb-12"
+        >
           <div className="inline-flex items-center gap-2 bg-purple-100 border border-purple-200 text-[#7c2bea] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
             <HelpCircle className="w-4 h-4" /> Got Questions?
           </div>
@@ -100,11 +115,17 @@ export default function FaqSection() {
           </h2>
           <p className="text-gray-500 text-sm max-w-lg mx-auto font-medium">
             Everything you need to know about our drop taxi services, one-way pricing, and travel safety across South India.
-          </p>    
-        </div>
+          </p>
+        </motion.div>
 
         {/* --- CATEGORY TABS --- */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-10">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+          className="flex flex-wrap items-center justify-center gap-2 mb-10"
+        >
           {FAQ_CATEGORIES.map((cat) => (
             <button
               key={cat.id}
@@ -118,7 +139,7 @@ export default function FaqSection() {
               {cat.label}
             </button>
           ))}
-        </div>
+        </motion.div>
 
         {/* --- FAQ ACCORDION LIST --- */}
         <div className="space-y-4">
