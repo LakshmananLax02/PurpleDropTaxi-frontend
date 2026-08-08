@@ -24,6 +24,9 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CheckCircle2, Car as CarIcon } from "lucide-react";
 import { CONFIRM_LOADING_MESSAGES, VEHICLE_IMAGES, COLORS } from "../../lib/booking";
 
+// Add your MP4 at: public/images/booking-confirmation-background.mp4
+const CONFIRMATION_BACKGROUND_VIDEO = "/images/booking-confirmation-background.mp4";
+
 export default function CarLoadingAnimation({
   active,
   pickup,
@@ -69,6 +72,20 @@ export default function CarLoadingAnimation({
             background: `linear-gradient(135deg, #26074b 0%, #3d0c79 45%, ${COLORS.gradientFrom} 100%)`,
           }}
         >
+          {/* Customer-supplied MP4 background. It is muted and inline so it
+              can autoplay reliably while the confirmation is processing. */}
+          <video
+            aria-hidden="true"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="absolute inset-0 h-full w-full object-cover"
+            src={CONFIRMATION_BACKGROUND_VIDEO}
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-br from-[#1f043e]/80 via-[#5815b7]/70 to-[#1bc5d8]/55" />
+
           {/* Drifting clouds */}
           {[0, 1, 2].map((i) => (
             <motion.div
